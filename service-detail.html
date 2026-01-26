@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>服務項目 - 金優匯 Your Remit | yourpay</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Service Detail Page Specific Styles */
+        .service-hero {
+            position: relative;
+            min-height: 50vh;
+            display: flex;
+            align-items: center;
+            padding: calc(var(--header-height) + var(--space-3xl)) 0 var(--space-3xl);
+            background: var(--gradient-hero);
+            overflow: hidden;
+        }
+
+        .service-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(45, 189, 182, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(27, 58, 87, 0.3) 0%, transparent 50%);
+        }
+
+        .service-hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+        }
+
+        .service-hero .section-tag {
+            color: var(--color-accent);
+            margin-bottom: var(--space-md);
+        }
+
+        .service-hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 700;
+            color: var(--color-white);
+            margin-bottom: var(--space-lg);
+            line-height: 1.2;
+        }
+
+        .service-hero-desc {
+            font-size: 1.15rem;
+            color: var(--color-gray-300);
+            line-height: 1.8;
+            max-width: 600px;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-xl);
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb a {
+            color: var(--color-gray-400);
+            transition: color var(--transition-fast);
+        }
+
+        .breadcrumb a:hover {
+            color: var(--color-white);
+        }
+
+        .breadcrumb span {
+            color: var(--color-gray-500);
+        }
+
+        .breadcrumb-current {
+            color: var(--color-accent) !important;
+        }
+
+        /* Service Content Sections */
+        .service-section {
+            padding: var(--space-4xl) 0;
+        }
+
+        .service-section:nth-child(even) {
+            background: var(--color-gray-100);
+        }
+
+        .service-content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-4xl);
+            align-items: center;
+        }
+
+        .service-content-grid.reverse {
+            direction: rtl;
+        }
+
+        .service-content-grid.reverse > * {
+            direction: ltr;
+        }
+
+        .service-text {
+            max-width: 550px;
+        }
+
+        .service-text h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.75rem, 3vw, 2.25rem);
+            font-weight: 700;
+            color: var(--color-dark);
+            margin-bottom: var(--space-lg);
+        }
+
+        .service-text p {
+            font-size: 1rem;
+            color: var(--color-gray-700);
+            line-height: 1.9;
+            margin-bottom: var(--space-lg);
+        }
+
+        .service-image-wrapper {
+            position: relative;
+        }
+
+        .service-image {
+            width: 100%;
+            height: 400px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .service-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .service-image-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gradient-primary);
+        }
+
+        .service-image-placeholder svg {
+            width: 80px;
+            height: 80px;
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .service-decoration {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border: 3px solid var(--color-accent);
+            border-radius: var(--radius-xl);
+            bottom: -20px;
+            right: -20px;
+            z-index: -1;
+        }
+
+        /* CTA Section */
+        .service-cta {
+            padding: var(--space-4xl) 0;
+            background: var(--gradient-primary);
+            text-align: center;
+        }
+
+        .service-cta h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.75rem, 3vw, 2.5rem);
+            font-weight: 700;
+            color: var(--color-white);
+            margin-bottom: var(--space-md);
+        }
+
+        .service-cta p {
+            font-size: 1.1rem;
+            color: var(--color-gray-400);
+            margin-bottom: var(--space-xl);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .service-cta .btn {
+            margin: 0 var(--space-sm);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .service-content-grid {
+                grid-template-columns: 1fr;
+                gap: var(--space-2xl);
+            }
+
+            .service-content-grid.reverse {
+                direction: ltr;
+            }
+
+            .service-text {
+                max-width: 100%;
+            }
+
+            .service-image {
+                height: 350px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .service-hero {
+                min-height: 40vh;
+            }
+
+            .service-image {
+                height: 280px;
+            }
+
+            .service-decoration {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 頂部導航 -->
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <div class="logo-group">
+                    <span class="logo-yourremit">Your Remit</span>
+                    <div class="logo-yourpay">
+                        <svg class="logo-icon" width="28" height="32" viewBox="0 0 36 44">
+                            <path d="M4 8 Q4 4 8 4 L8 4 Q8 0 16 0 Q28 0 32 8 L26 14 Q24 10 18 10 Q12 10 12 14 L12 14 L12 40 Q12 44 8 44 Q4 44 4 40 Z" fill="#1B3A57"/>
+                            <path d="M20 22 Q20 18 24 18 L32 18 L32 26 Q32 34 24 34 L20 34 L20 28 Q20 26 24 26 L26 26 L26 24 Q26 22 24 22 Z" fill="#2DBDB6"/>
+                        </svg>
+                        <span>your<em>pay</em></span>
+                    </div>
+                </div>
+            </a>
+            
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="index.html#about" class="nav-link">關於我們</a>
+                    </li>
+                    <li class="nav-item has-dropdown">
+                        <a href="index.html#services" class="nav-link">
+                            服務項目
+                            <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </a>
+                        <ul class="dropdown">
+                            <li><a href="service-detail.html?id=1">國際匯款服務</a></li>
+                            <li><a href="service-detail.html?id=2">金融科技</a></li>
+                            <li><a href="service-detail.html?id=3">企業顧問</a></li>
+                            <li><a href="service-detail.html?id=4">投資理財</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="index.html#news" class="nav-link">最新消息</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="index.html#contact" class="nav-link">聯絡我們</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="header-actions">
+                <div class="lang-switch">
+                    <a href="#" class="lang-active">繁中</a>
+                    <span class="lang-divider">|</span>
+                    <a href="#">EN</a>
+                </div>
+            </div>
+
+            <button class="mobile-menu-btn" aria-label="開啟選單">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Service Hero -->
+    <section class="service-hero">
+        <div class="container">
+            <div class="service-hero-content">
+                <nav class="breadcrumb">
+                    <a href="index.html">首頁</a>
+                    <span>/</span>
+                    <a href="index.html#services">服務項目</a>
+                    <span>/</span>
+                    <span class="breadcrumb-current" id="breadcrumbTitle">服務名稱</span>
+                </nav>
+                <span class="section-tag" id="serviceTag">Service</span>
+                <h1 class="service-hero-title" id="serviceTitle">服務名稱</h1>
+                <p class="service-hero-desc" id="serviceDesc">服務描述</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Service Content Section 1 -->
+    <section class="service-section" id="section1">
+        <div class="container">
+            <div class="service-content-grid">
+                <div class="service-text">
+                    <h2 id="section1Title">區塊標題 1</h2>
+                    <p id="section1Content">區塊內文 1</p>
+                </div>
+                <div class="service-image-wrapper">
+                    <div class="service-image">
+                        <div class="service-image-placeholder" id="section1ImagePlaceholder">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                <polyline points="21 15 16 10 5 21"></polyline>
+                            </svg>
+                        </div>
+                        <img id="section1Image" src="" alt="" style="display: none;">
+                    </div>
+                    <div class="service-decoration"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Service Content Section 2 -->
+    <section class="service-section" id="section2">
+        <div class="container">
+            <div class="service-content-grid reverse">
+                <div class="service-text">
+                    <h2 id="section2Title">區塊標題 2</h2>
+                    <p id="section2Content">區塊內文 2</p>
+                </div>
+                <div class="service-image-wrapper">
+                    <div class="service-image">
+                        <div class="service-image-placeholder" id="section2ImagePlaceholder">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                <polyline points="21 15 16 10 5 21"></polyline>
+                            </svg>
+                        </div>
+                        <img id="section2Image" src="" alt="" style="display: none;">
+                    </div>
+                    <div class="service-decoration"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Service Content Section 3 -->
+    <section class="service-section" id="section3">
+        <div class="container">
+            <div class="service-content-grid">
+                <div class="service-text">
+                    <h2 id="section3Title">區塊標題 3</h2>
+                    <p id="section3Content">區塊內文 3</p>
+                </div>
+                <div class="service-image-wrapper">
+                    <div class="service-image">
+                        <div class="service-image-placeholder" id="section3ImagePlaceholder">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                <polyline points="21 15 16 10 5 21"></polyline>
+                            </svg>
+                        </div>
+                        <img id="section3Image" src="" alt="" style="display: none;">
+                    </div>
+                    <div class="service-decoration"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="service-cta">
+        <div class="container">
+            <h2>需要進一步了解？</h2>
+            <p>我們的專業團隊隨時為您提供諮詢服務，歡迎與我們聯繫</p>
+            <div>
+                <a href="index.html#contact" class="btn btn-primary">
+                    聯繫我們
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </a>
+                <a href="index.html#services" class="btn btn-outline">查看其他服務</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-top">
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-brand">
+                        <a href="index.html" class="footer-logo">
+                            <div class="logo-group">
+                                <span class="logo-yourremit">Your Remit</span>
+                                <div class="logo-yourpay">
+                                    <svg class="logo-icon" width="28" height="32" viewBox="0 0 36 44">
+                                        <path d="M4 8 Q4 4 8 4 L8 4 Q8 0 16 0 Q28 0 32 8 L26 14 Q24 10 18 10 Q12 10 12 14 L12 14 L12 40 Q12 44 8 44 Q4 44 4 40 Z" fill="#1B3A57"/>
+                                        <path d="M20 22 Q20 18 24 18 L32 18 L32 26 Q32 34 24 34 L20 34 L20 28 Q20 26 24 26 L26 26 L26 24 Q26 22 24 22 Z" fill="#2DBDB6"/>
+                                    </svg>
+                                    <span>your<em>pay</em></span>
+                                </div>
+                            </div>
+                        </a>
+                        <p class="footer-desc">金優匯股份有限公司 - 專業國際匯款服務</p>
+                    </div>
+                    
+                    <div class="footer-links">
+                        <h4 class="footer-title">服務項目</h4>
+                        <ul>
+                            <li><a href="service-detail.html?id=1">國際匯款服務</a></li>
+                            <li><a href="service-detail.html?id=2">金融科技</a></li>
+                            <li><a href="service-detail.html?id=3">企業顧問</a></li>
+                            <li><a href="service-detail.html?id=4">投資理財</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-links">
+                        <h4 class="footer-title">客戶服務</h4>
+                        <ul>
+                            <li><a href="#">常見問題</a></li>
+                            <li><a href="index.html#contact">聯絡我們</a></li>
+                            <li><a href="#">隱私權政策</a></li>
+                            <li><a href="#">服務條款</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="footer-bottom-content">
+                    <p class="copyright">Copyright © 2025 金優匯股份有限公司 Your Remit | yourpay. All Rights Reserved.</p>
+                </div>
+            </div>
+        </div>
+        
+        <button class="back-to-top" aria-label="回到頂部">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="19" x2="12" y2="5"></line>
+                <polyline points="5 12 12 5 19 12"></polyline>
+            </svg>
+        </button>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Service Detail Page Script
+        document.addEventListener('DOMContentLoaded', () => {
+            loadServiceData();
+        });
+
+        function loadServiceData() {
+            // Get service ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const serviceId = urlParams.get('id') || '1';
+
+            // Get service data from localStorage
+            const serviceDetailData = JSON.parse(localStorage.getItem('serviceDetailData')) || getDefaultServiceData();
+            const service = serviceDetailData[serviceId];
+
+            if (!service) {
+                console.error('Service not found');
+                return;
+            }
+
+            // Update page title
+            document.title = `${service.title} - 金優匯 Your Remit | yourpay`;
+
+            // Update hero section
+            document.getElementById('breadcrumbTitle').textContent = service.title;
+            document.getElementById('serviceTag').textContent = service.tag || 'Service';
+            document.getElementById('serviceTitle').textContent = service.title;
+            document.getElementById('serviceDesc').textContent = service.description;
+
+            // Update content sections
+            for (let i = 1; i <= 3; i++) {
+                const section = service.sections[i - 1];
+                if (section) {
+                    document.getElementById(`section${i}Title`).textContent = section.title;
+                    document.getElementById(`section${i}Content`).textContent = section.content;
+                    
+                    // Handle image
+                    const img = document.getElementById(`section${i}Image`);
+                    const placeholder = document.getElementById(`section${i}ImagePlaceholder`);
+                    
+                    if (section.image) {
+                        img.src = section.image;
+                        img.alt = section.title;
+                        img.style.display = 'block';
+                        placeholder.style.display = 'none';
+                    } else {
+                        img.style.display = 'none';
+                        placeholder.style.display = 'flex';
+                    }
+                }
+            }
+        }
+
+        function getDefaultServiceData() {
+            return {
+                '1': {
+                    title: '國際匯款服務',
+                    tag: 'International Remittance',
+                    description: '提供快速、安全、便捷的跨境匯款服務，覆蓋全球主要國家與地區，讓您的資金流動無國界。',
+                    sections: [
+                        {
+                            title: '全球覆蓋網絡',
+                            content: '我們的國際匯款服務覆蓋全球超過50個國家和地區，與當地主要銀行和金融機構建立合作關係，確保您的匯款能夠快速、安全地送達目的地。無論是商業往來還是個人匯款，我們都能為您提供最佳解決方案。',
+                            image: ''
+                        },
+                        {
+                            title: '快速到帳服務',
+                            content: '採用先進的金融科技系統，大幅縮短匯款處理時間。一般匯款可在1-3個工作日內到帳，緊急匯款更可在24小時內完成。實時追蹤功能讓您隨時掌握匯款狀態。',
+                            image: ''
+                        },
+                        {
+                            title: '安全保障機制',
+                            content: '我們採用業界最高標準的安全措施，包括SSL加密傳輸、多重身份驗證、防詐騙監控系統等，全方位保護您的資金安全。同時，我們嚴格遵守各國金融法規，確保所有交易合法合規。',
+                            image: ''
+                        }
+                    ]
+                },
+                '2': {
+                    title: '金融科技',
+                    tag: 'FinTech',
+                    description: '運用最新科技打造數位金融平台，提供便捷的線上服務體驗，讓金融服務觸手可及。',
+                    sections: [
+                        {
+                            title: '智能化平台',
+                            content: '我們的數位金融平台整合人工智能與大數據分析技術，為用戶提供個性化的金融服務建議。智能風控系統確保每筆交易的安全性，同時簡化操作流程，讓金融服務更加便捷。',
+                            image: ''
+                        },
+                        {
+                            title: '行動支付解決方案',
+                            content: '開發完整的行動支付生態系統，支援多種支付方式，包括二維碼支付、NFC感應支付、線上支付等。商戶可輕鬆接入我們的支付系統，消費者享受無縫的支付體驗。',
+                            image: ''
+                        },
+                        {
+                            title: 'API整合服務',
+                            content: '提供完善的API接口，讓企業客戶能夠將我們的金融服務無縫整合到自身系統中。專業的技術團隊提供全程支援，確保整合過程順暢高效。',
+                            image: ''
+                        }
+                    ]
+                },
+                '3': {
+                    title: '企業顧問',
+                    tag: 'Business Consulting',
+                    description: '專業團隊提供企業財務規劃、投資分析與風險管理等顧問服務，助力企業穩健發展。',
+                    sections: [
+                        {
+                            title: '財務規劃諮詢',
+                            content: '我們的資深財務顧問團隊為企業提供全面的財務規劃服務，包括現金流管理、資本結構優化、預算編制與控制等。透過深入分析企業財務狀況，制定切實可行的改善方案。',
+                            image: ''
+                        },
+                        {
+                            title: '投資策略分析',
+                            content: '運用專業的分析工具和豐富的市場經驗，為企業提供投資決策支援。從市場調研、項目評估到風險分析，全方位協助企業做出明智的投資決策。',
+                            image: ''
+                        },
+                        {
+                            title: '風險管理服務',
+                            content: '建立完善的風險管理體系，識別、評估和控制企業面臨的各類風險。提供風險預警機制和應急預案，確保企業在複雜的商業環境中穩健運營。',
+                            image: ''
+                        }
+                    ]
+                },
+                '4': {
+                    title: '投資理財',
+                    tag: 'Investment',
+                    description: '多元化投資產品與專業理財規劃，助您實現財富增值目標，打造穩健的財務未來。',
+                    sections: [
+                        {
+                            title: '多元投資產品',
+                            content: '提供豐富多樣的投資產品選擇，包括基金、債券、外匯、貴金屬等。根據不同的風險偏好和投資目標，為客戶量身定制投資組合，實現資產的穩健增值。',
+                            image: ''
+                        },
+                        {
+                            title: '專業理財規劃',
+                            content: '持證理財規劃師團隊為您提供一對一的理財諮詢服務。從財務診斷、目標設定到方案執行，全程陪伴您實現財務自由的夢想。',
+                            image: ''
+                        },
+                        {
+                            title: '投資教育服務',
+                            content: '定期舉辦投資講座和工作坊，分享市場趨勢和投資技巧。提供豐富的線上學習資源，幫助客戶提升投資知識和能力，做出更明智的投資決策。',
+                            image: ''
+                        }
+                    ]
+                }
+            };
+        }
+    </script>
+</body>
+</html>
+

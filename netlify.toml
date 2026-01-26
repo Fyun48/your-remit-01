@@ -1,0 +1,67 @@
+[build]
+  # 發布目錄（因為檔案在根目錄，所以設為當前目錄）
+  publish = "."
+
+  # 建置命令（編譯 TypeScript Functions）
+  command = "npm run build"
+
+[functions]
+  # Netlify Functions 目錄
+  directory = "netlify/functions"
+
+# API 路由重寫（簡化 API 呼叫路徑）
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
+
+# 路由重寫規則（用於單頁應用程式）
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# 標頭設定（快取控制）
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.jpg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.svg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.woff"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.woff2"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# HTML 檔案不應快取
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+
+

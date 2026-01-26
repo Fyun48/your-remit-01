@@ -1,0 +1,32 @@
+# Firebase
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+
+# Node modules (if you add any in the future)
+node_modules/
+
+# Environment variables
+.env
+.env.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Local Netlify folder
+.netlify
+
+# TypeScript build output
+netlify/functions/**/*.js
+netlify/functions/**/*.js.map
+netlify/functions/**/*.d.ts
+netlify/functions/**/*.d.ts.map
+
+# Claude Code
+.claude/

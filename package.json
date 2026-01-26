@@ -1,0 +1,22 @@
+{
+  "name": "your-remit-website",
+  "version": "1.0.0",
+  "description": "金優匯 Your Remit | yourpay 網站",
+  "scripts": {
+    "build": "tsc",
+    "dev": "netlify dev",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@netlify/functions": "^2.4.0",
+    "postgres": "^3.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
+
