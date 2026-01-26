@@ -11,17 +11,15 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "moduleResolution": "node",
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
+    "declaration": false,
+    "sourceMap": false,
     "types": ["node", "@netlify/functions"]
   },
   "include": [
-    "netlify/functions/**/*"
+    "netlify/functions/**/*.ts"
   ],
   "exclude": [
-    "node_modules",
-    "netlify/functions/**/*.js"
+    "node_modules"
   ]
 }
 
