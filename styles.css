@@ -488,7 +488,7 @@ input, textarea, select {
 
 .hero {
     position: relative;
-    min-height: 100vh;
+    height: 480px;
     display: flex;
     align-items: center;
     justify-content: center;
