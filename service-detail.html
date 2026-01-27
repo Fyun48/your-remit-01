@@ -9,51 +9,80 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* Service Detail Page Specific Styles */
+        /* Service Detail Page - Bold Creative Style */
+
+        /* Hero Section */
         .service-hero {
             position: relative;
-            min-height: 50vh;
+            min-height: 70vh;
             display: flex;
             align-items: center;
-            padding: calc(var(--header-height) + var(--space-3xl)) 0 var(--space-3xl);
+            padding: calc(var(--header-height) + var(--space-3xl)) 0 var(--space-4xl);
             background: var(--gradient-hero);
             overflow: hidden;
         }
 
-        .service-hero::before {
-            content: '';
+        .service-hero-bg {
             position: absolute;
             inset: 0;
-            background: 
-                radial-gradient(circle at 20% 80%, rgba(45, 189, 182, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(27, 58, 87, 0.3) 0%, transparent 50%);
+            overflow: hidden;
+        }
+
+        .service-hero-gradient {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 30% 20%, rgba(45, 189, 182, 0.15) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 80%, rgba(27, 58, 87, 0.3) 0%, transparent 50%);
+        }
+
+        .service-hero-shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+        }
+
+        .service-hero-shape-1 {
+            width: 500px;
+            height: 500px;
+            background: var(--color-accent);
+            top: -150px;
+            right: -100px;
+            opacity: 0.1;
+        }
+
+        .service-hero-shape-2 {
+            width: 350px;
+            height: 350px;
+            background: var(--color-primary-light);
+            bottom: -100px;
+            left: -100px;
+            opacity: 0.15;
+        }
+
+        .service-hero-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        .service-hero-container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 var(--space-xl);
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: var(--space-4xl);
+            align-items: center;
         }
 
         .service-hero-content {
-            position: relative;
-            z-index: 1;
-            max-width: 800px;
-        }
-
-        .service-hero .section-tag {
-            color: var(--color-accent);
-            margin-bottom: var(--space-md);
-        }
-
-        .service-hero-title {
-            font-family: var(--font-display);
-            font-size: clamp(2.5rem, 6vw, 4rem);
-            font-weight: 700;
-            color: var(--color-white);
-            margin-bottom: var(--space-lg);
-            line-height: 1.2;
-        }
-
-        .service-hero-desc {
-            font-size: 1.15rem;
-            color: var(--color-gray-300);
-            line-height: 1.8;
-            max-width: 600px;
+            max-width: 700px;
         }
 
         .breadcrumb {
@@ -81,13 +110,163 @@
             color: var(--color-accent) !important;
         }
 
-        /* Service Content Sections */
-        .service-section {
-            padding: var(--space-4xl) 0;
+        .service-hero-badge {
+            display: inline-block;
+            padding: var(--space-sm) var(--space-lg);
+            background: rgba(45, 189, 182, 0.15);
+            border: 1px solid rgba(45, 189, 182, 0.3);
+            border-radius: var(--radius-full);
+            color: var(--color-accent);
+            font-size: var(--text-small);
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: var(--space-lg);
         }
 
-        .service-section:nth-child(even) {
+        .service-hero-title {
+            font-family: var(--font-display);
+            font-size: var(--text-h1);
+            font-weight: 900;
+            line-height: 1.1;
+            color: var(--color-white);
+            margin-bottom: var(--space-xl);
+        }
+
+        .service-hero-title-highlight {
+            background: var(--gradient-text);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .service-hero-desc {
+            font-size: 1.25rem;
+            color: var(--color-gray-300);
+            line-height: 1.8;
+            max-width: 550px;
+            margin-bottom: var(--space-2xl);
+        }
+
+        .service-hero-cta {
+            display: flex;
+            gap: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        /* Hero Visual - Floating Cards */
+        .service-hero-visual {
+            position: relative;
+            height: 400px;
+        }
+
+        .service-feature-card {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-lg) var(--space-xl);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: var(--radius-xl);
+            color: var(--color-white);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .service-feature-card .card-icon {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gradient-accent);
+            border-radius: var(--radius-lg);
+        }
+
+        .service-feature-card span {
+            font-size: var(--text-small);
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .service-feature-card-1 {
+            top: 5%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .service-feature-card-2 {
+            top: 35%;
+            right: 5%;
+            animation-delay: 0.3s;
+        }
+
+        .service-feature-card-3 {
+            bottom: 10%;
+            left: 25%;
+            animation-delay: 0.6s;
+        }
+
+        /* Diagonal Section */
+        .service-diagonal-section {
+            position: relative;
+            padding: var(--space-4xl) 0;
+            overflow: hidden;
+        }
+
+        .service-diagonal-section:nth-child(odd) {
+            background: var(--color-white);
+        }
+
+        .service-diagonal-section:nth-child(even) {
             background: var(--color-gray-100);
+        }
+
+        .service-diagonal-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: inherit;
+            transform: skewY(-3deg);
+            transform-origin: top left;
+            z-index: 0;
+        }
+
+        .service-diagonal-section::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: inherit;
+            transform: skewY(3deg);
+            transform-origin: bottom right;
+            z-index: 0;
+        }
+
+        /* Dark diagonal section */
+        .service-diagonal-section.dark {
+            background: var(--gradient-primary);
+            color: var(--color-white);
+        }
+
+        .service-diagonal-section.dark::before,
+        .service-diagonal-section.dark::after {
+            background: var(--color-primary-dark);
+        }
+
+        .service-section-container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-lg);
         }
 
         .service-content-grid {
@@ -109,32 +288,121 @@
             max-width: 550px;
         }
 
+        .service-text .section-tag {
+            display: inline-block;
+            padding: var(--space-xs) var(--space-md);
+            background: var(--gradient-accent);
+            color: var(--color-white);
+            font-size: var(--text-small);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-radius: var(--radius-full);
+            margin-bottom: var(--space-md);
+        }
+
+        .service-diagonal-section.dark .service-text .section-tag {
+            background: rgba(45, 189, 182, 0.2);
+            color: var(--color-accent);
+        }
+
         .service-text h2 {
             font-family: var(--font-display);
-            font-size: clamp(1.75rem, 3vw, 2.25rem);
-            font-weight: 700;
-            color: var(--color-dark);
+            font-size: var(--text-h2);
+            font-weight: 800;
+            color: var(--color-primary);
             margin-bottom: var(--space-lg);
+            position: relative;
+        }
+
+        .service-diagonal-section.dark .service-text h2 {
+            color: var(--color-white);
+        }
+
+        .service-text h2 .title-decoration {
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--gradient-accent);
+            border-radius: var(--radius-full);
         }
 
         .service-text p {
+            font-size: 1.1rem;
+            color: var(--color-gray-600);
+            line-height: 1.9;
+            margin-bottom: var(--space-xl);
+        }
+
+        .service-diagonal-section.dark .service-text p {
+            color: var(--color-gray-300);
+        }
+
+        /* Feature List */
+        .service-features-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+
+        .service-feature-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .service-feature-item .check-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gradient-accent);
+            border-radius: 50%;
+            color: var(--color-white);
+            flex-shrink: 0;
+        }
+
+        .service-feature-item span {
             font-size: 1rem;
             color: var(--color-gray-700);
-            line-height: 1.9;
-            margin-bottom: var(--space-lg);
+        }
+
+        .service-diagonal-section.dark .service-feature-item span {
+            color: var(--color-gray-300);
+        }
+
+        /* Image Container */
+        .service-image-container {
+            position: relative;
         }
 
         .service-image-wrapper {
             position: relative;
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            box-shadow: var(--shadow-xl);
+            transform: rotate(-2deg);
+            transition: transform var(--transition-base);
+        }
+
+        .service-content-grid.reverse .service-image-wrapper {
+            transform: rotate(2deg);
+        }
+
+        .service-image-wrapper:hover {
+            transform: rotate(0);
         }
 
         .service-image {
             width: 100%;
-            height: 400px;
+            height: 380px;
             background: var(--gradient-primary);
-            border-radius: var(--radius-xl);
-            overflow: hidden;
-            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .service-image img {
@@ -158,47 +426,123 @@
             color: rgba(255, 255, 255, 0.3);
         }
 
-        .service-decoration {
+        .service-image-decoration {
             position: absolute;
-            width: 150px;
-            height: 150px;
-            border: 3px solid var(--color-accent);
+            width: 120px;
+            height: 120px;
+            background: var(--gradient-accent);
             border-radius: var(--radius-xl);
-            bottom: -20px;
-            right: -20px;
             z-index: -1;
+        }
+
+        .service-image-decoration-1 {
+            top: -20px;
+            right: -20px;
+        }
+
+        .service-image-decoration-2 {
+            bottom: -20px;
+            left: -20px;
         }
 
         /* CTA Section */
         .service-cta {
+            position: relative;
             padding: var(--space-4xl) 0;
             background: var(--gradient-primary);
             text-align: center;
+            overflow: hidden;
+        }
+
+        .service-cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: var(--color-primary-dark);
+            transform: skewY(-3deg);
+            transform-origin: top left;
+        }
+
+        .service-cta-bg {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 50%, rgba(45, 189, 182, 0.1) 0%, transparent 60%);
+        }
+
+        .service-cta-content {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0 var(--space-lg);
         }
 
         .service-cta h2 {
             font-family: var(--font-display);
-            font-size: clamp(1.75rem, 3vw, 2.5rem);
-            font-weight: 700;
+            font-size: var(--text-h2);
+            font-weight: 800;
             color: var(--color-white);
             margin-bottom: var(--space-md);
         }
 
         .service-cta p {
-            font-size: 1.1rem;
-            color: var(--color-gray-400);
-            margin-bottom: var(--space-xl);
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
+            font-size: 1.15rem;
+            color: var(--color-gray-300);
+            margin-bottom: var(--space-2xl);
+            line-height: 1.8;
         }
 
-        .service-cta .btn {
-            margin: 0 var(--space-sm);
+        .service-cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        /* Button Styles */
+        .btn-outline {
+            background: transparent;
+            color: var(--color-white);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.5);
         }
 
         /* Responsive */
         @media (max-width: 1024px) {
+            .service-hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .service-hero-content {
+                max-width: 100%;
+            }
+
+            .service-hero-desc {
+                max-width: 100%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .service-hero-cta {
+                justify-content: center;
+            }
+
+            .breadcrumb {
+                justify-content: center;
+            }
+
+            .service-hero-visual {
+                display: none;
+            }
+
             .service-content-grid {
                 grid-template-columns: 1fr;
                 gap: var(--space-2xl);
@@ -210,30 +554,73 @@
 
             .service-text {
                 max-width: 100%;
+                text-align: center;
             }
 
-            .service-image {
-                height: 350px;
+            .service-text h2 .title-decoration {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .service-features-list {
+                align-items: center;
+            }
+
+            .service-image-wrapper {
+                transform: none;
+                max-width: 500px;
+                margin: 0 auto;
+            }
+
+            .service-content-grid.reverse .service-image-wrapper {
+                transform: none;
             }
         }
 
         @media (max-width: 768px) {
             .service-hero {
-                min-height: 40vh;
+                min-height: 60vh;
+            }
+
+            .service-diagonal-section::before,
+            .service-diagonal-section::after {
+                height: 50px;
             }
 
             .service-image {
-                height: 280px;
+                height: 300px;
             }
 
-            .service-decoration {
+            .service-image-decoration {
+                width: 80px;
+                height: 80px;
+            }
+
+            .service-image-decoration-1 {
+                top: -10px;
+                right: -10px;
+            }
+
+            .service-image-decoration-2 {
+                bottom: -10px;
+                left: -10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .service-image-decoration {
                 display: none;
+            }
+
+            .service-cta-buttons {
+                flex-direction: column;
+                align-items: center;
             }
         }
     </style>
 </head>
 <body>
-    <!-- 頂部導航 -->
+    <!-- Header -->
     <header class="header">
         <div class="header-container">
             <a href="index.html" class="logo">
@@ -248,7 +635,7 @@
                     </div>
                 </div>
             </a>
-            
+
             <nav class="nav">
                 <ul class="nav-list">
                     <li class="nav-item">
@@ -295,92 +682,239 @@
 
     <!-- Service Hero -->
     <section class="service-hero">
-        <div class="container">
+        <!-- Background Elements -->
+        <div class="service-hero-bg">
+            <div class="service-hero-gradient"></div>
+            <div class="service-hero-shape service-hero-shape-1"></div>
+            <div class="service-hero-shape service-hero-shape-2"></div>
+            <div class="service-hero-grid"></div>
+        </div>
+
+        <div class="service-hero-container">
             <div class="service-hero-content">
-                <nav class="breadcrumb">
+                <nav class="breadcrumb animate-fade-in-up">
                     <a href="index.html">首頁</a>
                     <span>/</span>
                     <a href="index.html#services">服務項目</a>
                     <span>/</span>
                     <span class="breadcrumb-current" id="breadcrumbTitle">服務名稱</span>
                 </nav>
-                <span class="section-tag" id="serviceTag">Service</span>
-                <h1 class="service-hero-title" id="serviceTitle">服務名稱</h1>
-                <p class="service-hero-desc" id="serviceDesc">服務描述</p>
+                <span class="service-hero-badge animate-fade-in-up delay-100" id="serviceTag">Service</span>
+                <h1 class="service-hero-title animate-fade-in-up delay-200">
+                    <span id="serviceTitle">服務名稱</span>
+                </h1>
+                <p class="service-hero-desc animate-fade-in-up delay-300" id="serviceDesc">服務描述</p>
+                <div class="service-hero-cta animate-fade-in-up delay-400">
+                    <a href="index.html#contact" class="btn btn-primary btn-glow">
+                        立即諮詢
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                    <a href="index.html#services" class="btn btn-outline-light">查看所有服務</a>
+                </div>
+            </div>
+
+            <!-- Floating Feature Cards -->
+            <div class="service-hero-visual">
+                <div class="service-feature-card service-feature-card-1" id="featureCard1">
+                    <div class="card-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="2" y1="12" x2="22" y2="12"></line>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                        </svg>
+                    </div>
+                    <span id="feature1Text">專業服務</span>
+                </div>
+                <div class="service-feature-card service-feature-card-2" id="featureCard2">
+                    <div class="card-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                    </div>
+                    <span id="feature2Text">安全可靠</span>
+                </div>
+                <div class="service-feature-card service-feature-card-3" id="featureCard3">
+                    <div class="card-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                        </svg>
+                    </div>
+                    <span id="feature3Text">優惠費率</span>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Service Content Section 1 -->
-    <section class="service-section" id="section1">
-        <div class="container">
+    <section class="service-diagonal-section" id="section1">
+        <div class="service-section-container">
             <div class="service-content-grid">
-                <div class="service-text">
-                    <h2 id="section1Title">區塊標題 1</h2>
+                <div class="service-text animate-on-scroll">
+                    <span class="section-tag">Feature 01</span>
+                    <h2 id="section1Title">
+                        區塊標題 1
+                        <span class="title-decoration"></span>
+                    </h2>
                     <p id="section1Content">區塊內文 1</p>
-                </div>
-                <div class="service-image-wrapper">
-                    <div class="service-image">
-                        <div class="service-image-placeholder" id="section1ImagePlaceholder">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                                <polyline points="21 15 16 10 5 21"></polyline>
-                            </svg>
+                    <div class="service-features-list" id="section1Features">
+                        <div class="service-feature-item">
+                            <span class="check-icon">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                            </span>
+                            <span>特色功能 1</span>
                         </div>
-                        <img id="section1Image" src="" alt="" style="display: none;">
+                        <div class="service-feature-item">
+                            <span class="check-icon">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                            </span>
+                            <span>特色功能 2</span>
+                        </div>
+                        <div class="service-feature-item">
+                            <span class="check-icon">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                            </span>
+                            <span>特色功能 3</span>
+                        </div>
                     </div>
-                    <div class="service-decoration"></div>
+                </div>
+                <div class="service-image-container animate-on-scroll">
+                    <div class="service-image-wrapper">
+                        <div class="service-image">
+                            <div class="service-image-placeholder" id="section1ImagePlaceholder">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                    <polyline points="21 15 16 10 5 21"></polyline>
+                                </svg>
+                            </div>
+                            <img id="section1Image" src="" alt="" style="display: none;">
+                        </div>
+                    </div>
+                    <div class="service-image-decoration service-image-decoration-1"></div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Service Content Section 2 -->
-    <section class="service-section" id="section2">
-        <div class="container">
+    <!-- Service Content Section 2 - Dark -->
+    <section class="service-diagonal-section dark" id="section2">
+        <div class="service-section-container">
             <div class="service-content-grid reverse">
-                <div class="service-text">
-                    <h2 id="section2Title">區塊標題 2</h2>
+                <div class="service-text animate-on-scroll">
+                    <span class="section-tag">Feature 02</span>
+                    <h2 id="section2Title">
+                        區塊標題 2
+                        <span class="title-decoration"></span>
+                    </h2>
                     <p id="section2Content">區塊內文 2</p>
-                </div>
-                <div class="service-image-wrapper">
-                    <div class="service-image">
-                        <div class="service-image-placeholder" id="section2ImagePlaceholder">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                                <polyline points="21 15 16 10 5 21"></polyline>
-                            </svg>
+                    <div class="service-features-list" id="section2Features">
+                        <div class="service-feature-item">
+                            <span class="check-icon">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                            </span>
+                            <span>特色功能 1</span>
                         </div>
-                        <img id="section2Image" src="" alt="" style="display: none;">
+                        <div class="service-feature-item">
+                            <span class="check-icon">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                            </span>
+                            <span>特色功能 2</span>
+                        </div>
+                        <div class="service-feature-item">
+                            <span class="check-icon">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                            </span>
+                            <span>特色功能 3</span>
+                        </div>
                     </div>
-                    <div class="service-decoration"></div>
+                </div>
+                <div class="service-image-container animate-on-scroll">
+                    <div class="service-image-wrapper">
+                        <div class="service-image">
+                            <div class="service-image-placeholder" id="section2ImagePlaceholder">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                    <polyline points="21 15 16 10 5 21"></polyline>
+                                </svg>
+                            </div>
+                            <img id="section2Image" src="" alt="" style="display: none;">
+                        </div>
+                    </div>
+                    <div class="service-image-decoration service-image-decoration-2"></div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Service Content Section 3 -->
-    <section class="service-section" id="section3">
-        <div class="container">
+    <section class="service-diagonal-section" id="section3">
+        <div class="service-section-container">
             <div class="service-content-grid">
-                <div class="service-text">
-                    <h2 id="section3Title">區塊標題 3</h2>
+                <div class="service-text animate-on-scroll">
+                    <span class="section-tag">Feature 03</span>
+                    <h2 id="section3Title">
+                        區塊標題 3
+                        <span class="title-decoration"></span>
+                    </h2>
                     <p id="section3Content">區塊內文 3</p>
-                </div>
-                <div class="service-image-wrapper">
-                    <div class="service-image">
-                        <div class="service-image-placeholder" id="section3ImagePlaceholder">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                                <polyline points="21 15 16 10 5 21"></polyline>
-                            </svg>
+                    <div class="service-features-list" id="section3Features">
+                        <div class="service-feature-item">
+                            <span class="check-icon">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                            </span>
+                            <span>特色功能 1</span>
                         </div>
-                        <img id="section3Image" src="" alt="" style="display: none;">
+                        <div class="service-feature-item">
+                            <span class="check-icon">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                            </span>
+                            <span>特色功能 2</span>
+                        </div>
+                        <div class="service-feature-item">
+                            <span class="check-icon">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                            </span>
+                            <span>特色功能 3</span>
+                        </div>
                     </div>
-                    <div class="service-decoration"></div>
+                </div>
+                <div class="service-image-container animate-on-scroll">
+                    <div class="service-image-wrapper">
+                        <div class="service-image">
+                            <div class="service-image-placeholder" id="section3ImagePlaceholder">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                    <polyline points="21 15 16 10 5 21"></polyline>
+                                </svg>
+                            </div>
+                            <img id="section3Image" src="" alt="" style="display: none;">
+                        </div>
+                    </div>
+                    <div class="service-image-decoration service-image-decoration-1"></div>
                 </div>
             </div>
         </div>
@@ -388,11 +922,12 @@
 
     <!-- CTA Section -->
     <section class="service-cta">
-        <div class="container">
-            <h2>需要進一步了解？</h2>
-            <p>我們的專業團隊隨時為您提供諮詢服務，歡迎與我們聯繫</p>
-            <div>
-                <a href="index.html#contact" class="btn btn-primary">
+        <div class="service-cta-bg"></div>
+        <div class="service-cta-content">
+            <h2 class="animate-on-scroll">需要進一步了解？</h2>
+            <p class="animate-on-scroll">我們的專業團隊隨時為您提供諮詢服務，歡迎與我們聯繫</p>
+            <div class="service-cta-buttons animate-on-scroll">
+                <a href="index.html#contact" class="btn btn-primary btn-glow">
                     聯繫我們
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -424,7 +959,7 @@
                         </a>
                         <p class="footer-desc">金優匯股份有限公司 - 專業國際匯款服務</p>
                     </div>
-                    
+
                     <div class="footer-links">
                         <h4 class="footer-title">服務項目</h4>
                         <ul>
@@ -434,7 +969,7 @@
                             <li><a href="service-detail.html?id=4">投資理財</a></li>
                         </ul>
                     </div>
-                    
+
                     <div class="footer-links">
                         <h4 class="footer-title">客戶服務</h4>
                         <ul>
@@ -447,15 +982,15 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="footer-bottom">
             <div class="container">
                 <div class="footer-bottom-content">
-                    <p class="copyright">Copyright © 2025 金優匯股份有限公司 Your Remit | yourpay. All Rights Reserved.</p>
+                    <p class="copyright">Copyright 2025 金優匯股份有限公司 Your Remit | yourpay. All Rights Reserved.</p>
                 </div>
             </div>
         </div>
-        
+
         <button class="back-to-top" aria-label="回到頂部">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="12" y1="19" x2="12" y2="5"></line>
@@ -494,17 +1029,25 @@
             document.getElementById('serviceTitle').textContent = service.title;
             document.getElementById('serviceDesc').textContent = service.description;
 
+            // Update feature cards based on service
+            updateFeatureCards(serviceId);
+
             // Update content sections
             for (let i = 1; i <= 3; i++) {
                 const section = service.sections[i - 1];
                 if (section) {
                     document.getElementById(`section${i}Title`).textContent = section.title;
                     document.getElementById(`section${i}Content`).textContent = section.content;
-                    
+
+                    // Update feature list if available
+                    if (section.features) {
+                        updateFeatureList(`section${i}Features`, section.features);
+                    }
+
                     // Handle image
                     const img = document.getElementById(`section${i}Image`);
                     const placeholder = document.getElementById(`section${i}ImagePlaceholder`);
-                    
+
                     if (section.image) {
                         img.src = section.image;
                         img.alt = section.title;
@@ -518,6 +1061,53 @@
             }
         }
 
+        function updateFeatureCards(serviceId) {
+            const featureIcons = {
+                '1': [
+                    { icon: 'globe', text: '全球覆蓋' },
+                    { icon: 'clock', text: '快速到帳' },
+                    { icon: 'shield', text: '安全保障' }
+                ],
+                '2': [
+                    { icon: 'cpu', text: '智能平台' },
+                    { icon: 'smartphone', text: '行動支付' },
+                    { icon: 'code', text: 'API整合' }
+                ],
+                '3': [
+                    { icon: 'briefcase', text: '財務規劃' },
+                    { icon: 'trending', text: '投資分析' },
+                    { icon: 'shield', text: '風險管理' }
+                ],
+                '4': [
+                    { icon: 'layers', text: '多元產品' },
+                    { icon: 'target', text: '專業規劃' },
+                    { icon: 'book', text: '投資教育' }
+                ]
+            };
+
+            const features = featureIcons[serviceId] || featureIcons['1'];
+
+            if (features[0]) document.getElementById('feature1Text').textContent = features[0].text;
+            if (features[1]) document.getElementById('feature2Text').textContent = features[1].text;
+            if (features[2]) document.getElementById('feature3Text').textContent = features[2].text;
+        }
+
+        function updateFeatureList(containerId, features) {
+            const container = document.getElementById(containerId);
+            if (!container || !features || features.length === 0) return;
+
+            container.innerHTML = features.map(feature => `
+                <div class="service-feature-item">
+                    <span class="check-icon">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    </span>
+                    <span>${feature}</span>
+                </div>
+            `).join('');
+        }
+
         function getDefaultServiceData() {
             return {
                 '1': {
@@ -528,16 +1118,19 @@
                         {
                             title: '全球覆蓋網絡',
                             content: '我們的國際匯款服務覆蓋全球超過50個國家和地區，與當地主要銀行和金融機構建立合作關係，確保您的匯款能夠快速、安全地送達目的地。無論是商業往來還是個人匯款，我們都能為您提供最佳解決方案。',
+                            features: ['覆蓋50+國家', '合作銀行網絡', '多幣種支援'],
                             image: ''
                         },
                         {
                             title: '快速到帳服務',
                             content: '採用先進的金融科技系統，大幅縮短匯款處理時間。一般匯款可在1-3個工作日內到帳，緊急匯款更可在24小時內完成。實時追蹤功能讓您隨時掌握匯款狀態。',
+                            features: ['1-3日到帳', '24小時緊急服務', '即時追蹤'],
                             image: ''
                         },
                         {
                             title: '安全保障機制',
                             content: '我們採用業界最高標準的安全措施，包括SSL加密傳輸、多重身份驗證、防詐騙監控系統等，全方位保護您的資金安全。同時，我們嚴格遵守各國金融法規，確保所有交易合法合規。',
+                            features: ['SSL加密', '多重驗證', '合規監管'],
                             image: ''
                         }
                     ]
@@ -550,16 +1143,19 @@
                         {
                             title: '智能化平台',
                             content: '我們的數位金融平台整合人工智能與大數據分析技術，為用戶提供個性化的金融服務建議。智能風控系統確保每筆交易的安全性，同時簡化操作流程，讓金融服務更加便捷。',
+                            features: ['AI智能分析', '大數據風控', '個性化推薦'],
                             image: ''
                         },
                         {
                             title: '行動支付解決方案',
                             content: '開發完整的行動支付生態系統，支援多種支付方式，包括二維碼支付、NFC感應支付、線上支付等。商戶可輕鬆接入我們的支付系統，消費者享受無縫的支付體驗。',
+                            features: ['QR Code支付', 'NFC感應', '線上支付'],
                             image: ''
                         },
                         {
                             title: 'API整合服務',
                             content: '提供完善的API接口，讓企業客戶能夠將我們的金融服務無縫整合到自身系統中。專業的技術團隊提供全程支援，確保整合過程順暢高效。',
+                            features: ['完整API文檔', '技術支援', '快速整合'],
                             image: ''
                         }
                     ]
@@ -572,16 +1168,19 @@
                         {
                             title: '財務規劃諮詢',
                             content: '我們的資深財務顧問團隊為企業提供全面的財務規劃服務，包括現金流管理、資本結構優化、預算編制與控制等。透過深入分析企業財務狀況，制定切實可行的改善方案。',
+                            features: ['現金流管理', '資本結構優化', '預算控制'],
                             image: ''
                         },
                         {
                             title: '投資策略分析',
                             content: '運用專業的分析工具和豐富的市場經驗，為企業提供投資決策支援。從市場調研、項目評估到風險分析，全方位協助企業做出明智的投資決策。',
+                            features: ['市場調研', '項目評估', '風險分析'],
                             image: ''
                         },
                         {
                             title: '風險管理服務',
                             content: '建立完善的風險管理體系，識別、評估和控制企業面臨的各類風險。提供風險預警機制和應急預案，確保企業在複雜的商業環境中穩健運營。',
+                            features: ['風險識別', '預警機制', '應急預案'],
                             image: ''
                         }
                     ]
@@ -594,16 +1193,19 @@
                         {
                             title: '多元投資產品',
                             content: '提供豐富多樣的投資產品選擇，包括基金、債券、外匯、貴金屬等。根據不同的風險偏好和投資目標，為客戶量身定制投資組合，實現資產的穩健增值。',
+                            features: ['基金投資', '債券配置', '外匯交易'],
                             image: ''
                         },
                         {
                             title: '專業理財規劃',
                             content: '持證理財規劃師團隊為您提供一對一的理財諮詢服務。從財務診斷、目標設定到方案執行，全程陪伴您實現財務自由的夢想。',
+                            features: ['一對一諮詢', '財務診斷', '目標規劃'],
                             image: ''
                         },
                         {
                             title: '投資教育服務',
                             content: '定期舉辦投資講座和工作坊，分享市場趨勢和投資技巧。提供豐富的線上學習資源，幫助客戶提升投資知識和能力，做出更明智的投資決策。',
+                            features: ['投資講座', '線上課程', '市場分析'],
                             image: ''
                         }
                     ]
@@ -613,4 +1215,3 @@
     </script>
 </body>
 </html>
-
