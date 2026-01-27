@@ -1,14 +1,26 @@
 /* ================================
    Admin Dashboard CSS
+   Light Creative Style (輕量版創意風格)
 ================================ */
 :root {
+    /* Primary Colors - Deep Navy Blue */
     --color-primary: #1B3A57;
     --color-primary-light: #2A5580;
-    --color-primary-dark: #122740;
+    --color-primary-dark: #0D1E2D;
+
+    /* Accent Colors - Teal/Cyan */
     --color-accent: #2DBDB6;
     --color-accent-light: #4DD4CD;
     --color-accent-dark: #1F9E98;
-    --color-dark: #0F1C2E;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, #1B3A57 0%, #0D1E2D 100%);
+    --gradient-accent: linear-gradient(135deg, #2DBDB6 0%, #1F9E98 100%);
+    --gradient-button: linear-gradient(135deg, #2DBDB6 0%, #4DD4CD 100%);
+    --gradient-button-primary: linear-gradient(135deg, #1B3A57 0%, #2A5580 100%);
+
+    /* Neutral Colors */
+    --color-dark: #0D1E2D;
     --color-gray-900: #1C2D42;
     --color-gray-800: #2D4156;
     --color-gray-700: #4A6380;
@@ -19,21 +31,39 @@
     --color-gray-200: #E5ECF2;
     --color-gray-100: #F4F7FA;
     --color-white: #FFFFFF;
+
+    /* Status Colors */
     --color-success: #10B981;
     --color-warning: #F59E0B;
     --color-error: #EF4444;
+
+    /* Typography */
     --font-primary: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
     --font-display: 'Poppins', -apple-system, sans-serif;
+
+    /* Layout */
     --sidebar-width: 260px;
     --header-height: 70px;
+
+    /* Transitions */
     --transition-fast: 0.15s ease;
     --transition-base: 0.3s ease;
-    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
-    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
-    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
+    --transition-slow: 0.5s ease;
+
+    /* Shadows - Brand colored for softer appearance */
+    --shadow-sm: 0 2px 8px rgba(27, 58, 87, 0.08);
+    --shadow-md: 0 4px 16px rgba(27, 58, 87, 0.12);
+    --shadow-lg: 0 8px 32px rgba(27, 58, 87, 0.16);
+    --shadow-xl: 0 20px 60px rgba(27, 58, 87, 0.2);
+    --shadow-glow: 0 0 20px rgba(45, 189, 182, 0.3);
+    --shadow-card-hover: 0 12px 40px rgba(27, 58, 87, 0.18);
+
+    /* Border Radius - Softer corners */
     --radius-sm: 6px;
     --radius-md: 10px;
     --radius-lg: 16px;
+    --radius-xl: 24px;
+    --radius-full: 9999px;
 }
 
 * {
@@ -75,11 +105,12 @@ input, select, textarea {
     top: 0;
     bottom: 0;
     width: var(--sidebar-width);
-    background: var(--color-dark);
+    background: var(--gradient-primary);
     display: flex;
     flex-direction: column;
     z-index: 100;
     transition: transform var(--transition-base);
+    box-shadow: var(--shadow-lg);
 }
 
 .sidebar-header {
@@ -309,8 +340,8 @@ input, select, textarea {
 .header-search input:focus {
     outline: none;
     background: var(--color-white);
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(27, 58, 87, 0.1);
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgba(45, 189, 182, 0.15);
 }
 
 .header-actions {
@@ -360,7 +391,7 @@ input, select, textarea {
 .user-avatar {
     width: 38px;
     height: 38px;
-    background: var(--color-primary);
+    background: var(--gradient-button-primary);
     border-radius: var(--radius-md);
     display: flex;
     align-items: center;
@@ -368,6 +399,7 @@ input, select, textarea {
     color: var(--color-white);
     font-weight: 600;
     font-size: 0.9rem;
+    box-shadow: var(--shadow-sm);
 }
 
 .user-info {
@@ -454,18 +486,19 @@ input, select, textarea {
     align-items: center;
     gap: 0.5rem;
     padding: 0.75rem 1.25rem;
-    background: var(--color-accent);
+    background: var(--gradient-button);
     color: var(--color-dark);
     border-radius: var(--radius-md);
     font-size: 0.9rem;
     font-weight: 600;
-    transition: all var(--transition-fast);
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow-sm);
 }
 
 .add-btn:hover {
-    background: var(--color-accent-light);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md), var(--shadow-glow);
+    filter: brightness(1.05);
 }
 
 /* ================================
@@ -486,6 +519,14 @@ input, select, textarea {
     align-items: center;
     gap: 1rem;
     box-shadow: var(--shadow-sm);
+    transition: all var(--transition-base);
+    border: 1px solid transparent;
+}
+
+.stat-card:hover {
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-2px);
+    border-color: var(--color-gray-200);
 }
 
 .stat-icon {
@@ -549,6 +590,13 @@ input, select, textarea {
     border-radius: var(--radius-lg);
     padding: 1.5rem;
     box-shadow: var(--shadow-sm);
+    transition: all var(--transition-base);
+    border: 1px solid transparent;
+}
+
+.dashboard-card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-gray-200);
 }
 
 .card-header {
@@ -662,12 +710,16 @@ input, select, textarea {
     color: var(--color-gray-700);
     font-size: 0.9rem;
     font-weight: 500;
-    transition: all var(--transition-fast);
+    transition: all var(--transition-base);
+    border: 1px solid transparent;
 }
 
 .quick-action-btn:hover {
-    background: var(--color-primary);
+    background: var(--gradient-button-primary);
     color: var(--color-white);
+    transform: translateX(4px);
+    box-shadow: var(--shadow-sm);
+    border-color: var(--color-primary);
 }
 
 /* ================================
@@ -704,6 +756,7 @@ input, select, textarea {
     color: var(--color-primary);
     background: var(--color-white);
     border-bottom-color: var(--color-accent);
+    font-weight: 600;
 }
 
 .editor-content {
@@ -744,15 +797,22 @@ input, select, textarea {
     font-size: 0.9rem;
     color: var(--color-dark);
     background: var(--color-white);
-    transition: all var(--transition-fast);
+    transition: all var(--transition-base);
+}
+
+.form-group input:hover,
+.form-group select:hover,
+.form-group textarea:hover {
+    border-color: var(--color-gray-400);
 }
 
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(27, 58, 87, 0.1);
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgba(45, 189, 182, 0.15);
+    background: var(--color-white);
 }
 
 .form-group textarea {
@@ -810,18 +870,19 @@ input, select, textarea {
     align-items: center;
     gap: 0.5rem;
     padding: 0.875rem 1.5rem;
-    background: var(--color-primary);
+    background: var(--gradient-button-primary);
     color: var(--color-white);
     border-radius: var(--radius-md);
     font-size: 0.9rem;
     font-weight: 600;
-    transition: all var(--transition-fast);
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow-sm);
 }
 
 .save-btn:hover {
-    background: var(--color-primary-light);
-    transform: translateY(-1px);
+    transform: translateY(-2px);
     box-shadow: var(--shadow-md);
+    filter: brightness(1.1);
 }
 
 /* ================================
@@ -841,11 +902,14 @@ input, select, textarea {
     background: var(--color-white);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-sm);
-    transition: all var(--transition-fast);
+    transition: all var(--transition-base);
+    border: 1px solid transparent;
 }
 
 .news-list-item:hover {
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-2px);
+    border-color: var(--color-gray-200);
 }
 
 .news-list-order {
@@ -1014,13 +1078,14 @@ input, select, textarea {
 
 .modal-content {
     background: var(--color-white);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-xl);
     width: 100%;
     max-width: 560px;
     max-height: 90vh;
     overflow-y: auto;
     transform: translateY(20px);
     transition: transform var(--transition-base);
+    box-shadow: var(--shadow-xl);
 }
 
 .modal.active .modal-content {
@@ -1087,16 +1152,19 @@ input, select, textarea {
 
 .submit-btn {
     padding: 0.75rem 1.5rem;
-    background: var(--color-primary);
+    background: var(--gradient-button-primary);
     color: var(--color-white);
     border-radius: var(--radius-md);
     font-size: 0.9rem;
     font-weight: 600;
-    transition: all var(--transition-fast);
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow-sm);
 }
 
 .submit-btn:hover {
-    background: var(--color-primary-light);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+    filter: brightness(1.1);
 }
 
 /* ================================
@@ -1217,12 +1285,12 @@ input, select, textarea {
 ================================ */
 .upload-area {
     border: 2px dashed var(--color-gray-300);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-xl);
     padding: 3rem;
     text-align: center;
     background: var(--color-white);
     cursor: pointer;
-    transition: all var(--transition-fast);
+    transition: all var(--transition-base);
     margin-bottom: 1.5rem;
 }
 
@@ -1230,6 +1298,8 @@ input, select, textarea {
 .upload-area.dragover {
     border-color: var(--color-accent);
     background: rgba(45, 189, 182, 0.05);
+    box-shadow: var(--shadow-glow);
+    transform: translateY(-2px);
 }
 
 .upload-icon {
@@ -1333,6 +1403,13 @@ input, select, textarea {
     border-radius: var(--radius-lg);
     padding: 1.5rem;
     box-shadow: var(--shadow-sm);
+    transition: all var(--transition-base);
+    border: 1px solid transparent;
+}
+
+.settings-card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-gray-200);
 }
 
 .settings-card h3 {
@@ -1359,10 +1436,10 @@ input, select, textarea {
     align-items: center;
     gap: 0.75rem;
     padding: 1rem 1.5rem;
-    background: var(--color-dark);
+    background: var(--gradient-primary);
     color: var(--color-white);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-lg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
     transform: translateY(100px);
     opacity: 0;
     visibility: hidden;
@@ -1473,6 +1550,13 @@ input, select, textarea {
     padding: 1.5rem;
     margin-bottom: 1.5rem;
     box-shadow: var(--shadow-sm);
+    transition: all var(--transition-base);
+    border: 1px solid transparent;
+}
+
+.banner-settings:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-gray-200);
 }
 
 .banner-settings .settings-row {
@@ -1547,6 +1631,14 @@ input, select, textarea {
     display: flex;
     gap: 1.25rem;
     align-items: flex-start;
+    transition: all var(--transition-base);
+    border: 1px solid transparent;
+}
+
+.banner-item:hover {
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-2px);
+    border-color: var(--color-gray-200);
 }
 
 .banner-item-order {
@@ -1668,12 +1760,13 @@ input, select, textarea {
 }
 
 .banner-upload-btn {
-    background: var(--color-accent);
+    background: var(--gradient-button);
     color: var(--color-dark);
 }
 
 .banner-upload-btn:hover {
-    background: var(--color-accent-dark);
+    filter: brightness(1.05);
+    box-shadow: var(--shadow-glow);
 }
 
 .banner-delete-btn {
@@ -1694,17 +1787,19 @@ input, select, textarea {
     padding: 1rem;
     background: var(--color-white);
     border: 2px dashed var(--color-gray-300);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-xl);
     color: var(--color-gray-600);
     font-weight: 600;
     cursor: pointer;
-    transition: all var(--transition-fast);
+    transition: all var(--transition-base);
 }
 
 .add-banner-btn:hover {
-    border-color: var(--color-primary);
-    color: var(--color-primary);
-    background: rgba(26, 58, 87, 0.02);
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    background: rgba(45, 189, 182, 0.05);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow);
 }
 
 .add-banner-btn:disabled {
@@ -1956,6 +2051,14 @@ input, select, textarea {
     align-items: center;
     gap: 1rem;
     box-shadow: var(--shadow-sm);
+    transition: all var(--transition-base);
+    border: 1px solid transparent;
+}
+
+.summary-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+    border-color: var(--color-gray-200);
 }
 
 .summary-icon {
@@ -2060,12 +2163,15 @@ input, select, textarea {
     padding: 1.25rem;
     box-shadow: var(--shadow-sm);
     cursor: pointer;
-    transition: all var(--transition-fast);
+    transition: all var(--transition-base);
     position: relative;
+    border: 1px solid transparent;
 }
 
 .message-item:hover {
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-2px);
+    border-color: var(--color-gray-200);
 }
 
 .message-item.unread {
@@ -2248,6 +2354,13 @@ input, select, textarea {
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-sm);
     overflow: hidden;
+    transition: all var(--transition-base);
+    border: 1px solid transparent;
+}
+
+.app-card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-gray-200);
 }
 
 .app-card-header {
@@ -2701,6 +2814,13 @@ input, select, textarea {
     box-shadow: var(--shadow-sm);
     margin-bottom: 1.5rem;
     overflow: hidden;
+    transition: all var(--transition-base);
+    border: 1px solid transparent;
+}
+
+.governance-block:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-gray-200);
 }
 
 .governance-block:last-child {
@@ -2744,19 +2864,20 @@ input, select, textarea {
     font-size: 0.9rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all var(--transition-fast);
+    transition: all var(--transition-base);
     border: none;
 }
 
 .btn-primary {
-    background: var(--color-accent);
+    background: var(--gradient-button);
     color: var(--color-dark);
+    box-shadow: var(--shadow-sm);
 }
 
 .btn-primary:hover {
-    background: var(--color-accent-light);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md), var(--shadow-glow);
+    filter: brightness(1.05);
 }
 
 .btn-sm {
