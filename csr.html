@@ -418,8 +418,9 @@
                 console.log('Values:', values, 'Error:', valuesError);
                 if (values && values.length > 0) {
                     const valuesContainer = document.querySelector('.csr-values-grid');
+                    console.log('Values container found:', valuesContainer);
                     if (valuesContainer) {
-                        valuesContainer.innerHTML = values.map(value => {
+                        const html = values.map(value => {
                             const iconSvg = getIconSvg(value.icon);
                             return `
                                 <div class="csr-value-card animate-on-scroll">
@@ -429,6 +430,9 @@
                                 </div>
                             `;
                         }).join('');
+                        console.log('Values HTML length:', html.length);
+                        valuesContainer.innerHTML = html;
+                        console.log('Values container innerHTML set, children:', valuesContainer.children.length);
                     }
                 }
             } catch (e) {
