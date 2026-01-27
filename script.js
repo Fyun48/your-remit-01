@@ -264,15 +264,31 @@ function initMobileMenu() {
         }
         
         .mobile-nav .nav-list {
+            display: flex;
             flex-direction: column;
             align-items: stretch;
             gap: 0;
         }
-        
+
+        .mobile-nav .nav-item {
+            width: 100%;
+        }
+
         .mobile-nav .nav-link {
+            display: flex;
             padding: var(--space-lg);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             font-size: 1.1rem;
+            color: white;
+        }
+
+        .mobile-nav .nav-link:hover {
+            color: var(--color-accent);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .mobile-nav .dropdown-arrow {
+            margin-left: auto;
         }
         
         .mobile-nav .dropdown {
@@ -293,8 +309,13 @@ function initMobileMenu() {
         }
         
         .mobile-nav .dropdown li a {
-            color: var(--color-gray-400);
+            color: rgba(255, 255, 255, 0.7);
             padding: var(--space-md) var(--space-xl);
+            display: block;
+        }
+
+        .mobile-nav .dropdown li a:hover {
+            color: var(--color-accent);
         }
         
         .mobile-menu-btn.active span:nth-child(1) {
