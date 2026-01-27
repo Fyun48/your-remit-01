@@ -997,6 +997,62 @@
                     </div>
                 </div>
             </section>
+
+            <!-- Investor Documents Section -->
+            <section id="investor-documents-section" class="content-section" style="display: none;">
+                <div class="section-header">
+                    <div class="section-header-left">
+                        <h1 class="section-title">投資人文件管理</h1>
+                        <p class="section-desc">管理投資人專區的財務報告、公司公告及股東會資料</p>
+                    </div>
+                </div>
+
+                <!-- Filter Bar -->
+                <div class="filter-bar">
+                    <div class="filter-group">
+                        <label for="doc-category-filter">分類</label>
+                        <select id="doc-category-filter">
+                            <option value="">全部分類</option>
+                            <option value="financial">財務報告</option>
+                            <option value="announcement">公司公告</option>
+                            <option value="shareholder">股東會資料</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="doc-year-filter">年份</label>
+                        <select id="doc-year-filter">
+                            <option value="">全部年份</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" onclick="showAddDocumentModal()">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        新增文件
+                    </button>
+                </div>
+
+                <!-- Data Table -->
+                <div class="data-table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>標題</th>
+                                <th>分類</th>
+                                <th>年度/季度</th>
+                                <th>發布日期</th>
+                                <th>保護</th>
+                                <th>狀態</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="investor-docs-table">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
         </div>
     </main>
 
@@ -1239,6 +1295,117 @@
                 <div class="modal-actions">
                     <button type="button" class="cancel-btn" id="cancelImageEditBtn">取消</button>
                     <button type="submit" class="submit-btn">儲存變更</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add/Edit Document Modal -->
+    <div class="modal" id="document-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="document-modal-title">新增文件</h2>
+                <button class="modal-close" onclick="closeDocumentModal()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <form id="document-form" class="modal-form">
+                <input type="hidden" id="doc-id">
+
+                <div class="form-group">
+                    <label for="doc-category">分類</label>
+                    <select id="doc-category" required onchange="onDocCategoryChange()">
+                        <option value="financial">財務報告</option>
+                        <option value="announcement">公司公告</option>
+                        <option value="shareholder">股東會資料</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="doc-type">文件類型</label>
+                    <select id="doc-type" required>
+                        <!-- Options change based on category -->
+                        <option value="annual">年報</option>
+                        <option value="quarterly">季報</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="doc-title">標題</label>
+                    <input type="text" id="doc-title" placeholder="請輸入文件標題" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="doc-description">說明（可選）</label>
+                    <textarea id="doc-description" rows="3" placeholder="請輸入文件說明"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="doc-file-url">檔案網址</label>
+                    <input type="url" id="doc-file-url" placeholder="https://example.com/document.pdf" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group conditional" id="fiscal-year-row">
+                        <label for="doc-fiscal-year">財務年度</label>
+                        <input type="number" id="doc-fiscal-year" min="2000" max="2100" placeholder="2025">
+                    </div>
+
+                    <div class="form-group conditional" id="fiscal-quarter-row">
+                        <label for="doc-fiscal-quarter">季度</label>
+                        <select id="doc-fiscal-quarter">
+                            <option value="">無</option>
+                            <option value="1">Q1</option>
+                            <option value="2">Q2</option>
+                            <option value="3">Q3</option>
+                            <option value="4">Q4</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="doc-publish-date">發布日期</label>
+                    <input type="date" id="doc-publish-date" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="doc-protected" onchange="togglePasswordFields()">
+                        <span>啟用密碼保護</span>
+                    </label>
+                </div>
+
+                <div class="password-fields" id="password-fields" style="display: none;">
+                    <div class="form-group">
+                        <label for="doc-password">密碼</label>
+                        <input type="password" id="doc-password" placeholder="請輸入保護密碼">
+                    </div>
+                    <div class="form-group">
+                        <label for="doc-password-hint">密碼提示（可選）</label>
+                        <input type="text" id="doc-password-hint" placeholder="請輸入密碼提示">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>發布狀態</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="doc-published" value="true" checked>
+                            <span>上線</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="doc-published" value="false">
+                            <span>草稿</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="cancel-btn" onclick="closeDocumentModal()">取消</button>
+                    <button type="submit" class="submit-btn">儲存</button>
                 </div>
             </form>
         </div>
