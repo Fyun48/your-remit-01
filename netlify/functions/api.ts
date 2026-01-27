@@ -483,6 +483,62 @@ export const handler: Handler = async (event) => {
       }
     }
 
+    // ==================== GOVERNANCE INFO ====================
+    if (path === '/investor/governance' || path.startsWith('/investor/governance/')) {
+      const id = path.split('/')[3];
+
+      if (method === 'GET') {
+        if (id) {
+          const result = await sql`SELECT * FROM governance_info WHERE id = ${id}`;
+          return result.length ? success(result[0]) : error('Not found', 404);
+        }
+
+        const { type, published_only } = params;
+        let result;
+
+        if (type) {
+          result = await sql`SELECT * FROM governance_info WHERE type = ${type} ORDER BY "order" ASC`;
+        } else if (published_only === 'true') {
+          result = await sql`SELECT * FROM governance_info WHERE is_published = true ORDER BY type, "order" ASC`;
+        } else {
+          result = await sql`SELECT * FROM governance_info ORDER BY type, "order" ASC`;
+        }
+
+        return success(result);
+      }
+
+      if (method === 'POST') {
+        const result = await sql`
+          INSERT INTO governance_info (type, name, title, description, file_url, "order", is_published)
+          VALUES (${body.type}, ${body.name}, ${body.title || null}, ${body.description || null}, ${body.file_url || null}, ${body.order || 0}, ${body.is_published !== false})
+          RETURNING *
+        `;
+        return success(result[0], 201);
+      }
+
+      if (method === 'PUT' && id) {
+        const result = await sql`
+          UPDATE governance_info SET
+            type = ${body.type},
+            name = ${body.name},
+            title = ${body.title || null},
+            description = ${body.description || null},
+            file_url = ${body.file_url || null},
+            "order" = ${body.order || 0},
+            is_published = ${body.is_published !== false},
+            updated_at = NOW()
+          WHERE id = ${id}
+          RETURNING *
+        `;
+        return result.length ? success(result[0]) : error('Not found', 404);
+      }
+
+      if (method === 'DELETE' && id) {
+        await sql`DELETE FROM governance_info WHERE id = ${id}`;
+        return success({ deleted: true });
+      }
+    }
+
     // ==================== VISITOR LOGS ====================
     if (path === '/visitors' || path.startsWith('/visitors/')) {
       if (method === 'GET') {
