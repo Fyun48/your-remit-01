@@ -254,11 +254,17 @@ function initNavigation() {
                 parentSubmenu.classList.add('open');
             }
 
-            // Show corresponding section
-            contentSections.forEach(s => s.classList.remove('active'));
-            const targetSection = document.getElementById(section);
-            if (targetSection) {
-                targetSection.classList.add('active');
+            // Check if this is an investor section
+            if (section.startsWith('investor-')) {
+                // Handle investor sections with their initialization
+                handleInvestorSectionNavigation(section);
+            } else {
+                // Show corresponding section
+                contentSections.forEach(s => s.classList.remove('active'));
+                const targetSection = document.getElementById(section);
+                if (targetSection) {
+                    targetSection.classList.add('active');
+                }
             }
 
             // Close mobile menu
@@ -2925,4 +2931,1050 @@ async function saveAppSettings(platform, form) {
         showToast('儲存失敗，請稍後再試', 'error');
     }
 }
+
+// ==================== INVESTOR DOCUMENTS MANAGEMENT ====================
+
+let allInvestorDocs = [];
+
+/**
+ * Helper: Escape HTML to prevent XSS
+ */
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+/**
+ * Helper: Format date for display
+ */
+function formatDate(dateStr) {
+    if (!dateStr) return '-';
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('zh-TW');
+}
+
+/**
+ * Get category label in Chinese
+ */
+function getCategoryLabel(category) {
+    const labels = {
+        financial: '財務報告',
+        announcement: '公司公告',
+        shareholder: '股東會'
+    };
+    return labels[category] || category;
+}
+
+/**
+ * Get document type label
+ */
+function getDocTypeLabel(type) {
+    const labels = {
+        annual: '年報',
+        quarterly: '季報',
+        monthly: '月報',
+        notice: '公告',
+        meeting_notice: '開會通知',
+        meeting_minutes: '會議記錄',
+        proxy_form: '委託書',
+        annual_report: '年報',
+        handbook: '議事手冊',
+        other: '其他'
+    };
+    return labels[type] || type;
+}
+
+/**
+ * Update document type options based on category
+ */
+function updateDocTypeOptions() {
+    const category = document.getElementById('doc-category').value;
+    const typeSelect = document.getElementById('doc-type');
+
+    const options = {
+        financial: [
+            { value: 'annual', label: '年報' },
+            { value: 'quarterly', label: '季報' },
+            { value: 'monthly', label: '月報' }
+        ],
+        announcement: [
+            { value: 'notice', label: '公告' },
+            { value: 'other', label: '其他' }
+        ],
+        shareholder: [
+            { value: 'meeting_notice', label: '開會通知' },
+            { value: 'meeting_minutes', label: '會議記錄' },
+            { value: 'proxy_form', label: '委託書' },
+            { value: 'annual_report', label: '年報' },
+            { value: 'handbook', label: '議事手冊' },
+            { value: 'other', label: '其他' }
+        ]
+    };
+
+    const categoryOptions = options[category] || [];
+    typeSelect.innerHTML = categoryOptions.map(opt =>
+        `<option value="${opt.value}">${opt.label}</option>`
+    ).join('');
+}
+
+/**
+ * Handle category change event
+ */
+function onDocCategoryChange() {
+    updateDocTypeOptions();
+
+    // Show/hide fiscal year/quarter fields based on category
+    const category = document.getElementById('doc-category').value;
+    const yearRow = document.getElementById('fiscal-year-row');
+    const quarterRow = document.getElementById('fiscal-quarter-row');
+
+    if (yearRow && quarterRow) {
+        if (category === 'financial') {
+            yearRow.style.display = 'block';
+            quarterRow.style.display = 'block';
+        } else if (category === 'shareholder') {
+            yearRow.style.display = 'block';
+            quarterRow.style.display = 'none';
+        } else {
+            yearRow.style.display = 'none';
+            quarterRow.style.display = 'none';
+        }
+    }
+}
+
+/**
+ * Toggle password fields visibility
+ */
+function togglePasswordFields() {
+    const isProtected = document.getElementById('doc-protected').checked;
+    const passwordFields = document.getElementById('password-fields');
+    if (passwordFields) {
+        passwordFields.style.display = isProtected ? 'block' : 'none';
+    }
+}
+
+/**
+ * Load investor documents from API
+ */
+async function loadInvestorDocuments() {
+    const tbody = document.getElementById('investor-docs-table');
+    if (!tbody) return;
+
+    tbody.innerHTML = '<tr><td colspan="7" class="loading">載入中...</td></tr>';
+
+    try {
+        const response = await fetch('/api/investor/documents');
+        const data = await response.json();
+
+        if (!data.success) {
+            throw new Error(data.error || '載入失敗');
+        }
+
+        allInvestorDocs = data.data || [];
+
+        // Populate year filter
+        const years = [...new Set(allInvestorDocs.map(d => d.fiscal_year).filter(Boolean))].sort((a, b) => b - a);
+        const yearFilter = document.getElementById('doc-year-filter');
+        if (yearFilter) {
+            yearFilter.innerHTML = '<option value="">全部年份</option>' +
+                years.map(y => `<option value="${y}">${y}</option>`).join('');
+        }
+
+        renderDocumentsTable(allInvestorDocs);
+    } catch (error) {
+        console.error('Error loading investor documents:', error);
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">載入失敗</td></tr>';
+    }
+}
+
+/**
+ * Render documents table
+ */
+function renderDocumentsTable(docs) {
+    const tbody = document.getElementById('investor-docs-table');
+    if (!tbody) return;
+
+    if (!docs || docs.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">暫無資料</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = docs.map(doc => `
+        <tr>
+            <td>${escapeHtml(doc.title)}</td>
+            <td><span class="badge badge-${doc.category}">${getCategoryLabel(doc.category)}</span></td>
+            <td>${doc.fiscal_year ? doc.fiscal_year + (doc.fiscal_quarter ? ' Q' + doc.fiscal_quarter : '') : '-'}</td>
+            <td>${formatDate(doc.publish_date)}</td>
+            <td>${doc.is_protected ? '🔒' : '🔓'}</td>
+            <td><span class="status-badge ${doc.is_published ? 'published' : 'draft'}">${doc.is_published ? '上線' : '草稿'}</span></td>
+            <td class="actions">
+                <button class="btn-icon" onclick="editDocument('${doc.id}')" title="編輯">✏️</button>
+                <button class="btn-icon" onclick="deleteDocument('${doc.id}')" title="刪除">🗑️</button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+/**
+ * Filter documents by category and year
+ */
+function filterDocuments() {
+    const category = document.getElementById('doc-category-filter')?.value || '';
+    const year = document.getElementById('doc-year-filter')?.value || '';
+
+    let filtered = allInvestorDocs;
+    if (category) {
+        filtered = filtered.filter(d => d.category === category);
+    }
+    if (year) {
+        filtered = filtered.filter(d => d.fiscal_year === parseInt(year));
+    }
+
+    renderDocumentsTable(filtered);
+}
+
+/**
+ * Show add document modal
+ */
+function showAddDocumentModal() {
+    const modal = document.getElementById('document-modal');
+    const title = document.getElementById('document-modal-title');
+    const form = document.getElementById('document-form');
+
+    if (!modal || !form) return;
+
+    if (title) title.textContent = '新增文件';
+    form.reset();
+    document.getElementById('doc-id').value = '';
+
+    // Set default date to today
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('doc-publish-date').value = today;
+
+    // Set default category and update type options
+    document.getElementById('doc-category').value = 'financial';
+    updateDocTypeOptions();
+    onDocCategoryChange();
+    togglePasswordFields();
+
+    modal.classList.add('active');
+}
+
+/**
+ * Close document modal
+ */
+function closeDocumentModal() {
+    const modal = document.getElementById('document-modal');
+    if (modal) {
+        modal.classList.remove('active');
+    }
+}
+
+/**
+ * Edit document - load document data into form
+ */
+async function editDocument(id) {
+    const doc = allInvestorDocs.find(d => d.id === id || d.id === parseInt(id));
+    if (!doc) {
+        showToast('找不到文件', 'error');
+        return;
+    }
+
+    const modal = document.getElementById('document-modal');
+    const title = document.getElementById('document-modal-title');
+
+    if (title) title.textContent = '編輯文件';
+
+    document.getElementById('doc-id').value = doc.id;
+    document.getElementById('doc-category').value = doc.category;
+    updateDocTypeOptions();
+    document.getElementById('doc-type').value = doc.type;
+    document.getElementById('doc-title').value = doc.title;
+    document.getElementById('doc-description').value = doc.description || '';
+    document.getElementById('doc-file-url').value = doc.file_url;
+    document.getElementById('doc-fiscal-year').value = doc.fiscal_year || '';
+    document.getElementById('doc-fiscal-quarter').value = doc.fiscal_quarter || '';
+    document.getElementById('doc-publish-date').value = doc.publish_date ? doc.publish_date.split('T')[0] : '';
+    document.getElementById('doc-protected').checked = doc.is_protected || false;
+    document.getElementById('doc-password-hint').value = doc.password_hint || '';
+
+    const publishedRadio = document.querySelector(`input[name="doc-published"][value="${doc.is_published}"]`);
+    if (publishedRadio) publishedRadio.checked = true;
+
+    onDocCategoryChange();
+    togglePasswordFields();
+
+    if (modal) modal.classList.add('active');
+}
+
+/**
+ * Save document (create or update)
+ */
+async function saveDocument(e) {
+    e.preventDefault();
+
+    const id = document.getElementById('doc-id').value;
+    const docData = {
+        category: document.getElementById('doc-category').value,
+        type: document.getElementById('doc-type').value,
+        title: document.getElementById('doc-title').value,
+        description: document.getElementById('doc-description').value,
+        file_url: document.getElementById('doc-file-url').value,
+        fiscal_year: document.getElementById('doc-fiscal-year').value ? parseInt(document.getElementById('doc-fiscal-year').value) : null,
+        fiscal_quarter: document.getElementById('doc-fiscal-quarter').value ? parseInt(document.getElementById('doc-fiscal-quarter').value) : null,
+        publish_date: document.getElementById('doc-publish-date').value,
+        is_protected: document.getElementById('doc-protected').checked,
+        password_hint: document.getElementById('doc-password-hint').value,
+        is_published: document.querySelector('input[name="doc-published"]:checked')?.value === 'true'
+    };
+
+    const password = document.getElementById('doc-password')?.value;
+    if (password) {
+        docData.password = password;
+    }
+
+    try {
+        const method = id ? 'PUT' : 'POST';
+        const url = id ? `/api/investor/documents/${id}` : '/api/investor/documents';
+
+        const response = await fetch(url, {
+            method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(docData)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            closeDocumentModal();
+            await loadInvestorDocuments();
+            showToast(id ? '文件已更新' : '文件已新增');
+        } else {
+            showToast('儲存失敗: ' + (result.error || '未知錯誤'), 'error');
+        }
+    } catch (error) {
+        console.error('Error saving document:', error);
+        showToast('儲存失敗，請稍後再試', 'error');
+    }
+}
+
+/**
+ * Delete document with confirmation
+ */
+async function deleteDocument(id) {
+    if (!confirm('確定要刪除此文件嗎？')) return;
+
+    try {
+        const response = await fetch(`/api/investor/documents/${id}`, {
+            method: 'DELETE'
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            await loadInvestorDocuments();
+            showToast('文件已刪除');
+        } else {
+            showToast('刪除失敗: ' + (result.error || '未知錯誤'), 'error');
+        }
+    } catch (error) {
+        console.error('Error deleting document:', error);
+        showToast('刪除失敗，請稍後再試', 'error');
+    }
+}
+
+// ==================== GOVERNANCE MANAGEMENT ====================
+
+let allBoardMembers = [];
+let allCharters = [];
+let orgChartUrl = '';
+
+/**
+ * Load board members from API
+ */
+async function loadBoardMembers() {
+    const tbody = document.getElementById('board-members-tbody');
+    if (!tbody) return;
+
+    tbody.innerHTML = '<tr><td colspan="6" class="loading">載入中...</td></tr>';
+
+    try {
+        const response = await fetch('/api/investor/governance?type=board_member');
+        const data = await response.json();
+
+        if (!data.success) {
+            throw new Error(data.error || '載入失敗');
+        }
+
+        allBoardMembers = data.data || [];
+        renderBoardMembersTable(allBoardMembers);
+    } catch (error) {
+        console.error('Error loading board members:', error);
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">載入失敗</td></tr>';
+    }
+}
+
+/**
+ * Render board members table
+ */
+function renderBoardMembersTable(members) {
+    const tbody = document.getElementById('board-members-tbody');
+    if (!tbody) return;
+
+    if (!members || members.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">暫無資料</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = members.map((member, index) => `
+        <tr>
+            <td>
+                <div class="order-controls">
+                    <button class="order-btn" onclick="moveBoardMember('${member.id}', 'up')" ${index === 0 ? 'disabled' : ''}>▲</button>
+                    <span>${member.order || index + 1}</span>
+                    <button class="order-btn" onclick="moveBoardMember('${member.id}', 'down')" ${index === members.length - 1 ? 'disabled' : ''}>▼</button>
+                </div>
+            </td>
+            <td>${escapeHtml(member.name)}</td>
+            <td>${escapeHtml(member.title)}</td>
+            <td class="bio-cell">${escapeHtml(member.description || '-')}</td>
+            <td><span class="status-badge ${member.is_published ? 'published' : 'draft'}">${member.is_published ? '上線' : '草稿'}</span></td>
+            <td class="actions">
+                <button class="btn-icon" onclick="editBoardMember('${member.id}')" title="編輯">✏️</button>
+                <button class="btn-icon" onclick="deleteBoardMember('${member.id}')" title="刪除">🗑️</button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+/**
+ * Move board member order
+ */
+async function moveBoardMember(id, direction) {
+    const index = allBoardMembers.findIndex(m => m.id === id || m.id === parseInt(id));
+    if (index === -1) return;
+
+    const newIndex = direction === 'up' ? index - 1 : index + 1;
+    if (newIndex < 0 || newIndex >= allBoardMembers.length) return;
+
+    // Swap orders
+    const currentOrder = allBoardMembers[index].order || index + 1;
+    const targetOrder = allBoardMembers[newIndex].order || newIndex + 1;
+
+    try {
+        // Update both items
+        await Promise.all([
+            fetch(`/api/investor/governance/${allBoardMembers[index].id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ order: targetOrder })
+            }),
+            fetch(`/api/investor/governance/${allBoardMembers[newIndex].id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ order: currentOrder })
+            })
+        ]);
+
+        await loadBoardMembers();
+        showToast('排序已更新');
+    } catch (error) {
+        console.error('Error updating order:', error);
+        showToast('排序更新失敗', 'error');
+    }
+}
+
+/**
+ * Show add board member modal
+ */
+function showAddBoardMemberModal() {
+    const modal = document.getElementById('board-member-modal');
+    const title = document.getElementById('board-member-modal-title');
+    const form = document.getElementById('board-member-form');
+
+    if (!modal || !form) return;
+
+    if (title) title.textContent = '新增董事會成員';
+    form.reset();
+    document.getElementById('board-member-id').value = '';
+
+    // Set default order
+    const maxOrder = allBoardMembers.length > 0
+        ? Math.max(...allBoardMembers.map(m => m.order || 0)) + 1
+        : 1;
+    document.getElementById('board-member-sort').value = maxOrder;
+
+    modal.classList.add('active');
+}
+
+/**
+ * Close board member modal
+ */
+function closeBoardMemberModal() {
+    const modal = document.getElementById('board-member-modal');
+    if (modal) {
+        modal.classList.remove('active');
+    }
+}
+
+/**
+ * Edit board member - load data into form
+ */
+async function editBoardMember(id) {
+    const member = allBoardMembers.find(m => m.id === id || m.id === parseInt(id));
+    if (!member) {
+        showToast('找不到成員資料', 'error');
+        return;
+    }
+
+    const modal = document.getElementById('board-member-modal');
+    const title = document.getElementById('board-member-modal-title');
+
+    if (title) title.textContent = '編輯董事會成員';
+
+    document.getElementById('board-member-id').value = member.id;
+    document.getElementById('board-member-name').value = member.name;
+    document.getElementById('board-member-title').value = member.title;
+    document.getElementById('board-member-bio').value = member.description || '';
+    document.getElementById('board-member-sort').value = member.order || 1;
+
+    const publishedRadio = document.querySelector(`input[name="board-member-published"][value="${member.is_published}"]`);
+    if (publishedRadio) publishedRadio.checked = true;
+
+    if (modal) modal.classList.add('active');
+}
+
+/**
+ * Save board member (create or update)
+ */
+async function saveBoardMember(e) {
+    e.preventDefault();
+
+    const id = document.getElementById('board-member-id').value;
+    const memberData = {
+        type: 'board_member',
+        name: document.getElementById('board-member-name').value,
+        title: document.getElementById('board-member-title').value,
+        description: document.getElementById('board-member-bio').value,
+        order: parseInt(document.getElementById('board-member-sort').value) || 1,
+        is_published: document.querySelector('input[name="board-member-published"]:checked')?.value === 'true'
+    };
+
+    try {
+        const method = id ? 'PUT' : 'POST';
+        const url = id ? `/api/investor/governance/${id}` : '/api/investor/governance';
+
+        const response = await fetch(url, {
+            method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(memberData)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            closeBoardMemberModal();
+            await loadBoardMembers();
+            showToast(id ? '成員資料已更新' : '成員已新增');
+        } else {
+            showToast('儲存失敗: ' + (result.error || '未知錯誤'), 'error');
+        }
+    } catch (error) {
+        console.error('Error saving board member:', error);
+        showToast('儲存失敗，請稍後再試', 'error');
+    }
+}
+
+/**
+ * Delete board member with confirmation
+ */
+async function deleteBoardMember(id) {
+    if (!confirm('確定要刪除此成員嗎？')) return;
+
+    try {
+        const response = await fetch(`/api/investor/governance/${id}`, {
+            method: 'DELETE'
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            await loadBoardMembers();
+            showToast('成員已刪除');
+        } else {
+            showToast('刪除失敗: ' + (result.error || '未知錯誤'), 'error');
+        }
+    } catch (error) {
+        console.error('Error deleting board member:', error);
+        showToast('刪除失敗，請稍後再試', 'error');
+    }
+}
+
+/**
+ * Load org chart URL
+ */
+async function loadOrgChart() {
+    try {
+        const response = await fetch('/api/investor/governance?type=org_chart');
+        const data = await response.json();
+
+        if (data.success && data.data && data.data.length > 0) {
+            orgChartUrl = data.data[0].file_url || '';
+            const urlInput = document.getElementById('org-chart-url');
+            const preview = document.getElementById('org-chart-preview');
+
+            if (urlInput) urlInput.value = orgChartUrl;
+
+            if (preview && orgChartUrl) {
+                const img = preview.querySelector('img');
+                const placeholder = preview.querySelector('.placeholder');
+                if (img) {
+                    img.src = orgChartUrl;
+                    img.style.display = 'block';
+                }
+                if (placeholder) placeholder.style.display = 'none';
+            }
+        }
+    } catch (error) {
+        console.error('Error loading org chart:', error);
+    }
+}
+
+/**
+ * Save org chart URL
+ */
+async function saveOrgChart() {
+    const urlInput = document.getElementById('org-chart-url');
+    const newUrl = urlInput?.value || '';
+
+    try {
+        // Check if org_chart entry exists
+        const checkResponse = await fetch('/api/investor/governance?type=org_chart');
+        const checkData = await checkResponse.json();
+
+        let method = 'POST';
+        let url = '/api/investor/governance';
+
+        if (checkData.success && checkData.data && checkData.data.length > 0) {
+            method = 'PUT';
+            url = `/api/investor/governance/${checkData.data[0].id}`;
+        }
+
+        const response = await fetch(url, {
+            method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                type: 'org_chart',
+                name: '組織架構圖',
+                file_url: newUrl,
+                is_published: true
+            })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            orgChartUrl = newUrl;
+
+            // Update preview
+            const preview = document.getElementById('org-chart-preview');
+            if (preview && newUrl) {
+                const img = preview.querySelector('img');
+                const placeholder = preview.querySelector('.placeholder');
+                if (img) {
+                    img.src = newUrl;
+                    img.style.display = 'block';
+                }
+                if (placeholder) placeholder.style.display = 'none';
+            }
+
+            showToast('組織架構圖已儲存');
+        } else {
+            showToast('儲存失敗: ' + (result.error || '未知錯誤'), 'error');
+        }
+    } catch (error) {
+        console.error('Error saving org chart:', error);
+        showToast('儲存失敗，請稍後再試', 'error');
+    }
+}
+
+/**
+ * Load charters and policies
+ */
+async function loadCharters() {
+    const tbody = document.getElementById('charters-tbody');
+    if (!tbody) return;
+
+    tbody.innerHTML = '<tr><td colspan="6" class="loading">載入中...</td></tr>';
+
+    try {
+        const response = await fetch('/api/investor/governance?type=charter');
+        const data = await response.json();
+
+        if (!data.success) {
+            throw new Error(data.error || '載入失敗');
+        }
+
+        allCharters = data.data || [];
+        renderChartersTable(allCharters);
+    } catch (error) {
+        console.error('Error loading charters:', error);
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">載入失敗</td></tr>';
+    }
+}
+
+/**
+ * Render charters table
+ */
+function renderChartersTable(charters) {
+    const tbody = document.getElementById('charters-tbody');
+    if (!tbody) return;
+
+    if (!charters || charters.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">暫無資料</td></tr>';
+        return;
+    }
+
+    const typeLabels = {
+        charter: '公司章程',
+        policy: '內部規章',
+        committee: '委員會規程',
+        other: '其他'
+    };
+
+    tbody.innerHTML = charters.map((charter, index) => `
+        <tr>
+            <td>
+                <div class="order-controls">
+                    <button class="order-btn" onclick="moveCharter('${charter.id}', 'up')" ${index === 0 ? 'disabled' : ''}>▲</button>
+                    <span>${charter.order || index + 1}</span>
+                    <button class="order-btn" onclick="moveCharter('${charter.id}', 'down')" ${index === charters.length - 1 ? 'disabled' : ''}>▼</button>
+                </div>
+            </td>
+            <td>${escapeHtml(charter.name)}</td>
+            <td>${typeLabels[charter.title] || charter.title || '-'}</td>
+            <td><a href="${charter.file_url}" target="_blank" class="file-link">📄 查看檔案</a></td>
+            <td><span class="status-badge ${charter.is_published ? 'published' : 'draft'}">${charter.is_published ? '上線' : '草稿'}</span></td>
+            <td class="actions">
+                <button class="btn-icon" onclick="editCharter('${charter.id}')" title="編輯">✏️</button>
+                <button class="btn-icon" onclick="deleteCharter('${charter.id}')" title="刪除">🗑️</button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+/**
+ * Move charter order
+ */
+async function moveCharter(id, direction) {
+    const index = allCharters.findIndex(c => c.id === id || c.id === parseInt(id));
+    if (index === -1) return;
+
+    const newIndex = direction === 'up' ? index - 1 : index + 1;
+    if (newIndex < 0 || newIndex >= allCharters.length) return;
+
+    const currentOrder = allCharters[index].order || index + 1;
+    const targetOrder = allCharters[newIndex].order || newIndex + 1;
+
+    try {
+        await Promise.all([
+            fetch(`/api/investor/governance/${allCharters[index].id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ order: targetOrder })
+            }),
+            fetch(`/api/investor/governance/${allCharters[newIndex].id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ order: currentOrder })
+            })
+        ]);
+
+        await loadCharters();
+        showToast('排序已更新');
+    } catch (error) {
+        console.error('Error updating order:', error);
+        showToast('排序更新失敗', 'error');
+    }
+}
+
+/**
+ * Show add charter modal
+ */
+function showAddCharterModal() {
+    const modal = document.getElementById('charter-modal');
+    const title = document.getElementById('charter-modal-title');
+    const form = document.getElementById('charter-form');
+
+    if (!modal || !form) return;
+
+    if (title) title.textContent = '新增公司章程/內規';
+    form.reset();
+    document.getElementById('charter-id').value = '';
+
+    // Set default order
+    const maxOrder = allCharters.length > 0
+        ? Math.max(...allCharters.map(c => c.order || 0)) + 1
+        : 1;
+    document.getElementById('charter-sort').value = maxOrder;
+
+    modal.classList.add('active');
+}
+
+/**
+ * Close charter modal
+ */
+function closeCharterModal() {
+    const modal = document.getElementById('charter-modal');
+    if (modal) {
+        modal.classList.remove('active');
+    }
+}
+
+/**
+ * Edit charter - load data into form
+ */
+async function editCharter(id) {
+    const charter = allCharters.find(c => c.id === id || c.id === parseInt(id));
+    if (!charter) {
+        showToast('找不到文件', 'error');
+        return;
+    }
+
+    const modal = document.getElementById('charter-modal');
+    const title = document.getElementById('charter-modal-title');
+
+    if (title) title.textContent = '編輯公司章程/內規';
+
+    document.getElementById('charter-id').value = charter.id;
+    document.getElementById('charter-name').value = charter.name;
+    document.getElementById('charter-type').value = charter.title || '';
+    document.getElementById('charter-file-url').value = charter.file_url || '';
+    document.getElementById('charter-sort').value = charter.order || 1;
+
+    const publishedRadio = document.querySelector(`input[name="charter-published"][value="${charter.is_published}"]`);
+    if (publishedRadio) publishedRadio.checked = true;
+
+    if (modal) modal.classList.add('active');
+}
+
+/**
+ * Save charter (create or update)
+ */
+async function saveCharter(e) {
+    e.preventDefault();
+
+    const id = document.getElementById('charter-id').value;
+    const charterData = {
+        type: 'charter',
+        name: document.getElementById('charter-name').value,
+        title: document.getElementById('charter-type').value,
+        file_url: document.getElementById('charter-file-url').value,
+        order: parseInt(document.getElementById('charter-sort').value) || 1,
+        is_published: document.querySelector('input[name="charter-published"]:checked')?.value === 'true'
+    };
+
+    try {
+        const method = id ? 'PUT' : 'POST';
+        const url = id ? `/api/investor/governance/${id}` : '/api/investor/governance';
+
+        const response = await fetch(url, {
+            method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(charterData)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            closeCharterModal();
+            await loadCharters();
+            showToast(id ? '文件已更新' : '文件已新增');
+        } else {
+            showToast('儲存失敗: ' + (result.error || '未知錯誤'), 'error');
+        }
+    } catch (error) {
+        console.error('Error saving charter:', error);
+        showToast('儲存失敗，請稍後再試', 'error');
+    }
+}
+
+/**
+ * Delete charter with confirmation
+ */
+async function deleteCharter(id) {
+    if (!confirm('確定要刪除此文件嗎？')) return;
+
+    try {
+        const response = await fetch(`/api/investor/governance/${id}`, {
+            method: 'DELETE'
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            await loadCharters();
+            showToast('文件已刪除');
+        } else {
+            showToast('刪除失敗: ' + (result.error || '未知錯誤'), 'error');
+        }
+    } catch (error) {
+        console.error('Error deleting charter:', error);
+        showToast('刪除失敗，請稍後再試', 'error');
+    }
+}
+
+/**
+ * Navigate to documents section with filter
+ */
+function goToDocuments(category) {
+    // Navigate to investor-documents section
+    const section = document.getElementById('investor-documents-section');
+    document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+    if (section) {
+        section.classList.add('active');
+        section.style.display = 'block';
+    }
+
+    // Update nav
+    document.querySelectorAll('.submenu a').forEach(l => l.classList.remove('active'));
+    const navLink = document.querySelector('.submenu a[data-section="investor-documents"]');
+    if (navLink) navLink.classList.add('active');
+
+    // Set filter
+    if (category) {
+        const filter = document.getElementById('doc-category-filter');
+        if (filter) filter.value = category;
+        filterDocuments();
+    }
+}
+
+// ==================== INVESTOR SECTION INITIALIZATION ====================
+
+/**
+ * Initialize investor documents section
+ */
+function initInvestorDocuments() {
+    // Load documents
+    loadInvestorDocuments();
+
+    // Setup filter event listeners
+    const categoryFilter = document.getElementById('doc-category-filter');
+    const yearFilter = document.getElementById('doc-year-filter');
+
+    if (categoryFilter) {
+        categoryFilter.addEventListener('change', filterDocuments);
+    }
+    if (yearFilter) {
+        yearFilter.addEventListener('change', filterDocuments);
+    }
+
+    // Setup form submission
+    const form = document.getElementById('document-form');
+    if (form) {
+        form.addEventListener('submit', saveDocument);
+    }
+
+    // Setup modal close on backdrop click
+    const modal = document.getElementById('document-modal');
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeDocumentModal();
+        });
+    }
+}
+
+/**
+ * Initialize governance section
+ */
+function initGovernance() {
+    // Load all governance data
+    loadBoardMembers();
+    loadOrgChart();
+    loadCharters();
+
+    // Setup board member form
+    const boardMemberForm = document.getElementById('board-member-form');
+    if (boardMemberForm) {
+        boardMemberForm.addEventListener('submit', saveBoardMember);
+    }
+
+    // Setup charter form
+    const charterForm = document.getElementById('charter-form');
+    if (charterForm) {
+        charterForm.addEventListener('submit', saveCharter);
+    }
+
+    // Setup modal close on backdrop click
+    const boardMemberModal = document.getElementById('board-member-modal');
+    if (boardMemberModal) {
+        boardMemberModal.addEventListener('click', (e) => {
+            if (e.target === boardMemberModal) closeBoardMemberModal();
+        });
+    }
+
+    const charterModal = document.getElementById('charter-modal');
+    if (charterModal) {
+        charterModal.addEventListener('click', (e) => {
+            if (e.target === charterModal) closeCharterModal();
+        });
+    }
+}
+
+/**
+ * Handle section navigation for investor sections
+ */
+function handleInvestorSectionNavigation(section) {
+    // Hide all sections first
+    document.querySelectorAll('.content-section').forEach(s => {
+        s.classList.remove('active');
+        s.style.display = 'none';
+    });
+
+    // Show target section
+    const targetSection = document.getElementById(section + '-section');
+    if (targetSection) {
+        targetSection.classList.add('active');
+        targetSection.style.display = 'block';
+
+        // Initialize section data on first load
+        if (section === 'investor-documents') {
+            initInvestorDocuments();
+        } else if (section === 'investor-governance') {
+            initGovernance();
+        } else if (section === 'investor-shareholders') {
+            // Shareholders section just redirects to documents with filter
+            // No special initialization needed
+        }
+    }
+}
+
+// Make investor management functions globally available
+window.showAddDocumentModal = showAddDocumentModal;
+window.closeDocumentModal = closeDocumentModal;
+window.editDocument = editDocument;
+window.deleteDocument = deleteDocument;
+window.filterDocuments = filterDocuments;
+window.onDocCategoryChange = onDocCategoryChange;
+window.togglePasswordFields = togglePasswordFields;
+window.updateDocTypeOptions = updateDocTypeOptions;
+
+window.showAddBoardMemberModal = showAddBoardMemberModal;
+window.closeBoardMemberModal = closeBoardMemberModal;
+window.editBoardMember = editBoardMember;
+window.deleteBoardMember = deleteBoardMember;
+window.moveBoardMember = moveBoardMember;
+
+window.saveOrgChart = saveOrgChart;
+
+window.showAddCharterModal = showAddCharterModal;
+window.closeCharterModal = closeCharterModal;
+window.editCharter = editCharter;
+window.deleteCharter = deleteCharter;
+window.moveCharter = moveCharter;
+
+window.goToDocuments = goToDocuments;
+window.handleInvestorSectionNavigation = handleInvestorSectionNavigation;
 
