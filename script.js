@@ -15,13 +15,58 @@ document.addEventListener('DOMContentLoaded', async () => {
     initContactForm();
     initSmoothScroll();
     trackVisitor();
-    
+
     // 載入並更新內容設定（統計數字、聯絡資訊等）
     await loadAndUpdateContent();
-    
+
+    // 載入 App QR Code 設定
+    await loadAppQRCodes();
+
     // 載入內容後再初始化計數動畫
     initCounterAnimation();
 });
+
+/**
+ * 載入 App QR Code 設定
+ */
+async function loadAppQRCodes() {
+    try {
+        const response = await API.get('/app-settings');
+        if (!response.success || !response.data) return;
+
+        const settings = response.data;
+
+        settings.forEach(app => {
+            const heroImg = document.getElementById(`hero-qr-${app.platform}`);
+            const footerImg = document.getElementById(`footer-qr-${app.platform}`);
+
+            let qrSrc;
+            if (app.use_custom_image && app.custom_qr_image) {
+                // 使用自訂圖片
+                qrSrc = app.custom_qr_image;
+            } else if (app.store_url) {
+                // 使用連結自動生成 QR code
+                const heroSize = 100;
+                const footerSize = 80;
+
+                if (heroImg) {
+                    heroImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=${heroSize}x${heroSize}&data=${encodeURIComponent(app.store_url)}`;
+                }
+                if (footerImg) {
+                    footerImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=${footerSize}x${footerSize}&data=${encodeURIComponent(app.store_url)}`;
+                }
+                return;
+            }
+
+            if (qrSrc) {
+                if (heroImg) heroImg.src = qrSrc;
+                if (footerImg) footerImg.src = qrSrc;
+            }
+        });
+    } catch (error) {
+        console.log('App QR settings not available, using defaults');
+    }
+}
 
 /**
  * 載入並顯示最新消息

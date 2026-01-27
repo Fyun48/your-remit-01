@@ -173,8 +173,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         initNotifications();
         initSettings();
         initServiceDetailEditor();
+        initAppSettings();
         updateStats();
-        
+
         hideLoadingState();
     } catch (error) {
         console.error('載入資料失敗:', error);
@@ -201,6 +202,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         initNotifications();
         initSettings();
         initServiceDetailEditor();
+        initAppSettings();
         updateStats();
     }
 });
@@ -2770,4 +2772,115 @@ window.deleteImage = deleteImage;
 window.openServiceDetailEditor = openServiceDetailEditor;
 window.removeServiceImage = removeServiceImage;
 window.previewService = previewService;
+
+// ==================== App Settings ====================
+
+function initAppSettings() {
+    const androidForm = document.getElementById('androidAppForm');
+    const iosForm = document.getElementById('iosAppForm');
+
+    if (!androidForm || !iosForm) return;
+
+    // Load current settings
+    loadAppSettings();
+
+    // Handle checkbox toggle for custom image
+    document.querySelectorAll('.app-form input[name="use_custom_image"]').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const customGroup = this.closest('form').querySelector('.custom-image-group');
+            customGroup.style.display = this.checked ? 'block' : 'none';
+        });
+    });
+
+    // Handle store URL change to update preview
+    document.querySelectorAll('.app-form input[name="store_url"]').forEach(input => {
+        input.addEventListener('input', function() {
+            const platform = this.closest('.app-card').dataset.platform;
+            const previewImg = document.getElementById(`${platform}-qr-preview`);
+            const useCustom = this.closest('form').querySelector('input[name="use_custom_image"]').checked;
+
+            if (!useCustom && this.value) {
+                previewImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(this.value)}`;
+            }
+        });
+    });
+
+    // Handle custom image URL change to update preview
+    document.querySelectorAll('.app-form input[name="custom_qr_image"]').forEach(input => {
+        input.addEventListener('input', function() {
+            const platform = this.closest('.app-card').dataset.platform;
+            const previewImg = document.getElementById(`${platform}-qr-preview`);
+            const useCustom = this.closest('form').querySelector('input[name="use_custom_image"]').checked;
+
+            if (useCustom && this.value) {
+                previewImg.src = this.value;
+            }
+        });
+    });
+
+    // Android form submit
+    androidForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await saveAppSettings('android', androidForm);
+    });
+
+    // iOS form submit
+    iosForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await saveAppSettings('ios', iosForm);
+    });
+}
+
+async function loadAppSettings() {
+    try {
+        const response = await API.get('/app-settings');
+        if (!response.success || !response.data) return;
+
+        response.data.forEach(app => {
+            const form = document.getElementById(`${app.platform}AppForm`);
+            if (!form) return;
+
+            form.querySelector('input[name="app_name"]').value = app.app_name || 'YourRemit App';
+            form.querySelector('input[name="store_url"]').value = app.store_url || '';
+            form.querySelector('input[name="use_custom_image"]').checked = app.use_custom_image || false;
+            form.querySelector('input[name="custom_qr_image"]').value = app.custom_qr_image || '';
+
+            // Show/hide custom image group
+            const customGroup = form.querySelector('.custom-image-group');
+            customGroup.style.display = app.use_custom_image ? 'block' : 'none';
+
+            // Update preview
+            const previewImg = document.getElementById(`${app.platform}-qr-preview`);
+            if (app.use_custom_image && app.custom_qr_image) {
+                previewImg.src = app.custom_qr_image;
+            } else if (app.store_url) {
+                previewImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(app.store_url)}`;
+            }
+        });
+    } catch (error) {
+        console.log('App settings not available yet');
+    }
+}
+
+async function saveAppSettings(platform, form) {
+    const formData = new FormData(form);
+    const data = {
+        app_name: formData.get('app_name'),
+        store_url: formData.get('store_url'),
+        use_custom_image: formData.get('use_custom_image') === 'on',
+        custom_qr_image: formData.get('custom_qr_image')
+    };
+
+    try {
+        const response = await API.put(`/app-settings/${platform}`, data);
+        if (response.success) {
+            showToast(`${platform === 'android' ? 'Android' : 'iOS'} App 設定已儲存`, 'success');
+        } else {
+            showToast('儲存失敗: ' + (response.error || '未知錯誤'), 'error');
+        }
+    } catch (error) {
+        console.error('Save app settings error:', error);
+        showToast('儲存失敗，請稍後再試', 'error');
+    }
+}
 

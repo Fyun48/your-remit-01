@@ -140,6 +140,28 @@ CREATE TABLE IF NOT EXISTS visitor_logs (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- 9. App 設定表（QR Code 管理）
+CREATE TABLE IF NOT EXISTS app_settings (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    platform TEXT NOT NULL UNIQUE CHECK (platform IN ('android', 'ios')),
+    app_name TEXT NOT NULL DEFAULT 'YourRemit App',
+    store_url TEXT,
+    custom_qr_image TEXT,
+    use_custom_image BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 插入預設 App 設定
+INSERT INTO app_settings (platform, app_name, store_url, use_custom_image)
+VALUES
+    ('android', 'YourRemit App', 'https://play.google.com/store/apps/details?id=com.yourremit.app', FALSE),
+    ('ios', 'YourRemit App', 'https://apps.apple.com/app/yourremit', FALSE)
+ON CONFLICT (platform) DO NOTHING;
+
+CREATE TRIGGER update_app_settings_updated_at BEFORE UPDATE ON app_settings
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
 -- ============================================
 -- 建立索引以提升查詢效能
 -- ============================================

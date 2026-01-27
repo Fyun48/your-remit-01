@@ -322,6 +322,34 @@ export const handler: Handler = async (event) => {
       }
     }
 
+    // ==================== APP SETTINGS (QR Code) ====================
+    if (path === '/app-settings' || path.startsWith('/app-settings/')) {
+      const platform = path.split('/')[2]; // 'android' or 'ios'
+
+      if (method === 'GET') {
+        if (platform) {
+          const result = await sql`SELECT * FROM app_settings WHERE platform = ${platform}`;
+          return result.length ? success(result[0]) : error('Not found', 404);
+        }
+        const result = await sql`SELECT * FROM app_settings ORDER BY platform`;
+        return success(result);
+      }
+
+      if (method === 'PUT' && platform) {
+        const result = await sql`
+          UPDATE app_settings SET
+            app_name = ${body.app_name || 'YourRemit App'},
+            store_url = ${body.store_url || null},
+            custom_qr_image = ${body.custom_qr_image || null},
+            use_custom_image = ${body.use_custom_image || false},
+            updated_at = NOW()
+          WHERE platform = ${platform}
+          RETURNING *
+        `;
+        return result.length ? success(result[0]) : error('Not found', 404);
+      }
+    }
+
     // ==================== VISITOR LOGS ====================
     if (path === '/visitors' || path.startsWith('/visitors/')) {
       if (method === 'GET') {

@@ -102,6 +102,15 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="#" class="nav-link" data-section="app-settings">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                            <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                        </svg>
+                        <span>App 設定</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="#" class="nav-link" data-section="settings">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="12" r="3"></circle>
@@ -842,6 +851,94 @@
                     </div>
                 </div>
             </div>
+
+            <!-- App Settings Section -->
+            <section class="content-section" id="app-settings">
+                <div class="section-header">
+                    <h1 class="section-title">App 設定</h1>
+                    <p class="section-desc">管理 App 下載 QR Code，支援自訂圖片或輸入連結自動生成</p>
+                </div>
+
+                <div class="app-settings-grid">
+                    <!-- Android 設定 -->
+                    <div class="app-card" data-platform="android">
+                        <div class="app-card-header">
+                            <div class="app-icon android">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M17.6 9.48l1.84-3.18c.16-.31.04-.69-.26-.85-.29-.15-.65-.06-.83.22l-1.88 3.24c-1.4-.59-2.94-.92-4.47-.92s-3.07.33-4.47.92L5.65 5.67c-.19-.29-.54-.38-.83-.22-.31.16-.42.54-.26.85L6.4 9.48C3.3 11.25 1.28 14.44 1 18h22c-.28-3.56-2.3-6.75-5.4-8.52zM7 15.25c-.69 0-1.25-.56-1.25-1.25s.56-1.25 1.25-1.25 1.25.56 1.25 1.25-.56 1.25-1.25 1.25zm10 0c-.69 0-1.25-.56-1.25-1.25s.56-1.25 1.25-1.25 1.25.56 1.25 1.25-.56 1.25-1.25 1.25z"/>
+                                </svg>
+                            </div>
+                            <h3>Android App</h3>
+                        </div>
+                        <div class="app-card-body">
+                            <div class="qr-preview">
+                                <img id="android-qr-preview" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://play.google.com/store/apps/details?id=com.yourremit.app" alt="Android QR Code">
+                            </div>
+                            <form class="app-form" id="androidAppForm">
+                                <div class="form-group">
+                                    <label>App 名稱</label>
+                                    <input type="text" name="app_name" value="YourRemit App">
+                                </div>
+                                <div class="form-group">
+                                    <label>Play Store 連結</label>
+                                    <input type="url" name="store_url" placeholder="https://play.google.com/store/apps/details?id=...">
+                                </div>
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="use_custom_image">
+                                        <span>使用自訂 QR Code 圖片</span>
+                                    </label>
+                                </div>
+                                <div class="form-group custom-image-group" style="display: none;">
+                                    <label>自訂 QR Code 圖片 URL</label>
+                                    <input type="url" name="custom_qr_image" placeholder="https://example.com/qr-code.png">
+                                    <small>建議尺寸：200x200 像素以上</small>
+                                </div>
+                                <button type="submit" class="save-btn">儲存 Android 設定</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- iOS 設定 -->
+                    <div class="app-card" data-platform="ios">
+                        <div class="app-card-header">
+                            <div class="app-icon ios">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                                </svg>
+                            </div>
+                            <h3>iOS App</h3>
+                        </div>
+                        <div class="app-card-body">
+                            <div class="qr-preview">
+                                <img id="ios-qr-preview" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://apps.apple.com/app/yourremit" alt="iOS QR Code">
+                            </div>
+                            <form class="app-form" id="iosAppForm">
+                                <div class="form-group">
+                                    <label>App 名稱</label>
+                                    <input type="text" name="app_name" value="YourRemit App">
+                                </div>
+                                <div class="form-group">
+                                    <label>App Store 連結</label>
+                                    <input type="url" name="store_url" placeholder="https://apps.apple.com/app/...">
+                                </div>
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="use_custom_image">
+                                        <span>使用自訂 QR Code 圖片</span>
+                                    </label>
+                                </div>
+                                <div class="form-group custom-image-group" style="display: none;">
+                                    <label>自訂 QR Code 圖片 URL</label>
+                                    <input type="url" name="custom_qr_image" placeholder="https://example.com/qr-code.png">
+                                    <small>建議尺寸：200x200 像素以上</small>
+                                </div>
+                                <button type="submit" class="save-btn">儲存 iOS 設定</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
             <!-- Settings Section -->
             <section class="content-section" id="settings">
