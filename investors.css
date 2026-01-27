@@ -647,6 +647,10 @@
 /* ================================
    Responsive Design
 ================================ */
+
+/* --------------------------------
+   1024px Breakpoint
+-------------------------------- */
 @media (max-width: 1024px) {
     .nav-cards-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -664,45 +668,92 @@
     .investor-contact-details {
         align-items: center;
     }
+
+    .investor-contact-info h3 {
+        font-size: 1.35rem;
+    }
+
+    /* Hero background shapes - scale down */
+    .investor-hero-shape-1 {
+        width: 350px;
+        height: 350px;
+    }
+
+    .investor-hero-shape-2 {
+        width: 200px;
+        height: 200px;
+    }
 }
 
+/* --------------------------------
+   768px Breakpoint
+-------------------------------- */
 @media (max-width: 768px) {
+    /* Hero Section */
     .investor-hero {
-        min-height: 300px;
+        min-height: 280px;
         padding-top: calc(var(--header-height) + var(--space-2xl));
+        padding-bottom: var(--space-2xl);
     }
 
     .investor-hero-title {
-        font-size: clamp(2rem, 6vw, 3rem);
+        font-size: clamp(1.75rem, 6vw, 2.5rem);
     }
 
     .investor-hero-subtitle {
-        font-size: 1rem;
+        font-size: 0.95rem;
+        line-height: 1.7;
+        padding: 0 var(--space-md);
     }
 
+    /* Hide decorative shapes on mobile */
+    .investor-hero-shape {
+        display: none;
+    }
+
+    /* Navigation Cards */
     .nav-cards-grid {
         grid-template-columns: 1fr;
         margin-top: calc(-1 * var(--space-xl));
+        gap: var(--space-md);
     }
 
     .nav-card {
         flex-direction: row;
         text-align: left;
         padding: var(--space-lg);
+        gap: var(--space-lg);
     }
 
     .nav-card-icon {
-        width: 60px;
-        height: 60px;
+        width: 56px;
+        height: 56px;
+        flex-shrink: 0;
+    }
+
+    .nav-card-icon svg {
+        width: 28px;
+        height: 28px;
     }
 
     .nav-card h3 {
         font-size: 1rem;
+        margin-bottom: var(--space-xs);
+    }
+
+    .nav-card p {
+        font-size: 0.85rem;
+    }
+
+    /* Announcements Section */
+    .investor-announcements {
+        padding: var(--space-3xl) 0;
     }
 
     .announcement-item {
         flex-direction: column;
         gap: var(--space-md);
+        padding: var(--space-lg) 0;
     }
 
     .announcement-date {
@@ -711,12 +762,51 @@
         min-width: auto;
         padding: var(--space-sm) var(--space-md);
         align-self: flex-start;
+        border-radius: var(--radius-sm);
+    }
+
+    .announcement-date .day {
+        font-size: 1.1rem;
+    }
+
+    .announcement-date .month {
+        font-size: 0.7rem;
+    }
+
+    .announcement-content h4 {
+        font-size: 1rem;
+    }
+
+    .announcement-item:hover {
+        margin: 0 calc(-1 * var(--space-md));
+        padding-left: var(--space-md);
+        padding-right: var(--space-md);
+    }
+
+    /* Downloads Section */
+    .investor-downloads {
+        padding: var(--space-3xl) 0;
     }
 
     .download-card {
         flex-direction: column;
         align-items: flex-start;
         gap: var(--space-lg);
+        padding: var(--space-lg);
+    }
+
+    .download-info {
+        width: 100%;
+    }
+
+    .download-icon {
+        width: 48px;
+        height: 48px;
+    }
+
+    .download-details h4 {
+        white-space: normal;
+        font-size: 0.95rem;
     }
 
     .download-actions {
@@ -726,39 +816,279 @@
     .download-btn {
         width: 100%;
         justify-content: center;
+        min-height: 44px; /* Touch-friendly */
     }
 
+    /* Investor Contact Section */
+    .investor-contact {
+        padding: var(--space-2xl) 0;
+    }
+
+    .investor-contact-info h3 {
+        font-size: 1.25rem;
+    }
+
+    .investor-contact-info > p {
+        font-size: 0.9rem;
+    }
+
+    .contact-detail-item {
+        font-size: 0.85rem;
+    }
+
+    /* Modal */
     .modal-content {
         margin: var(--space-md);
         max-width: calc(100% - var(--space-2xl));
+        padding: var(--space-xl);
+    }
+
+    .modal-icon {
+        width: 64px;
+        height: 64px;
+    }
+
+    .modal-icon svg {
+        width: 36px;
+        height: 36px;
+    }
+
+    .modal-content h3 {
+        font-size: 1.1rem;
+    }
+
+    .modal-input-group input {
+        padding: var(--space-md);
+        font-size: 16px; /* Prevents zoom on iOS */
+        min-height: 48px;
+    }
+
+    .modal-actions {
+        flex-direction: column;
+    }
+
+    .modal-actions .btn {
+        width: 100%;
+        min-height: 44px;
+    }
+
+    /* Section Headers */
+    .section-header {
+        margin-bottom: var(--space-2xl);
+    }
+
+    .section-title {
+        font-size: clamp(1.5rem, 5vw, 2rem);
+    }
+
+    /* Button adjustments */
+    .announcements-more .btn {
+        width: 100%;
+        max-width: 280px;
+        justify-content: center;
     }
 }
 
+/* --------------------------------
+   480px Breakpoint
+-------------------------------- */
 @media (max-width: 480px) {
+    /* Investor Nav Cards */
     .investor-nav-cards {
         padding-bottom: var(--space-2xl);
     }
 
     .nav-card {
         padding: var(--space-md);
+        gap: var(--space-md);
     }
 
     .nav-card-icon {
-        width: 48px;
-        height: 48px;
+        width: 44px;
+        height: 44px;
     }
 
     .nav-card-icon svg {
-        width: 24px;
-        height: 24px;
+        width: 22px;
+        height: 22px;
     }
 
+    .nav-card h3 {
+        font-size: 0.95rem;
+    }
+
+    .nav-card p {
+        font-size: 0.8rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    /* Downloads */
     .download-info {
         flex-direction: column;
         align-items: flex-start;
+        gap: var(--space-md);
+    }
+
+    .download-icon {
+        width: 44px;
+        height: 44px;
     }
 
     .download-meta {
         flex-wrap: wrap;
+        gap: var(--space-sm);
+    }
+
+    .download-meta span {
+        font-size: 0.75rem;
+    }
+
+    /* Announcements */
+    .announcement-content h4 {
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    .announcement-content p {
+        font-size: 0.8rem;
+        -webkit-line-clamp: 3;
+    }
+
+    .announcement-link {
+        font-size: 0.8rem;
+    }
+
+    /* Investor Contact */
+    .investor-contact-content {
+        gap: var(--space-xl);
+    }
+
+    .investor-contact-info h3 {
+        font-size: 1.15rem;
+    }
+
+    .contact-detail-item {
+        font-size: 0.8rem;
+        gap: var(--space-sm);
+    }
+
+    .contact-detail-item svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    /* Modal */
+    .modal-content {
+        padding: var(--space-lg);
+        margin: var(--space-sm);
+        max-width: calc(100% - var(--space-md));
+    }
+
+    .modal-icon {
+        width: 56px;
+        height: 56px;
+        margin-bottom: var(--space-md);
+    }
+
+    .modal-icon svg {
+        width: 28px;
+        height: 28px;
+    }
+
+    .modal-hint {
+        font-size: 0.8rem;
+    }
+
+    .modal-error {
+        font-size: 0.8rem;
+    }
+
+    /* Section spacing */
+    .investor-announcements,
+    .investor-downloads {
+        padding: var(--space-2xl) 0;
+    }
+
+    /* Empty state */
+    .empty-state {
+        padding: var(--space-xl);
+    }
+
+    .empty-state svg {
+        width: 48px;
+        height: 48px;
+    }
+
+    .empty-state p {
+        font-size: 0.9rem;
+    }
+
+    /* Loading placeholder */
+    .loading-placeholder {
+        padding: var(--space-xl);
+    }
+
+    .loading-spinner {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+/* --------------------------------
+   Touch-Friendly Enhancements
+-------------------------------- */
+@media (pointer: coarse) {
+    /* Larger touch targets for touchscreens */
+    .nav-card {
+        min-height: 80px;
+    }
+
+    .download-btn {
+        min-height: 48px;
+    }
+
+    .announcement-link {
+        padding: var(--space-sm) 0;
+    }
+
+    .modal-close {
+        width: 44px;
+        height: 44px;
+    }
+
+    .toggle-password {
+        padding: var(--space-sm);
+    }
+}
+
+/* --------------------------------
+   Landscape Mobile Adjustments
+-------------------------------- */
+@media (max-width: 768px) and (orientation: landscape) {
+    .investor-hero {
+        min-height: auto;
+        padding-top: calc(var(--header-height) + var(--space-xl));
+        padding-bottom: var(--space-xl);
+    }
+
+    .investor-hero-title {
+        font-size: clamp(1.5rem, 4vw, 2rem);
+    }
+
+    .modal-content {
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+}
+
+/* --------------------------------
+   High DPI Screens
+-------------------------------- */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .loading-spinner {
+        border-width: 2px;
     }
 }
