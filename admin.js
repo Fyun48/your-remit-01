@@ -228,20 +228,62 @@ function initNavigation() {
         sidebar.classList.toggle('active');
     });
 
-    // Nav link clicks
-    navLinks.forEach(link => {
+    // Submenu toggle for items with has-submenu class
+    document.querySelectorAll('.nav-item.has-submenu > .nav-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const parentItem = link.closest('.nav-item.has-submenu');
+            parentItem.classList.toggle('open');
+        });
+    });
+
+    // Submenu link clicks
+    document.querySelectorAll('.submenu a[data-section]').forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
             const section = link.dataset.section;
-            
+
+            // Remove active from all nav links and submenu links
+            navLinks.forEach(l => l.classList.remove('active'));
+            document.querySelectorAll('.submenu a').forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
+
+            // Keep parent submenu open
+            const parentSubmenu = link.closest('.nav-item.has-submenu');
+            if (parentSubmenu) {
+                parentSubmenu.classList.add('open');
+            }
+
+            // Show corresponding section
+            contentSections.forEach(s => s.classList.remove('active'));
+            const targetSection = document.getElementById(section);
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+
+            // Close mobile menu
+            sidebar.classList.remove('active');
+        });
+    });
+
+    // Nav link clicks (for non-submenu items)
+    navLinks.forEach(link => {
+        // Skip if this is a submenu parent link
+        if (link.closest('.nav-item.has-submenu')) return;
+
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const section = link.dataset.section;
+
             // Update active nav link
             navLinks.forEach(l => l.classList.remove('active'));
+            document.querySelectorAll('.submenu a').forEach(l => l.classList.remove('active'));
             link.classList.add('active');
-            
+
             // Show corresponding section
             contentSections.forEach(s => s.classList.remove('active'));
             document.getElementById(section).classList.add('active');
-            
+
             // Close mobile menu
             sidebar.classList.remove('active');
         });

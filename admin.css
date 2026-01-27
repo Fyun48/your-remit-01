@@ -184,6 +184,63 @@ input, select, textarea {
 }
 
 /* ================================
+   Sidebar Submenu
+================================ */
+.nav-item.has-submenu > .nav-link {
+    justify-content: flex-start;
+}
+
+.nav-item.has-submenu > .nav-link .nav-icon {
+    font-size: 1.25rem;
+    width: 20px;
+    text-align: center;
+}
+
+.nav-item.has-submenu > .nav-link .submenu-arrow {
+    margin-left: auto;
+    transition: transform var(--transition-fast);
+}
+
+.nav-item.has-submenu.open > .nav-link .submenu-arrow {
+    transform: rotate(180deg);
+}
+
+.submenu {
+    list-style: none;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height var(--transition-base);
+}
+
+.nav-item.has-submenu.open .submenu {
+    max-height: 200px;
+}
+
+.submenu li {
+    padding: 0 0.75rem;
+}
+
+.submenu li a {
+    display: block;
+    padding: 0.625rem 1rem 0.625rem 2.75rem;
+    border-radius: var(--radius-sm);
+    color: var(--color-gray-500);
+    font-size: 0.85rem;
+    font-weight: 400;
+    transition: all var(--transition-fast);
+}
+
+.submenu li a:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--color-white);
+}
+
+.submenu li a.active {
+    background: rgba(45, 189, 182, 0.15);
+    color: var(--color-accent);
+}
+
+/* ================================
    Main Content
 ================================ */
 .main-content {
