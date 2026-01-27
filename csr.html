@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>企業責任 | 金優匯 Your Remit</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- 頂部導航 -->
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <div class="logo-group">
+                    <span class="logo-yourremit">Your Remit</span>
+                    <div class="logo-yourpay">
+                        <svg class="logo-icon" width="28" height="32" viewBox="0 0 36 44">
+                            <path d="M4 8 Q4 4 8 4 L8 4 Q8 0 16 0 Q28 0 32 8 L26 14 Q24 10 18 10 Q12 10 12 14 L12 14 L12 40 Q12 44 8 44 Q4 44 4 40 Z" fill="#1B3A57"/>
+                            <path d="M20 22 Q20 18 24 18 L32 18 L32 26 Q32 34 24 34 L20 34 L20 28 Q20 26 24 26 L26 26 L26 24 Q26 22 24 22 Z" fill="#2DBDB6"/>
+                        </svg>
+                        <span>your<em>pay</em></span>
+                    </div>
+                </div>
+            </a>
+
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="index.html#about" class="nav-link">關於我們</a>
+                    </li>
+                    <li class="nav-item has-dropdown">
+                        <a href="index.html#services" class="nav-link">
+                            服務項目
+                            <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </a>
+                        <ul class="dropdown">
+                            <li><a href="service-detail.html?id=1">國際匯款服務</a></li>
+                            <li><a href="service-detail.html?id=2">金融科技</a></li>
+                            <li><a href="service-detail.html?id=3">企業顧問</a></li>
+                            <li><a href="service-detail.html?id=4">投資理財</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="news.html" class="nav-link">最新消息</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="csr.html" class="nav-link active">企業責任</a>
+                    </li>
+                    <li class="nav-item has-dropdown">
+                        <a href="investors.html" class="nav-link">
+                            投資人關係
+                            <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </a>
+                        <ul class="dropdown">
+                            <li><a href="investors-financials.html">財務報告</a></li>
+                            <li><a href="investors-announcements.html">公司公告</a></li>
+                            <li><a href="investors-governance.html">公司治理</a></li>
+                            <li><a href="investors-shareholders.html">股東會資訊</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="index.html#career" class="nav-link">人才招募</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="app-download.html" class="nav-link">App 下載</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="header-actions">
+                <div class="lang-switch">
+                    <a href="#" class="lang-active">繁中</a>
+                    <span class="lang-divider">|</span>
+                    <a href="#">EN</a>
+                </div>
+            </div>
+
+            <button class="mobile-menu-btn" aria-label="開啟選單">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- 頁面標題區 -->
+    <section class="csr-hero">
+        <div class="csr-hero-bg">
+            <div class="csr-hero-overlay"></div>
+            <img src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=1920&q=80" alt="企業責任" class="csr-hero-image">
+        </div>
+        <div class="container">
+            <span class="section-tag">CSR</span>
+            <h1 class="page-title">企業社會責任</h1>
+            <p class="page-subtitle">以誠信經營為本，善盡企業公民責任，創造永續價值</p>
+        </div>
+    </section>
+
+    <!-- 核心理念 -->
+    <section class="csr-values">
+        <div class="container">
+            <div class="csr-values-grid">
+                <div class="csr-value-card animate-on-scroll">
+                    <div class="csr-value-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            <path d="M9 12l2 2 4-4"></path>
+                        </svg>
+                    </div>
+                    <h3>誠信經營</h3>
+                    <p>堅守法規與商業道德，建立透明的治理機制，維護客戶與股東權益</p>
+                </div>
+                <div class="csr-value-card animate-on-scroll">
+                    <div class="csr-value-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M12 6v6l4 2"></path>
+                        </svg>
+                    </div>
+                    <h3>永續發展</h3>
+                    <p>推動綠色營運，降低環境衝擊，為地球永續盡一份心力</p>
+                </div>
+                <div class="csr-value-card animate-on-scroll">
+                    <div class="csr-value-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+                    <h3>社會參與</h3>
+                    <p>積極投入公益活動，關懷弱勢族群，促進社會共好</p>
+                </div>
+                <div class="csr-value-card animate-on-scroll">
+                    <div class="csr-value-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                    </div>
+                    <h3>員工關懷</h3>
+                    <p>打造友善職場環境，重視員工發展，實現工作與生活平衡</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CSR 主要內容 -->
+    <section class="csr-content">
+        <div class="container">
+            <!-- 環境保護 -->
+            <article class="csr-article animate-on-scroll">
+                <div class="csr-article-image">
+                    <img src="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=600&h=400&fit=crop" alt="環境保護">
+                    <div class="csr-article-badge">Environment</div>
+                </div>
+                <div class="csr-article-content">
+                    <h2>環境保護</h2>
+                    <h3>綠色營運，守護地球</h3>
+                    <p>金優匯致力於減少營運過程中的環境足跡，我們實施多項綠色措施：</p>
+                    <ul class="csr-list">
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            全面推動無紙化作業，年減少用紙量達 85%
+                        </li>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            辦公室採用節能設備，年節電量超過 30%
+                        </li>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            鼓勵員工使用大眾運輸，提供交通補助
+                        </li>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            定期舉辦淨灘、植樹等環保活動
+                        </li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- 社會公益 -->
+            <article class="csr-article reverse animate-on-scroll">
+                <div class="csr-article-image">
+                    <img src="https://images.unsplash.com/photo-1593113598332-cd288d649433?w=600&h=400&fit=crop" alt="社會公益">
+                    <div class="csr-article-badge">Community</div>
+                </div>
+                <div class="csr-article-content">
+                    <h2>社會公益</h2>
+                    <h3>回饋社會，傳遞溫暖</h3>
+                    <p>我們相信企業的成功來自於社會的支持，因此積極回饋社會：</p>
+                    <ul class="csr-list">
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            設立「金優匯獎學金」，每年資助 50 位清寒學子
+                        </li>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            與社福機構合作，定期探訪獨居長者
+                        </li>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            捐助偏鄉學校數位設備，縮短城鄉數位落差
+                        </li>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            員工志工服務時數每年超過 2,000 小時
+                        </li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- 員工照顧 -->
+            <article class="csr-article animate-on-scroll">
+                <div class="csr-article-image">
+                    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&h=400&fit=crop" alt="員工照顧">
+                    <div class="csr-article-badge">People</div>
+                </div>
+                <div class="csr-article-content">
+                    <h2>員工照顧</h2>
+                    <h3>以人為本，共同成長</h3>
+                    <p>員工是公司最重要的資產，我們提供完善的照顧制度：</p>
+                    <ul class="csr-list">
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            具競爭力的薪資福利與年度分紅制度
+                        </li>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            完整的教育訓練與職涯發展計畫
+                        </li>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            彈性工時與遠端工作選項
+                        </li>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            員工健康檢查與心理諮商服務
+                        </li>
+                    </ul>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- CSR 數據 -->
+    <section class="csr-stats">
+        <div class="container">
+            <div class="csr-stats-grid">
+                <div class="csr-stat-item animate-on-scroll">
+                    <span class="csr-stat-number" data-count="85">85</span>
+                    <span class="csr-stat-unit">%</span>
+                    <span class="csr-stat-label">無紙化作業比例</span>
+                </div>
+                <div class="csr-stat-item animate-on-scroll">
+                    <span class="csr-stat-number" data-count="2000">2,000</span>
+                    <span class="csr-stat-unit">+</span>
+                    <span class="csr-stat-label">年度志工服務時數</span>
+                </div>
+                <div class="csr-stat-item animate-on-scroll">
+                    <span class="csr-stat-number" data-count="50">50</span>
+                    <span class="csr-stat-unit">位</span>
+                    <span class="csr-stat-label">獎學金受益學生</span>
+                </div>
+                <div class="csr-stat-item animate-on-scroll">
+                    <span class="csr-stat-number" data-count="30">30</span>
+                    <span class="csr-stat-unit">%</span>
+                    <span class="csr-stat-label">年度節電成效</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CSR 報告下載 -->
+    <section class="csr-download">
+        <div class="container">
+            <div class="csr-download-card animate-on-scroll">
+                <div class="csr-download-content">
+                    <h2>企業社會責任報告書</h2>
+                    <p>詳細了解金優匯在環境保護、社會參與及公司治理方面的承諾與成果</p>
+                </div>
+                <div class="csr-download-actions">
+                    <a href="#" class="btn btn-primary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        下載 2024 年報告
+                    </a>
+                    <a href="#" class="btn btn-outline">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                        歷年報告書
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <span class="logo-yourremit">Your Remit</span>
+                    </div>
+                    <p class="footer-desc">專業國際匯款服務，安全、快速、便捷</p>
+                </div>
+                <div class="footer-links">
+                    <h4>快速連結</h4>
+                    <ul>
+                        <li><a href="index.html#about">關於我們</a></li>
+                        <li><a href="index.html#services">服務項目</a></li>
+                        <li><a href="news.html">最新消息</a></li>
+                        <li><a href="index.html#contact">聯絡我們</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>服務項目</h4>
+                    <ul>
+                        <li><a href="service-detail.html?id=1">國際匯款</a></li>
+                        <li><a href="service-detail.html?id=2">金融科技</a></li>
+                        <li><a href="service-detail.html?id=3">企業顧問</a></li>
+                        <li><a href="service-detail.html?id=4">投資理財</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4>聯絡資訊</h4>
+                    <p>電話：02-2796-5959</p>
+                    <p>信箱：service@jinyouhui.com.tw</p>
+                    <p>地址：台北市內湖區安美街181號</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 金優匯 Your Remit. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="api-client.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
