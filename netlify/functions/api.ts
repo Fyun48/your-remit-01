@@ -35,6 +35,20 @@ function error(message: string, statusCode = 500) {
   return { statusCode, headers, body: JSON.stringify({ success: false, error: message }) };
 }
 
+// Simple password hashing (for demo - use bcrypt in production)
+async function hashPassword(password: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function verifyPassword(password: string, hash: string): Promise<boolean> {
+  const passwordHash = await hashPassword(password);
+  return passwordHash === hash;
+}
+
 export const handler: Handler = async (event) => {
   // Handle CORS preflight
   if (event.httpMethod === 'OPTIONS') {
@@ -347,6 +361,125 @@ export const handler: Handler = async (event) => {
           RETURNING *
         `;
         return result.length ? success(result[0]) : error('Not found', 404);
+      }
+    }
+
+    // ==================== INVESTOR DOCUMENTS ====================
+    if (path === '/investor/documents' || path.startsWith('/investor/documents/')) {
+      const id = path.split('/')[3];
+
+      if (method === 'GET') {
+        if (id) {
+          const result = await sql`SELECT * FROM investor_documents WHERE id = ${id}`;
+          return result.length ? success(result[0]) : error('Not found', 404);
+        }
+
+        const { category, year, published_only } = params;
+        let query = sql`SELECT * FROM investor_documents`;
+
+        if (category && year) {
+          query = sql`SELECT * FROM investor_documents WHERE category = ${category} AND fiscal_year = ${parseInt(year)} ORDER BY publish_date DESC, "order" ASC`;
+        } else if (category) {
+          query = sql`SELECT * FROM investor_documents WHERE category = ${category} ORDER BY fiscal_year DESC, publish_date DESC, "order" ASC`;
+        } else if (year) {
+          query = sql`SELECT * FROM investor_documents WHERE fiscal_year = ${parseInt(year)} ORDER BY publish_date DESC, "order" ASC`;
+        } else if (published_only === 'true') {
+          query = sql`SELECT * FROM investor_documents WHERE is_published = true ORDER BY fiscal_year DESC, publish_date DESC`;
+        } else {
+          query = sql`SELECT * FROM investor_documents ORDER BY fiscal_year DESC, publish_date DESC, "order" ASC`;
+        }
+
+        const result = await query;
+        return success(result);
+      }
+
+      if (method === 'POST') {
+        const passwordHash = body.password ? await hashPassword(body.password) : null;
+        const result = await sql`
+          INSERT INTO investor_documents (category, type, title, description, file_url, file_size, publish_date, fiscal_year, fiscal_quarter, is_protected, password_hash, password_hint, is_published, "order")
+          VALUES (${body.category}, ${body.type}, ${body.title}, ${body.description || null}, ${body.file_url}, ${body.file_size || null}, ${body.publish_date}, ${body.fiscal_year || null}, ${body.fiscal_quarter || null}, ${body.is_protected || false}, ${passwordHash}, ${body.password_hint || null}, ${body.is_published !== false}, ${body.order || 0})
+          RETURNING *
+        `;
+        return success(result[0], 201);
+      }
+
+      if (method === 'PUT' && id) {
+        const passwordHash = body.password ? await hashPassword(body.password) : undefined;
+        const updateFields = passwordHash !== undefined
+          ? sql`
+              category = ${body.category},
+              type = ${body.type},
+              title = ${body.title},
+              description = ${body.description || null},
+              file_url = ${body.file_url},
+              file_size = ${body.file_size || null},
+              publish_date = ${body.publish_date},
+              fiscal_year = ${body.fiscal_year || null},
+              fiscal_quarter = ${body.fiscal_quarter || null},
+              is_protected = ${body.is_protected || false},
+              password_hash = ${passwordHash},
+              password_hint = ${body.password_hint || null},
+              is_published = ${body.is_published !== false},
+              "order" = ${body.order || 0},
+              updated_at = NOW()
+            `
+          : sql`
+              category = ${body.category},
+              type = ${body.type},
+              title = ${body.title},
+              description = ${body.description || null},
+              file_url = ${body.file_url},
+              file_size = ${body.file_size || null},
+              publish_date = ${body.publish_date},
+              fiscal_year = ${body.fiscal_year || null},
+              fiscal_quarter = ${body.fiscal_quarter || null},
+              is_protected = ${body.is_protected || false},
+              password_hint = ${body.password_hint || null},
+              is_published = ${body.is_published !== false},
+              "order" = ${body.order || 0},
+              updated_at = NOW()
+            `;
+
+        const result = await sql`
+          UPDATE investor_documents SET ${updateFields}
+          WHERE id = ${id}
+          RETURNING *
+        `;
+        return result.length ? success(result[0]) : error('Not found', 404);
+      }
+
+      if (method === 'DELETE' && id) {
+        await sql`DELETE FROM investor_documents WHERE id = ${id}`;
+        return success({ deleted: true });
+      }
+    }
+
+    // ==================== INVESTOR PASSWORD VERIFY ====================
+    if (path === '/investor/verify-password' && method === 'POST') {
+      const { document_id, password } = body;
+
+      if (!document_id || !password) {
+        return error('Missing document_id or password', 400);
+      }
+
+      const result = await sql`SELECT password_hash, is_protected FROM investor_documents WHERE id = ${document_id}`;
+
+      if (!result.length) {
+        return error('Document not found', 404);
+      }
+
+      if (!result[0].is_protected) {
+        return success({ verified: true, message: 'Document is not protected' });
+      }
+
+      const isValid = await verifyPassword(password, result[0].password_hash);
+
+      if (isValid) {
+        // Generate simple token (in production, use JWT)
+        const token = `${document_id}-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+        return success({ verified: true, token });
+      } else {
+        return error('Invalid password', 401);
       }
     }
 
