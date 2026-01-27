@@ -1053,6 +1053,139 @@
                     </table>
                 </div>
             </section>
+
+            <!-- Investor Governance Section -->
+            <section id="investor-governance-section" class="content-section" style="display: none;">
+                <div class="section-header">
+                    <div class="section-header-left">
+                        <h1 class="section-title">公司治理管理</h1>
+                        <p class="section-desc">管理董事會成員、組織架構及公司章程內規</p>
+                    </div>
+                </div>
+
+                <!-- Board Members -->
+                <div class="governance-block">
+                    <div class="block-header">
+                        <h3>董事會成員</h3>
+                        <button class="btn btn-primary btn-sm" onclick="showAddBoardMemberModal()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            新增成員
+                        </button>
+                    </div>
+                    <div class="data-table-container">
+                        <table class="data-table sortable" id="board-members-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 60px;">排序</th>
+                                    <th>姓名</th>
+                                    <th>職稱</th>
+                                    <th>簡歷</th>
+                                    <th style="width: 80px;">狀態</th>
+                                    <th style="width: 100px;">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="board-members-tbody">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Organization Chart -->
+                <div class="governance-block">
+                    <div class="block-header">
+                        <h3>組織架構圖</h3>
+                    </div>
+                    <div class="org-chart-upload">
+                        <div class="preview" id="org-chart-preview">
+                            <img src="" alt="組織架構圖" style="display: none;">
+                            <span class="placeholder">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                    <polyline points="21 15 16 10 5 21"></polyline>
+                                </svg>
+                                <span>尚未上傳組織圖</span>
+                            </span>
+                        </div>
+                        <div class="upload-actions">
+                            <input type="url" id="org-chart-url" placeholder="輸入圖片網址（支援 JPG、PNG 格式）">
+                            <button class="btn btn-primary" onclick="saveOrgChart()">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                                    <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                                    <polyline points="7 3 7 8 15 8"></polyline>
+                                </svg>
+                                儲存
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charters and Policies -->
+                <div class="governance-block">
+                    <div class="block-header">
+                        <h3>公司章程與內規</h3>
+                        <button class="btn btn-primary btn-sm" onclick="showAddCharterModal()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            新增文件
+                        </button>
+                    </div>
+                    <div class="data-table-container">
+                        <table class="data-table sortable" id="charters-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 60px;">排序</th>
+                                    <th>名稱</th>
+                                    <th>類型</th>
+                                    <th>檔案</th>
+                                    <th style="width: 80px;">狀態</th>
+                                    <th style="width: 100px;">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="charters-tbody">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Investor Shareholders Section -->
+            <section id="investor-shareholders-section" class="content-section" style="display: none;">
+                <div class="section-header">
+                    <div class="section-header-left">
+                        <h1 class="section-title">股東會資料管理</h1>
+                        <p class="section-desc">管理股東會相關文件與資料</p>
+                    </div>
+                </div>
+
+                <div class="shareholders-notice">
+                    <div class="notice-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="16" x2="12" y2="12"></line>
+                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                        </svg>
+                    </div>
+                    <div class="notice-content">
+                        <p class="section-note">股東會相關文件請在「文件管理」中選擇分類「股東會資料」進行管理。</p>
+                        <a href="#" class="btn btn-outline" onclick="goToDocuments('shareholder'); return false;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                            </svg>
+                            前往文件管理
+                        </a>
+                    </div>
+                </div>
+            </section>
         </div>
     </main>
 
@@ -1405,6 +1538,129 @@
 
                 <div class="modal-actions">
                     <button type="button" class="cancel-btn" onclick="closeDocumentModal()">取消</button>
+                    <button type="submit" class="submit-btn">儲存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Board Member Modal -->
+    <div class="modal" id="board-member-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="board-member-modal-title">新增董事會成員</h2>
+                <button class="modal-close" onclick="closeBoardMemberModal()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <form id="board-member-form" class="modal-form">
+                <input type="hidden" id="board-member-id">
+
+                <div class="form-group">
+                    <label for="board-member-name">姓名 <span class="required">*</span></label>
+                    <input type="text" id="board-member-name" placeholder="請輸入姓名" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="board-member-title">職稱 <span class="required">*</span></label>
+                    <input type="text" id="board-member-title" placeholder="例如：董事長、獨立董事" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="board-member-bio">簡歷</label>
+                    <textarea id="board-member-bio" rows="4" placeholder="請輸入成員簡歷（學歷、經歷等）"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="board-member-sort">排序</label>
+                    <input type="number" id="board-member-sort" min="1" value="1" placeholder="數字越小排越前面">
+                    <span class="input-hint">數字越小排越前面</span>
+                </div>
+
+                <div class="form-group">
+                    <label>發布狀態</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="board-member-published" value="true" checked>
+                            <span>上線</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="board-member-published" value="false">
+                            <span>草稿</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="cancel-btn" onclick="closeBoardMemberModal()">取消</button>
+                    <button type="submit" class="submit-btn">儲存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Charter/Policy Modal -->
+    <div class="modal" id="charter-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="charter-modal-title">新增公司章程/內規</h2>
+                <button class="modal-close" onclick="closeCharterModal()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <form id="charter-form" class="modal-form">
+                <input type="hidden" id="charter-id">
+
+                <div class="form-group">
+                    <label for="charter-name">文件名稱 <span class="required">*</span></label>
+                    <input type="text" id="charter-name" placeholder="例如：公司章程、薪酬委員會組織規程" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="charter-type">文件類型 <span class="required">*</span></label>
+                    <select id="charter-type" required>
+                        <option value="">請選擇類型</option>
+                        <option value="charter">公司章程</option>
+                        <option value="policy">內部規章</option>
+                        <option value="committee">委員會規程</option>
+                        <option value="other">其他</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="charter-file-url">檔案網址 <span class="required">*</span></label>
+                    <input type="url" id="charter-file-url" placeholder="https://example.com/document.pdf" required>
+                    <span class="input-hint">請輸入 PDF 或其他文件的下載連結</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="charter-sort">排序</label>
+                    <input type="number" id="charter-sort" min="1" value="1" placeholder="數字越小排越前面">
+                    <span class="input-hint">數字越小排越前面</span>
+                </div>
+
+                <div class="form-group">
+                    <label>發布狀態</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="charter-published" value="true" checked>
+                            <span>上線</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="charter-published" value="false">
+                            <span>草稿</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="cancel-btn" onclick="closeCharterModal()">取消</button>
                     <button type="submit" class="submit-btn">儲存</button>
                 </div>
             </form>
