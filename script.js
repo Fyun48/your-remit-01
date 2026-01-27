@@ -879,34 +879,23 @@ function initCounterAnimation() {
  * 滾動動畫
  */
 function initScrollAnimations() {
-    const animatedElements = document.querySelectorAll('.service-card, .news-card, .about-content, .about-visual, .contact-info, .contact-form-wrapper');
-
-    if (!animatedElements.length) return;
-
-    // 添加初始樣式
-    animatedElements.forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(40px)';
-        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-    });
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
 
     const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry, index) => {
+        entries.forEach(entry => {
             if (entry.isIntersecting) {
-                // 使用延遲創建錯開效果
-                setTimeout(() => {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }, index * 100);
+                entry.target.classList.add('is-visible');
                 observer.unobserve(entry.target);
             }
         });
-    }, {
-        threshold: 0.1,
-        rootMargin: '0px 0px -80px 0px'
-    });
+    }, observerOptions);
 
-    animatedElements.forEach(el => observer.observe(el));
+    document.querySelectorAll('.animate-on-scroll').forEach(el => {
+        observer.observe(el);
+    });
 }
 
 /**
