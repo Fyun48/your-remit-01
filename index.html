@@ -202,88 +202,43 @@
     </section>
 
     <!-- 最新消息 -->
-    <section class="news" id="news">
+    <section id="news" class="news-section">
         <div class="container">
-            <div class="section-header">
-                <span class="section-tag">Announcement</span>
-                <h2 class="section-title">最新消息</h2>
-                <div class="section-line"></div>
-            </div>
-            
-            <div class="news-tabs">
-                <button class="news-tab active" data-tab="all">全部公告</button>
-                <button class="news-tab" data-tab="service">服務公告</button>
-                <button class="news-tab" data-tab="event">活動資訊</button>
-                <button class="news-tab" data-tab="media">媒體報導</button>
+            <div class="section-header offset-title">
+                <span class="section-tag animate-on-scroll">News</span>
+                <h2 class="section-title animate-on-scroll">
+                    最新消息
+                    <span class="title-decoration"></span>
+                </h2>
             </div>
 
-            <div class="news-grid">
+            <div class="news-grid" id="news-list">
                 <article class="news-card">
-                    <div class="news-date">
-                        <span class="day">18</span>
-                        <span class="month">Dec</span>
-                    </div>
-                    <div class="news-content">
-                        <span class="news-category">服務公告</span>
-                        <h3 class="news-title">2025年農曆新年營業時間調整公告</h3>
-                        <p class="news-excerpt">為配合農曆新年假期，本公司營業時間將進行調整，敬請客戶提前安排匯款事宜...</p>
-                        <a href="#" class="news-link">
-                            閱讀更多
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                                <polyline points="12 5 19 12 12 19"></polyline>
-                            </svg>
-                        </a>
+                    <img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&h=200&fit=crop" alt="新年公告" class="news-card-image">
+                    <div class="news-card-content">
+                        <span class="news-card-date">2025/12/18</span>
+                        <h3 class="news-card-title">2025年農曆新年營業時間調整公告</h3>
+                        <p class="news-card-excerpt">為配合農曆新年假期，本公司營業時間將進行調整，敬請客戶提前安排匯款事宜...</p>
                     </div>
                 </article>
 
                 <article class="news-card">
-                    <div class="news-date">
-                        <span class="day">15</span>
-                        <span class="month">Dec</span>
-                    </div>
-                    <div class="news-content">
-                        <span class="news-category">活動資訊</span>
-                        <h3 class="news-title">金優匯年終感恩回饋活動開跑</h3>
-                        <p class="news-excerpt">感謝客戶一年來的支持，年終特別推出匯款手續費優惠活動，詳情請洽各服務據點...</p>
-                        <a href="#" class="news-link">
-                            閱讀更多
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                                <polyline points="12 5 19 12 12 19"></polyline>
-                            </svg>
-                        </a>
+                    <img src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=400&h=200&fit=crop" alt="年終活動" class="news-card-image">
+                    <div class="news-card-content">
+                        <span class="news-card-date">2025/12/15</span>
+                        <h3 class="news-card-title">金優匯年終感恩回饋活動開跑</h3>
+                        <p class="news-card-excerpt">感謝客戶一年來的支持，年終特別推出匯款手續費優惠活動，詳情請洽各服務據點...</p>
                     </div>
                 </article>
 
                 <article class="news-card">
-                    <div class="news-date">
-                        <span class="day">10</span>
-                        <span class="month">Dec</span>
-                    </div>
-                    <div class="news-content">
-                        <span class="news-category">媒體報導</span>
-                        <h3 class="news-title">金優匯榮獲2024年度最佳金融服務獎</h3>
-                        <p class="news-excerpt">本公司以卓越的服務品質與創新的金融科技，獲得業界肯定，榮獲年度最佳金融服務獎...</p>
-                        <a href="#" class="news-link">
-                            閱讀更多
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                                <polyline points="12 5 19 12 12 19"></polyline>
-                            </svg>
-                        </a>
+                    <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=400&h=200&fit=crop" alt="獲獎消息" class="news-card-image">
+                    <div class="news-card-content">
+                        <span class="news-card-date">2025/12/10</span>
+                        <h3 class="news-card-title">金優匯榮獲2024年度最佳金融服務獎</h3>
+                        <p class="news-card-excerpt">本公司以卓越的服務品質與創新的金融科技，獲得業界肯定，榮獲年度最佳金融服務獎...</p>
                     </div>
                 </article>
-            </div>
-
-            <div class="news-more">
-                <a href="#" class="btn btn-text">
-                    查看所有消息
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                        <polyline points="12 5 19 12 12 19"></polyline>
-                    </svg>
-                </a>
             </div>
         </div>
     </section>
