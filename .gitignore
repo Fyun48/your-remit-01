@@ -30,3 +30,6 @@ netlify/functions/**/*.d.ts.map
 
 # Claude Code
 .claude/
+
+# Git Worktrees
+.worktrees/
