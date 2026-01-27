@@ -162,6 +162,41 @@ ON CONFLICT (platform) DO NOTHING;
 CREATE TRIGGER update_app_settings_updated_at BEFORE UPDATE ON app_settings
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+-- 10. 投資人文件表
+CREATE TABLE IF NOT EXISTS investor_documents (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    category TEXT NOT NULL CHECK (category IN ('financial', 'announcement', 'governance', 'shareholder')),
+    type TEXT NOT NULL,
+    title TEXT NOT NULL,
+    description TEXT,
+    file_url TEXT NOT NULL,
+    file_size INTEGER,
+    publish_date DATE NOT NULL,
+    fiscal_year INTEGER,
+    fiscal_quarter INTEGER CHECK (fiscal_quarter >= 1 AND fiscal_quarter <= 4),
+    is_protected BOOLEAN DEFAULT FALSE,
+    password_hash TEXT,
+    password_hint TEXT,
+    is_published BOOLEAN DEFAULT TRUE,
+    "order" INTEGER DEFAULT 0,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 11. 公司治理資訊表
+CREATE TABLE IF NOT EXISTS governance_info (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    type TEXT NOT NULL CHECK (type IN ('board_member', 'org_chart', 'charter', 'policy')),
+    name TEXT NOT NULL,
+    title TEXT,
+    description TEXT,
+    file_url TEXT,
+    "order" INTEGER DEFAULT 0,
+    is_published BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
 -- ============================================
 -- 建立索引以提升查詢效能
 -- ============================================
@@ -173,6 +208,10 @@ CREATE INDEX IF NOT EXISTS idx_banners_order ON banners("order");
 CREATE INDEX IF NOT EXISTS idx_contact_messages_created ON contact_messages(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_contact_messages_read ON contact_messages(read);
 CREATE INDEX IF NOT EXISTS idx_visitor_logs_date ON visitor_logs(date DESC);
+CREATE INDEX IF NOT EXISTS idx_investor_docs_category ON investor_documents(category);
+CREATE INDEX IF NOT EXISTS idx_investor_docs_year ON investor_documents(fiscal_year DESC);
+CREATE INDEX IF NOT EXISTS idx_investor_docs_published ON investor_documents(is_published);
+CREATE INDEX IF NOT EXISTS idx_governance_type ON governance_info(type);
 
 -- ============================================
 -- 建立更新時間自動更新函數
@@ -194,6 +233,12 @@ CREATE TRIGGER update_banners_updated_at BEFORE UPDATE ON banners
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 CREATE TRIGGER update_service_details_updated_at BEFORE UPDATE ON service_details
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_investor_documents_updated_at BEFORE UPDATE ON investor_documents
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_governance_info_updated_at BEFORE UPDATE ON governance_info
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 -- ============================================
