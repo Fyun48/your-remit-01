@@ -392,9 +392,12 @@
     <script>
         // CSR Page Dynamic Content Loader
         document.addEventListener('DOMContentLoaded', async function() {
+            console.log('CSR 頁面載入中...');
+
+            // Load Hero
             try {
-                // Load Hero
-                const { data: settings } = await supabaseSelect('csr_settings', { limit: 1 });
+                const { data: settings, error: settingsError } = await supabaseSelect('csr_settings', { limit: 1 });
+                console.log('Settings:', settings, 'Error:', settingsError);
                 if (settings && settings.length > 0 && settings[0].hero) {
                     const hero = settings[0].hero;
                     const heroTitle = document.querySelector('.csr-hero .page-title');
@@ -405,9 +408,14 @@
                     if (heroSubtitle && hero.subtitle) heroSubtitle.textContent = hero.subtitle;
                     if (heroImage && hero.image) heroImage.src = hero.image;
                 }
+            } catch (e) {
+                console.error('Hero 載入失敗:', e);
+            }
 
-                // Load Values
-                const { data: values } = await supabaseSelect('csr_values', { order: { column: 'sort_order', ascending: true } });
+            // Load Values
+            try {
+                const { data: values, error: valuesError } = await supabaseSelect('csr_values', { order: { column: 'sort_order', ascending: true } });
+                console.log('Values:', values, 'Error:', valuesError);
                 if (values && values.length > 0) {
                     const valuesContainer = document.querySelector('.csr-values-grid');
                     if (valuesContainer) {
@@ -423,25 +431,35 @@
                         }).join('');
                     }
                 }
+            } catch (e) {
+                console.error('Values 載入失敗:', e);
+            }
 
-                // Load Articles
-                const { data: articles } = await supabaseSelect('csr_articles', { order: { column: 'sort_order', ascending: true } });
+            // Load Articles
+            try {
+                const { data: articles, error: articlesError } = await supabaseSelect('csr_articles', { order: { column: 'sort_order', ascending: true } });
+                console.log('Articles:', articles, 'Error:', articlesError);
                 if (articles && articles.length > 0) {
                     const articlesContainer = document.querySelector('.csr-content .container');
                     if (articlesContainer) {
                         articlesContainer.innerHTML = articles.map((article, index) => {
-                            const points = Array.isArray(article.points) ? article.points : JSON.parse(article.points || '[]');
+                            let points = [];
+                            try {
+                                points = Array.isArray(article.points) ? article.points : JSON.parse(article.points || '[]');
+                            } catch (e) {
+                                console.error('解析 points 失敗:', e);
+                            }
                             const isReverse = index % 2 === 1;
                             return `
                                 <article class="csr-article ${isReverse ? 'reverse' : ''} animate-on-scroll">
                                     <div class="csr-article-image">
-                                        <img src="${article.image}" alt="${article.title}">
+                                        <img src="${article.image || ''}" alt="${article.title}">
                                         <div class="csr-article-badge">${article.category}</div>
                                     </div>
                                     <div class="csr-article-content">
                                         <h2>${article.title}</h2>
                                         <h3>${article.subtitle}</h3>
-                                        <p>${article.intro}</p>
+                                        <p>${article.intro || ''}</p>
                                         <ul class="csr-list">
                                             ${points.map(point => `
                                                 <li>
@@ -459,9 +477,14 @@
                         }).join('');
                     }
                 }
+            } catch (e) {
+                console.error('Articles 載入失敗:', e);
+            }
 
-                // Load Stats
-                const { data: stats } = await supabaseSelect('csr_stats', { order: { column: 'sort_order', ascending: true } });
+            // Load Stats
+            try {
+                const { data: stats, error: statsError } = await supabaseSelect('csr_stats', { order: { column: 'sort_order', ascending: true } });
+                console.log('Stats:', stats, 'Error:', statsError);
                 if (stats && stats.length > 0) {
                     const statsContainer = document.querySelector('.csr-stats-grid');
                     if (statsContainer) {
@@ -474,9 +497,14 @@
                         `).join('');
                     }
                 }
+            } catch (e) {
+                console.error('Stats 載入失敗:', e);
+            }
 
-                // Load Reports
-                const { data: reports } = await supabaseSelect('csr_reports', { order: { column: 'sort_order', ascending: true } });
+            // Load Reports
+            try {
+                const { data: reports, error: reportsError } = await supabaseSelect('csr_reports', { order: { column: 'sort_order', ascending: true } });
+                console.log('Reports:', reports, 'Error:', reportsError);
                 if (reports && reports.length > 0) {
                     const downloadActions = document.querySelector('.csr-download-actions');
                     if (downloadActions) {
@@ -493,13 +521,13 @@
                         `).join('');
                     }
                 }
-
-                // Re-init scroll animations
-                initScrollAnimations();
-
-            } catch (error) {
-                console.error('載入 CSR 資料失敗:', error);
+            } catch (e) {
+                console.error('Reports 載入失敗:', e);
             }
+
+            // Re-init scroll animations
+            initScrollAnimations();
+            console.log('CSR 頁面載入完成');
         });
 
         function getIconSvg(iconType) {
