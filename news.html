@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>最新消息 | 金優匯 Your Remit</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- 頂部導航 -->
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <div class="logo-group">
+                    <span class="logo-yourremit">Your Remit</span>
+                    <div class="logo-yourpay">
+                        <svg class="logo-icon" width="28" height="32" viewBox="0 0 36 44">
+                            <path d="M4 8 Q4 4 8 4 L8 4 Q8 0 16 0 Q28 0 32 8 L26 14 Q24 10 18 10 Q12 10 12 14 L12 14 L12 40 Q12 44 8 44 Q4 44 4 40 Z" fill="#1B3A57"/>
+                            <path d="M20 22 Q20 18 24 18 L32 18 L32 26 Q32 34 24 34 L20 34 L20 28 Q20 26 24 26 L26 26 L26 24 Q26 22 24 22 Z" fill="#2DBDB6"/>
+                        </svg>
+                        <span>your<em>pay</em></span>
+                    </div>
+                </div>
+            </a>
+
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="index.html#about" class="nav-link">關於我們</a>
+                    </li>
+                    <li class="nav-item has-dropdown">
+                        <a href="index.html#services" class="nav-link">
+                            服務項目
+                            <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </a>
+                        <ul class="dropdown">
+                            <li><a href="service-detail.html?id=1">國際匯款服務</a></li>
+                            <li><a href="service-detail.html?id=2">金融科技</a></li>
+                            <li><a href="service-detail.html?id=3">企業顧問</a></li>
+                            <li><a href="service-detail.html?id=4">投資理財</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="news.html" class="nav-link active">最新消息</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="index.html#csr" class="nav-link">企業責任</a>
+                    </li>
+                    <li class="nav-item has-dropdown">
+                        <a href="investors.html" class="nav-link">
+                            投資人關係
+                            <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </a>
+                        <ul class="dropdown">
+                            <li><a href="investors-financials.html">財務報告</a></li>
+                            <li><a href="investors-announcements.html">公司公告</a></li>
+                            <li><a href="investors-governance.html">公司治理</a></li>
+                            <li><a href="investors-shareholders.html">股東會資訊</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="index.html#career" class="nav-link">人才招募</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="app-download.html" class="nav-link">App 下載</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="header-actions">
+                <div class="lang-switch">
+                    <a href="#" class="lang-active">繁中</a>
+                    <span class="lang-divider">|</span>
+                    <a href="#">EN</a>
+                </div>
+            </div>
+
+            <button class="mobile-menu-btn" aria-label="開啟選單">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- 頁面標題區 -->
+    <section class="page-hero">
+        <div class="container">
+            <span class="section-tag">News</span>
+            <h1 class="page-title">最新消息</h1>
+            <p class="page-subtitle">掌握金優匯最新動態與服務資訊</p>
+        </div>
+    </section>
+
+    <!-- 最新消息列表 -->
+    <section class="news-page-section">
+        <div class="container">
+            <!-- 篩選標籤 -->
+            <div class="news-filter">
+                <button class="filter-btn active" data-category="all">全部</button>
+                <button class="filter-btn" data-category="服務公告">服務公告</button>
+                <button class="filter-btn" data-category="活動資訊">活動資訊</button>
+                <button class="filter-btn" data-category="媒體報導">媒體報導</button>
+            </div>
+
+            <!-- 消息列表 -->
+            <div class="news-list" id="news-list">
+                <!-- 消息會由 JavaScript 動態載入 -->
+                <article class="news-item">
+                    <div class="news-item-date">
+                        <span class="date-day">18</span>
+                        <span class="date-month">2025/12</span>
+                    </div>
+                    <div class="news-item-content">
+                        <span class="news-item-category">服務公告</span>
+                        <h3 class="news-item-title">2025年農曆新年營業時間調整公告</h3>
+                        <p class="news-item-excerpt">為配合農曆新年假期，本公司營業時間將進行調整，敬請客戶提前安排匯款事宜。春節期間如有緊急需求，請撥打客服專線。</p>
+                        <a href="#" class="news-item-link">閱讀更多 →</a>
+                    </div>
+                </article>
+
+                <article class="news-item">
+                    <div class="news-item-date">
+                        <span class="date-day">15</span>
+                        <span class="date-month">2025/12</span>
+                    </div>
+                    <div class="news-item-content">
+                        <span class="news-item-category">活動資訊</span>
+                        <h3 class="news-item-title">金優匯年終感恩回饋活動開跑</h3>
+                        <p class="news-item-excerpt">感謝客戶一年來的支持，年終特別推出匯款手續費優惠活動，詳情請洽各服務據點或撥打客服專線。</p>
+                        <a href="#" class="news-item-link">閱讀更多 →</a>
+                    </div>
+                </article>
+
+                <article class="news-item">
+                    <div class="news-item-date">
+                        <span class="date-day">10</span>
+                        <span class="date-month">2025/12</span>
+                    </div>
+                    <div class="news-item-content">
+                        <span class="news-item-category">媒體報導</span>
+                        <h3 class="news-item-title">金優匯榮獲2024年度最佳金融服務獎</h3>
+                        <p class="news-item-excerpt">本公司以卓越的服務品質與創新的金融科技，獲得業界肯定，榮獲年度最佳金融服務獎。</p>
+                        <a href="#" class="news-item-link">閱讀更多 →</a>
+                    </div>
+                </article>
+
+                <article class="news-item">
+                    <div class="news-item-date">
+                        <span class="date-day">01</span>
+                        <span class="date-month">2025/12</span>
+                    </div>
+                    <div class="news-item-content">
+                        <span class="news-item-category">服務公告</span>
+                        <h3 class="news-item-title">新增東南亞匯款服務據點</h3>
+                        <p class="news-item-excerpt">為提供更便捷的服務，金優匯於越南、泰國新增合作據點，匯款更快速、更安全。</p>
+                        <a href="#" class="news-item-link">閱讀更多 →</a>
+                    </div>
+                </article>
+
+                <article class="news-item">
+                    <div class="news-item-date">
+                        <span class="date-day">25</span>
+                        <span class="date-month">2025/11</span>
+                    </div>
+                    <div class="news-item-content">
+                        <span class="news-item-category">活動資訊</span>
+                        <h3 class="news-item-title">金優匯App 2.0 全新改版上線</h3>
+                        <p class="news-item-excerpt">全新介面設計、更流暢的操作體驗，即刻下載體驗最新版本，享受更便捷的匯款服務。</p>
+                        <a href="#" class="news-item-link">閱讀更多 →</a>
+                    </div>
+                </article>
+            </div>
+
+            <!-- 分頁 -->
+            <div class="pagination">
+                <button class="pagination-btn" disabled>← 上一頁</button>
+                <div class="pagination-numbers">
+                    <span class="pagination-num active">1</span>
+                    <span class="pagination-num">2</span>
+                    <span class="pagination-num">3</span>
+                </div>
+                <button class="pagination-btn">下一頁 →</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <span class="logo-yourremit">Your Remit</span>
+                    </div>
+                    <p class="footer-desc">專業國際匯款服務，安全、快速、便捷</p>
+                </div>
+                <div class="footer-links">
+                    <h4>快速連結</h4>
+                    <ul>
+                        <li><a href="index.html#about">關於我們</a></li>
+                        <li><a href="index.html#services">服務項目</a></li>
+                        <li><a href="news.html">最新消息</a></li>
+                        <li><a href="index.html#contact">聯絡我們</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>服務項目</h4>
+                    <ul>
+                        <li><a href="service-detail.html?id=1">國際匯款</a></li>
+                        <li><a href="service-detail.html?id=2">金融科技</a></li>
+                        <li><a href="service-detail.html?id=3">企業顧問</a></li>
+                        <li><a href="service-detail.html?id=4">投資理財</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4>聯絡資訊</h4>
+                    <p>電話：02-2796-5959</p>
+                    <p>信箱：service@jinyouhui.com.tw</p>
+                    <p>地址：台北市內湖區安美街181號</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 金優匯 Your Remit. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="api-client.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
