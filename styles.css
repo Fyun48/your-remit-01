@@ -494,6 +494,7 @@ input, textarea, select {
     justify-content: center;
     overflow: hidden;
     background: var(--gradient-hero);
+    padding: var(--space-2xl) 0;
 }
 
 .hero-bg {
@@ -549,13 +550,32 @@ input, textarea, select {
     width: 100%;
     max-width: 1400px;
     margin: 0 auto;
-    padding: var(--space-xl) var(--space-xl);
+    padding: var(--space-lg) var(--space-xl);
+}
+
+.hero-layout {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-2xl);
+}
+
+.hero-left {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    gap: var(--space-lg);
+    align-items: flex-start;
+    text-align: left;
+    padding-top: 0;
+}
+
+.hero-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+    padding-top: var(--space-2xl);
 }
 
 .hero-content {
@@ -603,15 +623,21 @@ input, textarea, select {
     color: var(--color-gray-400);
     line-height: 1.6;
     margin-bottom: var(--space-md);
-    max-width: 600px;
-    text-align: center;
+    max-width: 400px;
+}
+
+.hero-right .hero-subtitle {
+    text-align: right;
 }
 
 .hero-cta {
     display: flex;
     gap: var(--space-md);
     flex-wrap: wrap;
-    justify-content: center;
+}
+
+.hero-right .hero-cta {
+    justify-content: flex-end;
 }
 
 .btn {
@@ -656,9 +682,10 @@ input, textarea, select {
 /* Hero Visual */
 .hero-visual {
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     gap: var(--space-md);
     flex-wrap: wrap;
+    margin-top: var(--space-md);
 }
 
 .hero-card {
@@ -750,8 +777,34 @@ input, textarea, select {
 
 /* Responsive */
 @media (max-width: 1024px) {
+    .hero-layout {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: var(--space-lg);
+    }
+
+    .hero-left,
+    .hero-right {
+        align-items: center;
+        text-align: center;
+        padding-top: 0;
+    }
+
+    .hero-right .hero-subtitle {
+        text-align: center;
+    }
+
+    .hero-right .hero-cta {
+        justify-content: center;
+    }
+
+    .hero-visual {
+        justify-content: center;
+    }
+
     .hero-container {
-        padding: var(--space-3xl) var(--space-lg);
+        padding: var(--space-lg) var(--space-lg);
     }
 
     .hero-content {
