@@ -1,9 +1,15 @@
 /**
- * API Client for NeonDB backend
- * Replaces Supabase client with direct API calls
+ * API Client for NeonDB backend + Supabase Storage
+ * Database: NeonDB (PostgreSQL)
+ * File Storage: Supabase Storage
  */
 
 const API_BASE = '/api';
+
+// Supabase Storage 配置
+const SUPABASE_URL = 'https://nxzvsxjvnazjltlgbyig.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im54enZzeGp2bmF6amx0bGdieWlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcwNDc2NzksImV4cCI6MjA4MjYyMzY3OX0.cZldlBlWNBV3rQZfjQqaRVWjqwXNO9-4Q7QGmCdX0-0';
+const SUPABASE_STORAGE_BUCKET = 'images';
 
 // Generic API call helper
 async function apiCall(endpoint, method = 'GET', data = null) {
@@ -199,45 +205,107 @@ async function supabaseDelete(table, id) {
     return apiCall(`${endpoints[table] || `/${table}`}/${id}`, 'DELETE');
 }
 
-// Image upload - now stores locally or uses base64
+// ==================== SUPABASE STORAGE ====================
+
+/**
+ * 上傳檔案到 Supabase Storage
+ * @param {string} bucket - Storage bucket 名稱
+ * @param {string} path - 檔案路徑 (例如: 'banners/image.jpg')
+ * @param {File|Blob} file - 要上傳的檔案
+ * @param {object} options - 額外選項
+ * @returns {Promise<{data: {publicUrl: string, path: string}, error: Error|null}>}
+ */
 async function supabaseUploadFile(bucket, path, file, options = {}) {
-    // For now, convert to base64 and store URL
-    // In production, you might want to use a proper file storage service
-    return new Promise((resolve, reject) => {
-        if (typeof file === 'string' && file.startsWith('data:')) {
-            // Already base64
-            resolve({
-                data: { publicUrl: file, path: path },
-                error: null
-            });
-        } else if (file instanceof File || file instanceof Blob) {
-            const reader = new FileReader();
-            reader.onload = () => {
-                resolve({
-                    data: { publicUrl: reader.result, path: path },
-                    error: null
-                });
-            };
-            reader.onerror = () => reject({ data: null, error: reader.error });
-            reader.readAsDataURL(file);
-        } else {
-            reject({ data: null, error: new Error('Unsupported file format') });
+    try {
+        // 確保是 File 或 Blob
+        if (!(file instanceof File) && !(file instanceof Blob)) {
+            throw new Error('檔案格式不支援');
         }
-    });
+
+        const uploadUrl = `${SUPABASE_URL}/storage/v1/object/${bucket}/${path}`;
+
+        const response = await fetch(uploadUrl, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                'Content-Type': file.type || 'application/octet-stream',
+                'x-upsert': 'true' // 如果檔案存在則覆蓋
+            },
+            body: file
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || `上傳失敗: ${response.status}`);
+        }
+
+        // 產生公開 URL
+        const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/${bucket}/${path}`;
+
+        console.log('檔案已上傳到 Supabase Storage:', publicUrl);
+
+        return {
+            data: { publicUrl, path },
+            error: null
+        };
+    } catch (error) {
+        console.error('Supabase Storage 上傳失敗:', error);
+        return {
+            data: null,
+            error
+        };
+    }
 }
 
-// Delete file - no-op for now since we're using base64/local
+/**
+ * 從 Supabase Storage 刪除檔案
+ * @param {string} bucket - Storage bucket 名稱
+ * @param {string} path - 檔案路徑
+ */
 async function supabaseDeleteFile(bucket, path) {
-    return { data: null, error: null };
+    try {
+        const deleteUrl = `${SUPABASE_URL}/storage/v1/object/${bucket}/${path}`;
+
+        const response = await fetch(deleteUrl, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+            }
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || `刪除失敗: ${response.status}`);
+        }
+
+        console.log('檔案已從 Supabase Storage 刪除:', path);
+        return { data: { path }, error: null };
+    } catch (error) {
+        console.error('Supabase Storage 刪除失敗:', error);
+        return { data: null, error };
+    }
 }
 
-// Get public URL - return as-is
+/**
+ * 取得 Supabase Storage 公開 URL
+ * @param {string} bucket - Storage bucket 名稱
+ * @param {string} path - 檔案路徑
+ * @returns {string} 公開 URL
+ */
 function supabaseGetPublicUrl(bucket, path) {
-    return path;
+    return `${SUPABASE_URL}/storage/v1/object/public/${bucket}/${path}`;
 }
 
-// Check if API is available
+/**
+ * 檢查 API 和 Storage 是否可用
+ */
 function getSupabaseClient() {
     // Return a truthy value to indicate API is available
-    return { connected: true };
+    return {
+        connected: true,
+        storage: {
+            url: SUPABASE_URL,
+            bucket: SUPABASE_STORAGE_BUCKET
+        }
+    };
 }
