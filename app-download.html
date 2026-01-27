@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App 下載 - 金優匯 Your Remit</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="investors.css">
+    <style>
+        /* App Download Page Specific Styles */
+        .app-download-hero {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+            padding: var(--space-4xl) 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-download-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 80%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(45, 189, 182, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .app-download-hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            color: white;
+        }
+
+        .app-download-hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            margin-bottom: var(--space-md);
+        }
+
+        .app-download-hero p {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .app-download-section {
+            padding: var(--space-4xl) 0;
+            background: var(--color-gray-50);
+        }
+
+        .app-download-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-3xl);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .app-download-grid {
+                grid-template-columns: 1fr;
+                gap: var(--space-2xl);
+            }
+        }
+
+        .app-download-card {
+            background: white;
+            border-radius: var(--radius-xl);
+            padding: var(--space-2xl);
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+            transition: transform var(--transition-base), box-shadow var(--transition-base);
+        }
+
+        .app-download-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .app-download-card .platform-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto var(--space-lg);
+            background: var(--color-gray-100);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .app-download-card .platform-icon svg {
+            width: 48px;
+            height: 48px;
+            color: var(--color-primary);
+        }
+
+        .app-download-card h3 {
+            font-size: 1.5rem;
+            color: var(--color-primary);
+            margin-bottom: var(--space-sm);
+        }
+
+        .app-download-card .platform-desc {
+            color: var(--color-gray-600);
+            margin-bottom: var(--space-xl);
+        }
+
+        .app-download-card .qr-container {
+            background: white;
+            padding: var(--space-lg);
+            border-radius: var(--radius-lg);
+            display: inline-block;
+            border: 2px solid var(--color-gray-200);
+            margin-bottom: var(--space-lg);
+        }
+
+        .app-download-card .qr-container img {
+            width: 180px;
+            height: 180px;
+            display: block;
+        }
+
+        .app-download-card .qr-hint {
+            font-size: 0.875rem;
+            color: var(--color-gray-500);
+            margin-bottom: var(--space-lg);
+        }
+
+        .app-download-card .store-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) var(--space-xl);
+            background: var(--color-primary);
+            color: white;
+            border-radius: var(--radius-full);
+            font-weight: 600;
+            text-decoration: none;
+            transition: background var(--transition-base), transform var(--transition-base);
+        }
+
+        .app-download-card .store-btn:hover {
+            background: var(--color-primary-dark);
+            transform: scale(1.05);
+        }
+
+        .app-download-card .store-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Features Section */
+        .app-features-section {
+            padding: var(--space-4xl) 0;
+            background: white;
+        }
+
+        .app-features-section h2 {
+            text-align: center;
+            font-size: clamp(1.75rem, 3vw, 2.5rem);
+            color: var(--color-primary);
+            margin-bottom: var(--space-3xl);
+        }
+
+        .app-features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--space-xl);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .app-feature-item {
+            text-align: center;
+            padding: var(--space-xl);
+        }
+
+        .app-feature-item .feature-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto var(--space-md);
+            background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-dark) 100%);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .app-feature-item .feature-icon svg {
+            width: 32px;
+            height: 32px;
+            color: white;
+        }
+
+        .app-feature-item h4 {
+            font-size: 1.125rem;
+            color: var(--color-primary);
+            margin-bottom: var(--space-sm);
+        }
+
+        .app-feature-item p {
+            color: var(--color-gray-600);
+            font-size: 0.9375rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <div class="logo-group">
+                    <span class="logo-yourremit">Your Remit</span>
+                    <div class="logo-yourpay">
+                        <svg class="logo-icon" width="28" height="32" viewBox="0 0 36 44">
+                            <path d="M4 8 Q4 4 8 4 L8 4 Q8 0 16 0 Q28 0 32 8 L26 14 Q24 10 18 10 Q12 10 12 14 L12 14 L12 40 Q12 44 8 44 Q4 44 4 40 Z" fill="#1B3A57"/>
+                            <path d="M20 22 Q20 18 24 18 L32 18 L32 26 Q32 34 24 34 L20 34 L20 28 Q20 26 24 26 L26 26 L26 24 Q26 22 24 22 Z" fill="#2DBDB6"/>
+                        </svg>
+                        <span>your<em>pay</em></span>
+                    </div>
+                </div>
+            </a>
+
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="index.html#about" class="nav-link">關於我們</a>
+                    </li>
+                    <li class="nav-item has-dropdown">
+                        <a href="index.html#services" class="nav-link">
+                            服務項目
+                            <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </a>
+                        <ul class="dropdown">
+                            <li><a href="service-detail.html?id=1">國際匯款服務</a></li>
+                            <li><a href="service-detail.html?id=2">金融科技</a></li>
+                            <li><a href="service-detail.html?id=3">企業顧問</a></li>
+                            <li><a href="service-detail.html?id=4">投資理財</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="index.html#news" class="nav-link">最新消息</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="index.html#csr" class="nav-link">企業責任</a>
+                    </li>
+                    <li class="nav-item has-dropdown">
+                        <a href="investors.html" class="nav-link">
+                            投資人關係
+                            <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </a>
+                        <ul class="dropdown">
+                            <li><a href="investors-financials.html">財務報告</a></li>
+                            <li><a href="investors-announcements.html">公司公告</a></li>
+                            <li><a href="investors-governance.html">公司治理</a></li>
+                            <li><a href="investors-shareholders.html">股東會資訊</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="index.html#career" class="nav-link">人才招募</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="app-download.html" class="nav-link active">App 下載</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="header-actions">
+                <div class="lang-switch">
+                    <a href="#" class="lang-active">繁中</a>
+                    <span class="lang-divider">|</span>
+                    <a href="#">EN</a>
+                </div>
+            </div>
+
+            <button class="mobile-menu-btn" type="button" aria-label="開啟選單">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="app-download-hero">
+        <div class="container">
+            <div class="app-download-hero-content">
+                <h1>下載 YourRemit App</h1>
+                <p>隨時隨地掌握您的金融服務，安全、快速、便捷的匯款體驗</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download Section -->
+    <section class="app-download-section">
+        <div class="container">
+            <div class="app-download-grid">
+                <!-- Android Card -->
+                <div class="app-download-card animate-on-scroll">
+                    <div class="platform-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M17.523 15.341a.5.5 0 0 0-.5.5v2.159a.5.5 0 0 0 .5.5.5.5 0 0 0 .5-.5v-2.159a.5.5 0 0 0-.5-.5zm-11.046 0a.5.5 0 0 0-.5.5v2.159a.5.5 0 0 0 .5.5.5.5 0 0 0 .5-.5v-2.159a.5.5 0 0 0-.5-.5zM15.011 8.063l.907-1.571a.19.19 0 0 0-.069-.259.189.189 0 0 0-.259.069l-.918 1.591a5.569 5.569 0 0 0-2.672-.679 5.569 5.569 0 0 0-2.672.679l-.918-1.591a.189.189 0 0 0-.259-.069.19.19 0 0 0-.069.259l.907 1.571a5.046 5.046 0 0 0-2.789 4.516h11.56a5.046 5.046 0 0 0-2.749-4.516zm-5.086 2.436a.456.456 0 0 1-.456-.456.456.456 0 0 1 .456-.456.456.456 0 0 1 .456.456.456.456 0 0 1-.456.456zm4.15 0a.456.456 0 0 1-.456-.456.456.456 0 0 1 .456-.456.456.456 0 0 1 .456.456.456.456 0 0 1-.456.456zM5.011 13.079v5.262a.947.947 0 0 0 .946.946h.916v2.213a.5.5 0 0 0 .5.5.5.5 0 0 0 .5-.5v-2.213h2.254v2.213a.5.5 0 0 0 .5.5.5.5 0 0 0 .5-.5v-2.213h.746v2.213a.5.5 0 0 0 .5.5.5.5 0 0 0 .5-.5v-2.213h2.254v2.213a.5.5 0 0 0 .5.5.5.5 0 0 0 .5-.5v-2.213h.916a.947.947 0 0 0 .946-.946v-5.262H5.011z"/>
+                        </svg>
+                    </div>
+                    <h3>Android 版本</h3>
+                    <p class="platform-desc">適用於 Android 8.0 以上版本</p>
+                    <div class="qr-container">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://play.google.com/store/apps/details?id=com.yourremit.app" alt="Android App QR Code">
+                    </div>
+                    <p class="qr-hint">使用手機掃描 QR Code 下載</p>
+                    <a href="https://play.google.com/store/apps/details?id=com.yourremit.app" class="store-btn" target="_blank">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 0 1-.61-.92V2.734a1 1 0 0 1 .609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.198l2.807 1.626a1 1 0 0 1 0 1.73l-2.808 1.626L15.206 12l2.492-2.491zM5.864 2.658L16.8 9.99l-2.302 2.302-8.634-8.634z"/>
+                        </svg>
+                        Google Play 下載
+                    </a>
+                </div>
+
+                <!-- iOS Card -->
+                <div class="app-download-card animate-on-scroll">
+                    <div class="platform-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                        </svg>
+                    </div>
+                    <h3>iOS 版本</h3>
+                    <p class="platform-desc">適用於 iOS 14.0 以上版本</p>
+                    <div class="qr-container">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://apps.apple.com/app/yourremit" alt="iOS App QR Code">
+                    </div>
+                    <p class="qr-hint">使用手機掃描 QR Code 下載</p>
+                    <a href="https://apps.apple.com/app/yourremit" class="store-btn" target="_blank">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                        </svg>
+                        App Store 下載
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="app-features-section">
+        <div class="container">
+            <h2>App 功能特色</h2>
+            <div class="app-features-grid">
+                <div class="app-feature-item animate-on-scroll">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        </svg>
+                    </div>
+                    <h4>安全可靠</h4>
+                    <p>多重安全驗證機制，保障您的每一筆交易</p>
+                </div>
+                <div class="app-feature-item animate-on-scroll">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                    </div>
+                    <h4>即時匯款</h4>
+                    <p>全球匯款即時到帳，匯率透明無隱藏費用</p>
+                </div>
+                <div class="app-feature-item animate-on-scroll">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="3" y1="9" x2="21" y2="9"/>
+                            <line x1="9" y1="21" x2="9" y2="9"/>
+                        </svg>
+                    </div>
+                    <h4>交易紀錄</h4>
+                    <p>完整交易歷史查詢，隨時掌握資金動態</p>
+                </div>
+                <div class="app-feature-item animate-on-scroll">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                        </svg>
+                    </div>
+                    <h4>客服支援</h4>
+                    <p>24小時線上客服，隨時為您解答疑問</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-top">
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-brand">
+                        <a href="index.html" class="footer-logo">
+                            <div class="logo-group">
+                                <span class="logo-yourremit">Your Remit</span>
+                                <div class="logo-yourpay">
+                                    <svg class="logo-icon" width="28" height="32" viewBox="0 0 36 44">
+                                        <path d="M4 8 Q4 4 8 4 L8 4 Q8 0 16 0 Q28 0 32 8 L26 14 Q24 10 18 10 Q12 10 12 14 L12 14 L12 40 Q12 44 8 44 Q4 44 4 40 Z" fill="#1B3A57"/>
+                                        <path d="M20 22 Q20 18 24 18 L32 18 L32 26 Q32 34 24 34 L20 34 L20 28 Q20 26 24 26 L26 26 L26 24 Q26 22 24 22 Z" fill="#2DBDB6"/>
+                                    </svg>
+                                    <span>your<em>pay</em></span>
+                                </div>
+                            </div>
+                        </a>
+                        <p class="footer-desc">金優匯股份有限公司 - 專業國際匯款服務</p>
+                        <div class="footer-social">
+                            <a href="#" class="social-link" aria-label="Facebook">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                                </svg>
+                            </a>
+                            <a href="#" class="social-link" aria-label="Line">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"></path>
+                                </svg>
+                            </a>
+                            <a href="#" class="social-link" aria-label="Instagram">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="footer-links">
+                        <h4 class="footer-title">關於金優匯</h4>
+                        <ul>
+                            <li><a href="#">公司簡介</a></li>
+                            <li><a href="#">經營理念</a></li>
+                            <li><a href="#">發展沿革</a></li>
+                            <li><a href="#">據點資訊</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-links">
+                        <h4 class="footer-title">服務項目</h4>
+                        <ul>
+                            <li><a href="#">國際匯款服務</a></li>
+                            <li><a href="#">金融科技</a></li>
+                            <li><a href="#">企業顧問</a></li>
+                            <li><a href="#">投資理財</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-links">
+                        <h4 class="footer-title">客戶服務</h4>
+                        <ul>
+                            <li><a href="#">常見問題</a></li>
+                            <li><a href="#">聯絡我們</a></li>
+                            <li><a href="#">隱私權政策</a></li>
+                            <li><a href="#">服務條款</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-links">
+                        <h4 class="footer-title">投資人專區</h4>
+                        <ul>
+                            <li><a href="investors-financials.html">財務報告</a></li>
+                            <li><a href="investors-announcements.html">公司公告</a></li>
+                            <li><a href="investors-governance.html">公司治理</a></li>
+                            <li><a href="investors-shareholders.html">股東會資訊</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-app-download">
+                        <h4 class="footer-title">下載 App</h4>
+                        <div class="footer-qr-codes">
+                            <div class="footer-qr-item">
+                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=https://play.google.com/store/apps/details?id=com.yourremit.app" alt="Android App QR Code">
+                                <span>Android</span>
+                            </div>
+                            <div class="footer-qr-item">
+                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=https://apps.apple.com/app/yourremit" alt="iOS App QR Code">
+                                <span>iOS</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="footer-bottom-content">
+                    <p class="copyright">Copyright &copy; 2025 金優匯股份有限公司 Your Remit | yourpay. All Rights Reserved.</p>
+                    <a href="login.html" class="admin-login-link">管理後台</a>
+                </div>
+            </div>
+        </div>
+
+        <button class="back-to-top" type="button" aria-label="回到頂部">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="19" x2="12" y2="5"></line>
+                <polyline points="5 12 12 5 19 12"></polyline>
+            </svg>
+        </button>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="api-client.js"></script>
+    <script>
+        // Back to top button
+        const backToTopBtn = document.querySelector('.back-to-top');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        });
+
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Scroll animations
+        const animateElements = document.querySelectorAll('.animate-on-scroll');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animated');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        animateElements.forEach(el => observer.observe(el));
+
+        // Mobile menu toggle
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const nav = document.querySelector('.nav');
+
+        mobileMenuBtn?.addEventListener('click', () => {
+            nav.classList.toggle('active');
+            mobileMenuBtn.classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

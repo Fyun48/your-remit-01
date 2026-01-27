@@ -2267,7 +2267,7 @@ input, textarea, select {
 
 .footer-qr-codes {
     display: flex;
-    gap: var(--space-md);
+    gap: calc(var(--space-md) * 4); /* 增加間距避免手機掃描錯誤 */
     margin-top: var(--space-md);
 }
 
