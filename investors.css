@@ -1,0 +1,764 @@
+/* ================================
+   Investor Relations Page Styles
+================================ */
+
+/* ================================
+   Investor Hero Section
+================================ */
+.investor-hero {
+    position: relative;
+    padding: calc(var(--header-height) + var(--space-4xl)) 0 var(--space-4xl);
+    background: var(--gradient-primary);
+    text-align: center;
+    overflow: hidden;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+}
+
+.investor-hero-bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+}
+
+.investor-hero-gradient {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 30% 20%, rgba(45, 189, 182, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(27, 58, 87, 0.3) 0%, transparent 50%);
+}
+
+.investor-hero-shape {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.5;
+}
+
+.investor-hero-shape-1 {
+    width: 500px;
+    height: 500px;
+    background: var(--color-accent);
+    top: -200px;
+    right: -100px;
+    opacity: 0.1;
+}
+
+.investor-hero-shape-2 {
+    width: 300px;
+    height: 300px;
+    background: var(--color-primary-light);
+    bottom: -100px;
+    left: -100px;
+    opacity: 0.15;
+}
+
+.investor-hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+}
+
+.investor-hero .container {
+    position: relative;
+    z-index: 1;
+}
+
+.investor-hero-title {
+    font-family: var(--font-display);
+    font-size: var(--text-h1);
+    font-weight: 700;
+    color: var(--color-white);
+    margin-bottom: var(--space-lg);
+    letter-spacing: 0.02em;
+}
+
+.investor-hero-subtitle {
+    font-size: 1.25rem;
+    color: var(--color-gray-400);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.8;
+}
+
+/* ================================
+   Navigation Cards
+================================ */
+.investor-nav-cards {
+    padding: 0 0 var(--space-4xl);
+    background: var(--color-gray-100);
+    position: relative;
+}
+
+.nav-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-xl);
+    margin-top: calc(-1 * var(--space-3xl));
+    position: relative;
+    z-index: 1;
+}
+
+.nav-card {
+    background: var(--color-white);
+    border-radius: var(--radius-xl);
+    padding: var(--space-2xl);
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+    transition: all var(--transition-base);
+    text-decoration: none;
+    color: var(--color-primary);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.nav-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-xl);
+}
+
+.nav-card:hover .nav-card-icon {
+    background: var(--gradient-accent);
+    color: var(--color-white);
+}
+
+.nav-card-icon {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-gray-100);
+    border-radius: var(--radius-lg);
+    color: var(--color-accent);
+    transition: all var(--transition-base);
+}
+
+.nav-card h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-dark);
+    margin: 0;
+}
+
+.nav-card p {
+    font-size: var(--text-small);
+    color: var(--color-gray-600);
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* ================================
+   Announcements Section
+================================ */
+.investor-announcements {
+    padding: var(--space-4xl) 0;
+    background: var(--color-white);
+}
+
+.announcements-list {
+    margin-bottom: var(--space-2xl);
+    min-height: 200px;
+}
+
+.announcement-item {
+    display: flex;
+    gap: var(--space-xl);
+    padding: var(--space-xl) 0;
+    border-bottom: 1px solid var(--color-gray-200);
+    transition: all var(--transition-fast);
+}
+
+.announcement-item:first-child {
+    padding-top: 0;
+}
+
+.announcement-item:last-child {
+    border-bottom: none;
+}
+
+.announcement-item:hover {
+    background: var(--color-gray-100);
+    margin: 0 calc(-1 * var(--space-lg));
+    padding-left: var(--space-lg);
+    padding-right: var(--space-lg);
+    border-radius: var(--radius-md);
+}
+
+.announcement-date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 80px;
+    padding: var(--space-md);
+    background: var(--gradient-primary);
+    border-radius: var(--radius-md);
+    color: var(--color-white);
+    text-align: center;
+}
+
+.announcement-date .day {
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.announcement-date .month {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.9;
+}
+
+.announcement-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.announcement-content h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-dark);
+    margin-bottom: var(--space-sm);
+    line-height: 1.4;
+}
+
+.announcement-content p {
+    font-size: var(--text-small);
+    color: var(--color-gray-600);
+    margin: 0;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.announcement-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: var(--text-small);
+    font-weight: 600;
+    color: var(--color-accent);
+    margin-top: var(--space-sm);
+    transition: all var(--transition-fast);
+}
+
+.announcement-link:hover {
+    color: var(--color-accent-dark);
+    gap: var(--space-sm);
+}
+
+.announcements-more {
+    text-align: center;
+}
+
+/* ================================
+   Downloads Section
+================================ */
+.investor-downloads {
+    padding: var(--space-4xl) 0;
+    background: var(--color-gray-100);
+}
+
+.downloads-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-xl);
+    min-height: 150px;
+}
+
+.download-card {
+    background: var(--color-white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-base);
+}
+
+.download-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.download-info {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+    flex: 1;
+    min-width: 0;
+}
+
+.download-icon {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-gray-100);
+    border-radius: var(--radius-md);
+    color: var(--color-primary);
+    flex-shrink: 0;
+}
+
+.download-details {
+    min-width: 0;
+}
+
+.download-details h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-dark);
+    margin-bottom: var(--space-xs);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.download-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    font-size: var(--text-small);
+    color: var(--color-gray-500);
+}
+
+.download-meta span {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.download-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-lg);
+    background: var(--gradient-accent);
+    color: var(--color-white);
+    border-radius: var(--radius-md);
+    font-size: var(--text-small);
+    font-weight: 600;
+    text-decoration: none;
+    transition: all var(--transition-base);
+    cursor: pointer;
+    border: none;
+}
+
+.download-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow);
+}
+
+.download-btn.protected {
+    background: var(--color-gray-600);
+}
+
+.download-btn.protected:hover {
+    background: var(--color-gray-700);
+    box-shadow: none;
+}
+
+.lock-icon {
+    display: flex;
+    align-items: center;
+    color: var(--color-gray-400);
+}
+
+/* ================================
+   Investor Contact Section
+================================ */
+.investor-contact {
+    padding: var(--space-3xl) 0;
+    background: var(--gradient-primary);
+}
+
+.investor-contact-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2xl);
+}
+
+.investor-contact-info h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-white);
+    margin-bottom: var(--space-sm);
+}
+
+.investor-contact-info > p {
+    color: var(--color-gray-400);
+    margin-bottom: var(--space-lg);
+}
+
+.investor-contact-details {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.contact-detail-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    color: var(--color-gray-300);
+    font-size: var(--text-small);
+}
+
+.contact-detail-item svg {
+    color: var(--color-accent);
+    flex-shrink: 0;
+}
+
+/* ================================
+   Password Modal
+================================ */
+.password-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+}
+
+.password-modal.active {
+    display: flex;
+}
+
+.modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(13, 30, 45, 0.8);
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    position: relative;
+    background: var(--color-white);
+    border-radius: var(--radius-xl);
+    padding: var(--space-2xl);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: var(--shadow-xl);
+    animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.modal-close {
+    position: absolute;
+    top: var(--space-md);
+    right: var(--space-md);
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-gray-500);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+    cursor: pointer;
+    background: none;
+    border: none;
+}
+
+.modal-close:hover {
+    color: var(--color-dark);
+    background: var(--color-gray-100);
+}
+
+.modal-icon {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-gray-100);
+    border-radius: 50%;
+    margin: 0 auto var(--space-lg);
+    color: var(--color-primary);
+}
+
+.modal-content h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-dark);
+    margin-bottom: var(--space-sm);
+}
+
+.modal-hint {
+    font-size: var(--text-small);
+    color: var(--color-gray-600);
+    margin-bottom: var(--space-xl);
+}
+
+.modal-input-group {
+    position: relative;
+    margin-bottom: var(--space-md);
+}
+
+.modal-input-group input {
+    width: 100%;
+    padding: var(--space-md) var(--space-lg);
+    padding-right: 48px;
+    border: 2px solid var(--color-gray-200);
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    color: var(--color-dark);
+    transition: all var(--transition-fast);
+}
+
+.modal-input-group input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 4px rgba(27, 58, 87, 0.1);
+}
+
+.modal-input-group input::placeholder {
+    color: var(--color-gray-400);
+}
+
+.toggle-password {
+    position: absolute;
+    right: var(--space-md);
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-gray-400);
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: var(--space-xs);
+}
+
+.toggle-password:hover {
+    color: var(--color-gray-600);
+}
+
+.modal-error {
+    font-size: var(--text-small);
+    color: #C62828;
+    min-height: 1.5em;
+    margin-bottom: var(--space-md);
+}
+
+.modal-actions {
+    display: flex;
+    gap: var(--space-md);
+}
+
+.modal-actions .btn {
+    flex: 1;
+}
+
+/* ================================
+   Button Outline Style
+================================ */
+.btn-outline {
+    background: transparent;
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+}
+
+.btn-outline:hover {
+    background: var(--color-primary);
+    color: var(--color-white);
+}
+
+/* ================================
+   Loading State
+================================ */
+.loading-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md);
+    padding: var(--space-2xl);
+    color: var(--color-gray-500);
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--color-gray-200);
+    border-top-color: var(--color-accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ================================
+   Empty State
+================================ */
+.empty-state {
+    text-align: center;
+    padding: var(--space-2xl);
+    color: var(--color-gray-500);
+}
+
+.empty-state svg {
+    width: 64px;
+    height: 64px;
+    color: var(--color-gray-300);
+    margin-bottom: var(--space-lg);
+}
+
+.empty-state p {
+    font-size: 1rem;
+}
+
+/* ================================
+   Responsive Design
+================================ */
+@media (max-width: 1024px) {
+    .nav-cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .downloads-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .investor-contact-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .investor-contact-details {
+        align-items: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .investor-hero {
+        min-height: 300px;
+        padding-top: calc(var(--header-height) + var(--space-2xl));
+    }
+
+    .investor-hero-title {
+        font-size: clamp(2rem, 6vw, 3rem);
+    }
+
+    .investor-hero-subtitle {
+        font-size: 1rem;
+    }
+
+    .nav-cards-grid {
+        grid-template-columns: 1fr;
+        margin-top: calc(-1 * var(--space-xl));
+    }
+
+    .nav-card {
+        flex-direction: row;
+        text-align: left;
+        padding: var(--space-lg);
+    }
+
+    .nav-card-icon {
+        width: 60px;
+        height: 60px;
+    }
+
+    .nav-card h3 {
+        font-size: 1rem;
+    }
+
+    .announcement-item {
+        flex-direction: column;
+        gap: var(--space-md);
+    }
+
+    .announcement-date {
+        flex-direction: row;
+        gap: var(--space-sm);
+        min-width: auto;
+        padding: var(--space-sm) var(--space-md);
+        align-self: flex-start;
+    }
+
+    .download-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-lg);
+    }
+
+    .download-actions {
+        width: 100%;
+    }
+
+    .download-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .modal-content {
+        margin: var(--space-md);
+        max-width: calc(100% - var(--space-2xl));
+    }
+}
+
+@media (max-width: 480px) {
+    .investor-nav-cards {
+        padding-bottom: var(--space-2xl);
+    }
+
+    .nav-card {
+        padding: var(--space-md);
+    }
+
+    .nav-card-icon {
+        width: 48px;
+        height: 48px;
+    }
+
+    .nav-card-icon svg {
+        width: 24px;
+        height: 24px;
+    }
+
+    .download-info {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .download-meta {
+        flex-wrap: wrap;
+    }
+}
