@@ -102,6 +102,14 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="#" class="nav-link" data-section="csr">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                        <span>企業責任</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="#" class="nav-link" data-section="app-settings">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
@@ -863,6 +871,300 @@
                         </button>
                         <button class="close-btn" id="closeMessageDetailBtn">關閉</button>
                     </div>
+                </div>
+            </div>
+
+            <!-- CSR Management Section -->
+            <section class="content-section" id="csr">
+                <div class="section-header">
+                    <div class="section-header-left">
+                        <h1 class="section-title">企業責任管理</h1>
+                        <p class="section-desc">管理企業社會責任頁面的內容</p>
+                    </div>
+                </div>
+
+                <!-- CSR 頁面設定 -->
+                <div class="csr-admin-section">
+                    <!-- Hero 設定 -->
+                    <div class="admin-card">
+                        <div class="admin-card-header">
+                            <h3>Hero 區塊設定</h3>
+                        </div>
+                        <div class="admin-card-body">
+                            <form id="csrHeroForm">
+                                <div class="form-group">
+                                    <label for="csrHeroTitle">主標題</label>
+                                    <input type="text" id="csrHeroTitle" value="企業社會責任">
+                                </div>
+                                <div class="form-group">
+                                    <label for="csrHeroSubtitle">副標題</label>
+                                    <input type="text" id="csrHeroSubtitle" value="以誠信經營為本，善盡企業公民責任，創造永續價值">
+                                </div>
+                                <div class="form-group">
+                                    <label for="csrHeroImage">背景圖片網址</label>
+                                    <input type="url" id="csrHeroImage" placeholder="https://...">
+                                </div>
+                                <button type="submit" class="save-btn">儲存 Hero 設定</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- 核心理念管理 -->
+                    <div class="admin-card">
+                        <div class="admin-card-header">
+                            <h3>核心理念</h3>
+                            <button class="add-btn" id="addCsrValueBtn">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                                新增理念
+                            </button>
+                        </div>
+                        <div class="admin-card-body">
+                            <div class="csr-values-list" id="csrValuesList">
+                                <!-- 動態生成 -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 文章管理 -->
+                    <div class="admin-card">
+                        <div class="admin-card-header">
+                            <h3>CSR 文章</h3>
+                            <button class="add-btn" id="addCsrArticleBtn">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                                新增文章
+                            </button>
+                        </div>
+                        <div class="admin-card-body">
+                            <div class="csr-articles-list" id="csrArticlesList">
+                                <!-- 動態生成 -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 統計數據管理 -->
+                    <div class="admin-card">
+                        <div class="admin-card-header">
+                            <h3>統計數據</h3>
+                            <button class="add-btn" id="addCsrStatBtn">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                                新增數據
+                            </button>
+                        </div>
+                        <div class="admin-card-body">
+                            <div class="csr-stats-list" id="csrStatsList">
+                                <!-- 動態生成 -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 報告下載管理 -->
+                    <div class="admin-card">
+                        <div class="admin-card-header">
+                            <h3>CSR 報告下載</h3>
+                            <button class="add-btn" id="addCsrReportBtn">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                                新增報告
+                            </button>
+                        </div>
+                        <div class="admin-card-body">
+                            <div class="csr-reports-list" id="csrReportsList">
+                                <!-- 動態生成 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CSR Value Modal -->
+            <div class="modal" id="csrValueModal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 id="csrValueModalTitle">新增核心理念</h2>
+                        <button class="modal-close" onclick="closeCsrValueModal()">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                    </div>
+                    <form id="csrValueForm" class="modal-form">
+                        <input type="hidden" id="csrValueId">
+                        <div class="form-group">
+                            <label for="csrValueTitle">標題 <span class="required">*</span></label>
+                            <input type="text" id="csrValueTitle" placeholder="例如：誠信經營" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="csrValueDesc">描述 <span class="required">*</span></label>
+                            <textarea id="csrValueDesc" rows="3" placeholder="簡短描述此核心理念" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="csrValueIcon">圖示類型</label>
+                            <select id="csrValueIcon">
+                                <option value="shield">盾牌（誠信）</option>
+                                <option value="clock">時鐘（永續）</option>
+                                <option value="users">人群（社會）</option>
+                                <option value="heart">愛心（關懷）</option>
+                                <option value="leaf">葉子（環保）</option>
+                                <option value="star">星星</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="csrValueOrder">排序</label>
+                            <input type="number" id="csrValueOrder" min="1" value="1">
+                        </div>
+                        <div class="modal-actions">
+                            <button type="button" class="cancel-btn" onclick="closeCsrValueModal()">取消</button>
+                            <button type="submit" class="submit-btn">儲存</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- CSR Article Modal -->
+            <div class="modal" id="csrArticleModal">
+                <div class="modal-content modal-lg">
+                    <div class="modal-header">
+                        <h2 id="csrArticleModalTitle">新增 CSR 文章</h2>
+                        <button class="modal-close" onclick="closeCsrArticleModal()">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                    </div>
+                    <form id="csrArticleForm" class="modal-form">
+                        <input type="hidden" id="csrArticleId">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="csrArticleCategory">分類標籤 <span class="required">*</span></label>
+                                <select id="csrArticleCategory" required>
+                                    <option value="Environment">Environment（環境）</option>
+                                    <option value="Community">Community（社會）</option>
+                                    <option value="People">People（員工）</option>
+                                    <option value="Governance">Governance（治理）</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="csrArticleOrder">排序</label>
+                                <input type="number" id="csrArticleOrder" min="1" value="1">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="csrArticleTitle">標題 <span class="required">*</span></label>
+                            <input type="text" id="csrArticleTitle" placeholder="例如：環境保護" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="csrArticleSubtitle">副標題 <span class="required">*</span></label>
+                            <input type="text" id="csrArticleSubtitle" placeholder="例如：綠色營運，守護地球" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="csrArticleIntro">前言</label>
+                            <textarea id="csrArticleIntro" rows="2" placeholder="文章前言說明"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="csrArticleImage">圖片網址</label>
+                            <input type="url" id="csrArticleImage" placeholder="https://...">
+                        </div>
+                        <div class="form-group">
+                            <label>內容重點（每行一項）</label>
+                            <textarea id="csrArticlePoints" rows="6" placeholder="全面推動無紙化作業&#10;辦公室採用節能設備&#10;鼓勵員工使用大眾運輸"></textarea>
+                            <span class="input-hint">每行輸入一個重點項目，會自動顯示為清單</span>
+                        </div>
+                        <div class="modal-actions">
+                            <button type="button" class="cancel-btn" onclick="closeCsrArticleModal()">取消</button>
+                            <button type="submit" class="submit-btn">儲存</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- CSR Stat Modal -->
+            <div class="modal" id="csrStatModal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 id="csrStatModalTitle">新增統計數據</h2>
+                        <button class="modal-close" onclick="closeCsrStatModal()">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                    </div>
+                    <form id="csrStatForm" class="modal-form">
+                        <input type="hidden" id="csrStatId">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="csrStatNumber">數字 <span class="required">*</span></label>
+                                <input type="text" id="csrStatNumber" placeholder="例如：85、2000" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="csrStatUnit">單位 <span class="required">*</span></label>
+                                <input type="text" id="csrStatUnit" placeholder="例如：%、+、位" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="csrStatLabel">說明文字 <span class="required">*</span></label>
+                            <input type="text" id="csrStatLabel" placeholder="例如：無紙化作業比例" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="csrStatOrder">排序</label>
+                            <input type="number" id="csrStatOrder" min="1" value="1">
+                        </div>
+                        <div class="modal-actions">
+                            <button type="button" class="cancel-btn" onclick="closeCsrStatModal()">取消</button>
+                            <button type="submit" class="submit-btn">儲存</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- CSR Report Modal -->
+            <div class="modal" id="csrReportModal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 id="csrReportModalTitle">新增 CSR 報告</h2>
+                        <button class="modal-close" onclick="closeCsrReportModal()">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                    </div>
+                    <form id="csrReportForm" class="modal-form">
+                        <input type="hidden" id="csrReportId">
+                        <div class="form-group">
+                            <label for="csrReportTitle">報告名稱 <span class="required">*</span></label>
+                            <input type="text" id="csrReportTitle" placeholder="例如：2024 年度 CSR 報告" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="csrReportYear">年份</label>
+                            <input type="number" id="csrReportYear" min="2000" max="2100" placeholder="2024">
+                        </div>
+                        <div class="form-group">
+                            <label for="csrReportUrl">下載連結 <span class="required">*</span></label>
+                            <input type="url" id="csrReportUrl" placeholder="https://..." required>
+                        </div>
+                        <div class="form-group">
+                            <label for="csrReportOrder">排序</label>
+                            <input type="number" id="csrReportOrder" min="1" value="1">
+                        </div>
+                        <div class="modal-actions">
+                            <button type="button" class="cancel-btn" onclick="closeCsrReportModal()">取消</button>
+                            <button type="submit" class="submit-btn">儲存</button>
+                        </div>
+                    </form>
                 </div>
             </div>
 

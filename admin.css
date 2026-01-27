@@ -3151,3 +3151,182 @@ input, select, textarea {
     }
 }
 
+/* ================================
+   CSR Management Styles
+================================ */
+.csr-admin-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.admin-card {
+    background: var(--color-white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+}
+
+.admin-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background: var(--color-gray-50);
+    border-bottom: 1px solid var(--color-gray-200);
+}
+
+.admin-card-header h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-gray-800);
+    margin: 0;
+}
+
+.admin-card-body {
+    padding: 1.5rem;
+}
+
+.admin-card-body .form-group {
+    margin-bottom: 1rem;
+}
+
+.admin-card-body .form-group:last-child {
+    margin-bottom: 0;
+}
+
+/* CSR List Items */
+.csr-values-list,
+.csr-articles-list,
+.csr-stats-list,
+.csr-reports-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.csr-list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--color-gray-50);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-gray-200);
+    transition: all var(--transition-fast);
+}
+
+.csr-list-item:hover {
+    border-color: var(--color-primary);
+    background: var(--color-white);
+}
+
+.csr-item-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.csr-item-title {
+    font-weight: 600;
+    color: var(--color-gray-800);
+    margin-bottom: 0.25rem;
+}
+
+.csr-item-desc {
+    font-size: 0.875rem;
+    color: var(--color-gray-500);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.csr-item-meta {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    font-size: 0.75rem;
+    color: var(--color-gray-400);
+}
+
+.csr-item-badge {
+    padding: 0.25rem 0.5rem;
+    background: var(--color-accent);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    text-transform: uppercase;
+}
+
+.csr-item-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.csr-item-actions .action-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-white);
+    border: 1px solid var(--color-gray-300);
+    border-radius: var(--radius-sm);
+    color: var(--color-gray-600);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.csr-item-actions .action-btn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.csr-item-actions .action-btn.delete:hover {
+    border-color: #ef4444;
+    color: #ef4444;
+    background: #fef2f2;
+}
+
+/* Empty State */
+.csr-empty-state {
+    text-align: center;
+    padding: 2rem;
+    color: var(--color-gray-500);
+}
+
+.csr-empty-state svg {
+    margin-bottom: 0.5rem;
+    opacity: 0.5;
+}
+
+/* Modal Large */
+.modal-lg {
+    max-width: 700px;
+}
+
+/* Responsive CSR Admin */
+@media (max-width: 768px) {
+    .admin-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .admin-card-header .add-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .csr-list-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .csr-item-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+}
+

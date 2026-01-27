@@ -174,6 +174,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         initSettings();
         initServiceDetailEditor();
         initAppSettings();
+        initCsrSection();
         updateStats();
 
         hideLoadingState();
@@ -203,6 +204,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         initSettings();
         initServiceDetailEditor();
         initAppSettings();
+        initCsrSection();
         updateStats();
     }
 });
@@ -3977,4 +3979,609 @@ window.moveCharter = moveCharter;
 
 window.goToDocuments = goToDocuments;
 window.handleInvestorSectionNavigation = handleInvestorSectionNavigation;
+
+// ==================== CSR Management ====================
+
+let csrData = {
+    hero: {
+        title: '企業社會責任',
+        subtitle: '以誠信經營為本，善盡企業公民責任，創造永續價值',
+        image: 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=1920&q=80'
+    },
+    values: [],
+    articles: [],
+    stats: [],
+    reports: []
+};
+
+// Initialize CSR section when loaded
+async function initCsrSection() {
+    await loadCsrData();
+    renderCsrValues();
+    renderCsrArticles();
+    renderCsrStats();
+    renderCsrReports();
+
+    // Set hero form values
+    document.getElementById('csrHeroTitle').value = csrData.hero.title || '';
+    document.getElementById('csrHeroSubtitle').value = csrData.hero.subtitle || '';
+    document.getElementById('csrHeroImage').value = csrData.hero.image || '';
+
+    // Setup form listeners
+    setupCsrFormListeners();
+}
+
+async function loadCsrData() {
+    try {
+        // Load CSR settings
+        const { data: settings } = await supabaseSelect('csr_settings', { limit: 1 });
+        if (settings && settings.length > 0) {
+            csrData.hero = settings[0].hero || csrData.hero;
+        }
+
+        // Load values
+        const { data: values } = await supabaseSelect('csr_values', { order: { column: 'sort_order', ascending: true } });
+        csrData.values = values || [];
+
+        // Load articles
+        const { data: articles } = await supabaseSelect('csr_articles', { order: { column: 'sort_order', ascending: true } });
+        csrData.articles = articles || [];
+
+        // Load stats
+        const { data: stats } = await supabaseSelect('csr_stats', { order: { column: 'sort_order', ascending: true } });
+        csrData.stats = stats || [];
+
+        // Load reports
+        const { data: reports } = await supabaseSelect('csr_reports', { order: { column: 'sort_order', ascending: true } });
+        csrData.reports = reports || [];
+    } catch (error) {
+        console.error('載入 CSR 資料失敗:', error);
+    }
+}
+
+function setupCsrFormListeners() {
+    // Hero form
+    document.getElementById('csrHeroForm')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const heroData = {
+            title: document.getElementById('csrHeroTitle').value,
+            subtitle: document.getElementById('csrHeroSubtitle').value,
+            image: document.getElementById('csrHeroImage').value
+        };
+
+        try {
+            const { data: existing } = await supabaseSelect('csr_settings', { limit: 1 });
+            if (existing && existing.length > 0) {
+                await supabaseUpdate('csr_settings', existing[0].id, { hero: heroData });
+            } else {
+                await supabaseInsert('csr_settings', { hero: heroData });
+            }
+            csrData.hero = heroData;
+            alert('Hero 設定已儲存！');
+        } catch (error) {
+            console.error('儲存 Hero 失敗:', error);
+            alert('儲存失敗，請稍後再試');
+        }
+    });
+
+    // Add buttons
+    document.getElementById('addCsrValueBtn')?.addEventListener('click', () => openCsrValueModal());
+    document.getElementById('addCsrArticleBtn')?.addEventListener('click', () => openCsrArticleModal());
+    document.getElementById('addCsrStatBtn')?.addEventListener('click', () => openCsrStatModal());
+    document.getElementById('addCsrReportBtn')?.addEventListener('click', () => openCsrReportModal());
+
+    // Form submissions
+    document.getElementById('csrValueForm')?.addEventListener('submit', saveCsrValue);
+    document.getElementById('csrArticleForm')?.addEventListener('submit', saveCsrArticle);
+    document.getElementById('csrStatForm')?.addEventListener('submit', saveCsrStat);
+    document.getElementById('csrReportForm')?.addEventListener('submit', saveCsrReport);
+}
+
+// ===== CSR Values =====
+function renderCsrValues() {
+    const container = document.getElementById('csrValuesList');
+    if (!container) return;
+
+    if (csrData.values.length === 0) {
+        container.innerHTML = `
+            <div class="csr-empty-state">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+                <p>尚未新增核心理念</p>
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = csrData.values.map(value => `
+        <div class="csr-list-item" data-id="${value.id}">
+            <div class="csr-item-info">
+                <div class="csr-item-title">${value.title}</div>
+                <div class="csr-item-desc">${value.description}</div>
+            </div>
+            <div class="csr-item-meta">
+                <span>排序: ${value.sort_order}</span>
+            </div>
+            <div class="csr-item-actions">
+                <button class="action-btn" onclick="editCsrValue(${value.id})" title="編輯">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                </button>
+                <button class="action-btn delete" onclick="deleteCsrValue(${value.id})" title="刪除">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function openCsrValueModal(id = null) {
+    const modal = document.getElementById('csrValueModal');
+    const title = document.getElementById('csrValueModalTitle');
+    const form = document.getElementById('csrValueForm');
+
+    form.reset();
+    document.getElementById('csrValueId').value = '';
+
+    if (id) {
+        const value = csrData.values.find(v => v.id === id);
+        if (value) {
+            title.textContent = '編輯核心理念';
+            document.getElementById('csrValueId').value = value.id;
+            document.getElementById('csrValueTitle').value = value.title;
+            document.getElementById('csrValueDesc').value = value.description;
+            document.getElementById('csrValueIcon').value = value.icon || 'shield';
+            document.getElementById('csrValueOrder').value = value.sort_order || 1;
+        }
+    } else {
+        title.textContent = '新增核心理念';
+        document.getElementById('csrValueOrder').value = csrData.values.length + 1;
+    }
+
+    modal.classList.add('active');
+}
+
+function closeCsrValueModal() {
+    document.getElementById('csrValueModal')?.classList.remove('active');
+}
+
+async function saveCsrValue(e) {
+    e.preventDefault();
+
+    const id = document.getElementById('csrValueId').value;
+    const data = {
+        title: document.getElementById('csrValueTitle').value,
+        description: document.getElementById('csrValueDesc').value,
+        icon: document.getElementById('csrValueIcon').value,
+        sort_order: parseInt(document.getElementById('csrValueOrder').value) || 1
+    };
+
+    try {
+        if (id) {
+            await supabaseUpdate('csr_values', id, data);
+        } else {
+            await supabaseInsert('csr_values', data);
+        }
+
+        closeCsrValueModal();
+        await loadCsrData();
+        renderCsrValues();
+        alert('儲存成功！');
+    } catch (error) {
+        console.error('儲存失敗:', error);
+        alert('儲存失敗，請稍後再試');
+    }
+}
+
+function editCsrValue(id) {
+    openCsrValueModal(id);
+}
+
+async function deleteCsrValue(id) {
+    if (!confirm('確定要刪除此核心理念嗎？')) return;
+
+    try {
+        await supabaseDelete('csr_values', id);
+        await loadCsrData();
+        renderCsrValues();
+    } catch (error) {
+        console.error('刪除失敗:', error);
+        alert('刪除失敗，請稍後再試');
+    }
+}
+
+// ===== CSR Articles =====
+function renderCsrArticles() {
+    const container = document.getElementById('csrArticlesList');
+    if (!container) return;
+
+    if (csrData.articles.length === 0) {
+        container.innerHTML = `
+            <div class="csr-empty-state">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                </svg>
+                <p>尚未新增 CSR 文章</p>
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = csrData.articles.map(article => `
+        <div class="csr-list-item" data-id="${article.id}">
+            <div class="csr-item-info">
+                <div class="csr-item-title">${article.title}</div>
+                <div class="csr-item-desc">${article.subtitle}</div>
+            </div>
+            <div class="csr-item-meta">
+                <span class="csr-item-badge">${article.category}</span>
+                <span>排序: ${article.sort_order}</span>
+            </div>
+            <div class="csr-item-actions">
+                <button class="action-btn" onclick="editCsrArticle(${article.id})" title="編輯">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                </button>
+                <button class="action-btn delete" onclick="deleteCsrArticle(${article.id})" title="刪除">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function openCsrArticleModal(id = null) {
+    const modal = document.getElementById('csrArticleModal');
+    const title = document.getElementById('csrArticleModalTitle');
+    const form = document.getElementById('csrArticleForm');
+
+    form.reset();
+    document.getElementById('csrArticleId').value = '';
+
+    if (id) {
+        const article = csrData.articles.find(a => a.id === id);
+        if (article) {
+            title.textContent = '編輯 CSR 文章';
+            document.getElementById('csrArticleId').value = article.id;
+            document.getElementById('csrArticleCategory').value = article.category;
+            document.getElementById('csrArticleTitle').value = article.title;
+            document.getElementById('csrArticleSubtitle').value = article.subtitle;
+            document.getElementById('csrArticleIntro').value = article.intro || '';
+            document.getElementById('csrArticleImage').value = article.image || '';
+            document.getElementById('csrArticlePoints').value = (article.points || []).join('\n');
+            document.getElementById('csrArticleOrder').value = article.sort_order || 1;
+        }
+    } else {
+        title.textContent = '新增 CSR 文章';
+        document.getElementById('csrArticleOrder').value = csrData.articles.length + 1;
+    }
+
+    modal.classList.add('active');
+}
+
+function closeCsrArticleModal() {
+    document.getElementById('csrArticleModal')?.classList.remove('active');
+}
+
+async function saveCsrArticle(e) {
+    e.preventDefault();
+
+    const id = document.getElementById('csrArticleId').value;
+    const pointsText = document.getElementById('csrArticlePoints').value;
+    const points = pointsText.split('\n').map(p => p.trim()).filter(p => p);
+
+    const data = {
+        category: document.getElementById('csrArticleCategory').value,
+        title: document.getElementById('csrArticleTitle').value,
+        subtitle: document.getElementById('csrArticleSubtitle').value,
+        intro: document.getElementById('csrArticleIntro').value,
+        image: document.getElementById('csrArticleImage').value,
+        points: points,
+        sort_order: parseInt(document.getElementById('csrArticleOrder').value) || 1
+    };
+
+    try {
+        if (id) {
+            await supabaseUpdate('csr_articles', id, data);
+        } else {
+            await supabaseInsert('csr_articles', data);
+        }
+
+        closeCsrArticleModal();
+        await loadCsrData();
+        renderCsrArticles();
+        alert('儲存成功！');
+    } catch (error) {
+        console.error('儲存失敗:', error);
+        alert('儲存失敗，請稍後再試');
+    }
+}
+
+function editCsrArticle(id) {
+    openCsrArticleModal(id);
+}
+
+async function deleteCsrArticle(id) {
+    if (!confirm('確定要刪除此文章嗎？')) return;
+
+    try {
+        await supabaseDelete('csr_articles', id);
+        await loadCsrData();
+        renderCsrArticles();
+    } catch (error) {
+        console.error('刪除失敗:', error);
+        alert('刪除失敗，請稍後再試');
+    }
+}
+
+// ===== CSR Stats =====
+function renderCsrStats() {
+    const container = document.getElementById('csrStatsList');
+    if (!container) return;
+
+    if (csrData.stats.length === 0) {
+        container.innerHTML = `
+            <div class="csr-empty-state">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <line x1="18" y1="20" x2="18" y2="10"></line>
+                    <line x1="12" y1="20" x2="12" y2="4"></line>
+                    <line x1="6" y1="20" x2="6" y2="14"></line>
+                </svg>
+                <p>尚未新增統計數據</p>
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = csrData.stats.map(stat => `
+        <div class="csr-list-item" data-id="${stat.id}">
+            <div class="csr-item-info">
+                <div class="csr-item-title">${stat.number}${stat.unit}</div>
+                <div class="csr-item-desc">${stat.label}</div>
+            </div>
+            <div class="csr-item-meta">
+                <span>排序: ${stat.sort_order}</span>
+            </div>
+            <div class="csr-item-actions">
+                <button class="action-btn" onclick="editCsrStat(${stat.id})" title="編輯">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                </button>
+                <button class="action-btn delete" onclick="deleteCsrStat(${stat.id})" title="刪除">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function openCsrStatModal(id = null) {
+    const modal = document.getElementById('csrStatModal');
+    const title = document.getElementById('csrStatModalTitle');
+    const form = document.getElementById('csrStatForm');
+
+    form.reset();
+    document.getElementById('csrStatId').value = '';
+
+    if (id) {
+        const stat = csrData.stats.find(s => s.id === id);
+        if (stat) {
+            title.textContent = '編輯統計數據';
+            document.getElementById('csrStatId').value = stat.id;
+            document.getElementById('csrStatNumber').value = stat.number;
+            document.getElementById('csrStatUnit').value = stat.unit;
+            document.getElementById('csrStatLabel').value = stat.label;
+            document.getElementById('csrStatOrder').value = stat.sort_order || 1;
+        }
+    } else {
+        title.textContent = '新增統計數據';
+        document.getElementById('csrStatOrder').value = csrData.stats.length + 1;
+    }
+
+    modal.classList.add('active');
+}
+
+function closeCsrStatModal() {
+    document.getElementById('csrStatModal')?.classList.remove('active');
+}
+
+async function saveCsrStat(e) {
+    e.preventDefault();
+
+    const id = document.getElementById('csrStatId').value;
+    const data = {
+        number: document.getElementById('csrStatNumber').value,
+        unit: document.getElementById('csrStatUnit').value,
+        label: document.getElementById('csrStatLabel').value,
+        sort_order: parseInt(document.getElementById('csrStatOrder').value) || 1
+    };
+
+    try {
+        if (id) {
+            await supabaseUpdate('csr_stats', id, data);
+        } else {
+            await supabaseInsert('csr_stats', data);
+        }
+
+        closeCsrStatModal();
+        await loadCsrData();
+        renderCsrStats();
+        alert('儲存成功！');
+    } catch (error) {
+        console.error('儲存失敗:', error);
+        alert('儲存失敗，請稍後再試');
+    }
+}
+
+function editCsrStat(id) {
+    openCsrStatModal(id);
+}
+
+async function deleteCsrStat(id) {
+    if (!confirm('確定要刪除此統計數據嗎？')) return;
+
+    try {
+        await supabaseDelete('csr_stats', id);
+        await loadCsrData();
+        renderCsrStats();
+    } catch (error) {
+        console.error('刪除失敗:', error);
+        alert('刪除失敗，請稍後再試');
+    }
+}
+
+// ===== CSR Reports =====
+function renderCsrReports() {
+    const container = document.getElementById('csrReportsList');
+    if (!container) return;
+
+    if (csrData.reports.length === 0) {
+        container.innerHTML = `
+            <div class="csr-empty-state">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="12" y1="18" x2="12" y2="12"></line>
+                    <line x1="9" y1="15" x2="15" y2="15"></line>
+                </svg>
+                <p>尚未新增 CSR 報告</p>
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = csrData.reports.map(report => `
+        <div class="csr-list-item" data-id="${report.id}">
+            <div class="csr-item-info">
+                <div class="csr-item-title">${report.title}</div>
+                <div class="csr-item-desc">${report.url}</div>
+            </div>
+            <div class="csr-item-meta">
+                ${report.year ? `<span>${report.year}年</span>` : ''}
+                <span>排序: ${report.sort_order}</span>
+            </div>
+            <div class="csr-item-actions">
+                <button class="action-btn" onclick="editCsrReport(${report.id})" title="編輯">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                </button>
+                <button class="action-btn delete" onclick="deleteCsrReport(${report.id})" title="刪除">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function openCsrReportModal(id = null) {
+    const modal = document.getElementById('csrReportModal');
+    const title = document.getElementById('csrReportModalTitle');
+    const form = document.getElementById('csrReportForm');
+
+    form.reset();
+    document.getElementById('csrReportId').value = '';
+
+    if (id) {
+        const report = csrData.reports.find(r => r.id === id);
+        if (report) {
+            title.textContent = '編輯 CSR 報告';
+            document.getElementById('csrReportId').value = report.id;
+            document.getElementById('csrReportTitle').value = report.title;
+            document.getElementById('csrReportYear').value = report.year || '';
+            document.getElementById('csrReportUrl').value = report.url;
+            document.getElementById('csrReportOrder').value = report.sort_order || 1;
+        }
+    } else {
+        title.textContent = '新增 CSR 報告';
+        document.getElementById('csrReportOrder').value = csrData.reports.length + 1;
+    }
+
+    modal.classList.add('active');
+}
+
+function closeCsrReportModal() {
+    document.getElementById('csrReportModal')?.classList.remove('active');
+}
+
+async function saveCsrReport(e) {
+    e.preventDefault();
+
+    const id = document.getElementById('csrReportId').value;
+    const data = {
+        title: document.getElementById('csrReportTitle').value,
+        year: document.getElementById('csrReportYear').value ? parseInt(document.getElementById('csrReportYear').value) : null,
+        url: document.getElementById('csrReportUrl').value,
+        sort_order: parseInt(document.getElementById('csrReportOrder').value) || 1
+    };
+
+    try {
+        if (id) {
+            await supabaseUpdate('csr_reports', id, data);
+        } else {
+            await supabaseInsert('csr_reports', data);
+        }
+
+        closeCsrReportModal();
+        await loadCsrData();
+        renderCsrReports();
+        alert('儲存成功！');
+    } catch (error) {
+        console.error('儲存失敗:', error);
+        alert('儲存失敗，請稍後再試');
+    }
+}
+
+function editCsrReport(id) {
+    openCsrReportModal(id);
+}
+
+async function deleteCsrReport(id) {
+    if (!confirm('確定要刪除此報告嗎？')) return;
+
+    try {
+        await supabaseDelete('csr_reports', id);
+        await loadCsrData();
+        renderCsrReports();
+    } catch (error) {
+        console.error('刪除失敗:', error);
+        alert('刪除失敗，請稍後再試');
+    }
+}
+
+// Make CSR functions globally available
+window.initCsrSection = initCsrSection;
+window.closeCsrValueModal = closeCsrValueModal;
+window.editCsrValue = editCsrValue;
+window.deleteCsrValue = deleteCsrValue;
+window.closeCsrArticleModal = closeCsrArticleModal;
+window.editCsrArticle = editCsrArticle;
+window.deleteCsrArticle = deleteCsrArticle;
+window.closeCsrStatModal = closeCsrStatModal;
+window.editCsrStat = editCsrStat;
+window.deleteCsrStat = deleteCsrStat;
+window.closeCsrReportModal = closeCsrReportModal;
+window.editCsrReport = editCsrReport;
+window.deleteCsrReport = deleteCsrReport;
 

@@ -389,5 +389,144 @@
 
     <script src="api-client.js"></script>
     <script src="script.js"></script>
+    <script>
+        // CSR Page Dynamic Content Loader
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                // Load Hero
+                const { data: settings } = await supabaseSelect('csr_settings', { limit: 1 });
+                if (settings && settings.length > 0 && settings[0].hero) {
+                    const hero = settings[0].hero;
+                    const heroTitle = document.querySelector('.csr-hero .page-title');
+                    const heroSubtitle = document.querySelector('.csr-hero .page-subtitle');
+                    const heroImage = document.querySelector('.csr-hero-image');
+
+                    if (heroTitle && hero.title) heroTitle.textContent = hero.title;
+                    if (heroSubtitle && hero.subtitle) heroSubtitle.textContent = hero.subtitle;
+                    if (heroImage && hero.image) heroImage.src = hero.image;
+                }
+
+                // Load Values
+                const { data: values } = await supabaseSelect('csr_values', { order: { column: 'sort_order', ascending: true } });
+                if (values && values.length > 0) {
+                    const valuesContainer = document.querySelector('.csr-values-grid');
+                    if (valuesContainer) {
+                        valuesContainer.innerHTML = values.map(value => {
+                            const iconSvg = getIconSvg(value.icon);
+                            return `
+                                <div class="csr-value-card animate-on-scroll">
+                                    <div class="csr-value-icon">${iconSvg}</div>
+                                    <h3>${value.title}</h3>
+                                    <p>${value.description}</p>
+                                </div>
+                            `;
+                        }).join('');
+                    }
+                }
+
+                // Load Articles
+                const { data: articles } = await supabaseSelect('csr_articles', { order: { column: 'sort_order', ascending: true } });
+                if (articles && articles.length > 0) {
+                    const articlesContainer = document.querySelector('.csr-content .container');
+                    if (articlesContainer) {
+                        articlesContainer.innerHTML = articles.map((article, index) => {
+                            const points = Array.isArray(article.points) ? article.points : JSON.parse(article.points || '[]');
+                            const isReverse = index % 2 === 1;
+                            return `
+                                <article class="csr-article ${isReverse ? 'reverse' : ''} animate-on-scroll">
+                                    <div class="csr-article-image">
+                                        <img src="${article.image}" alt="${article.title}">
+                                        <div class="csr-article-badge">${article.category}</div>
+                                    </div>
+                                    <div class="csr-article-content">
+                                        <h2>${article.title}</h2>
+                                        <h3>${article.subtitle}</h3>
+                                        <p>${article.intro}</p>
+                                        <ul class="csr-list">
+                                            ${points.map(point => `
+                                                <li>
+                                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                                    </svg>
+                                                    ${point}
+                                                </li>
+                                            `).join('')}
+                                        </ul>
+                                    </div>
+                                </article>
+                            `;
+                        }).join('');
+                    }
+                }
+
+                // Load Stats
+                const { data: stats } = await supabaseSelect('csr_stats', { order: { column: 'sort_order', ascending: true } });
+                if (stats && stats.length > 0) {
+                    const statsContainer = document.querySelector('.csr-stats-grid');
+                    if (statsContainer) {
+                        statsContainer.innerHTML = stats.map(stat => `
+                            <div class="csr-stat-item animate-on-scroll">
+                                <span class="csr-stat-number">${stat.number}</span>
+                                <span class="csr-stat-unit">${stat.unit}</span>
+                                <span class="csr-stat-label">${stat.label}</span>
+                            </div>
+                        `).join('');
+                    }
+                }
+
+                // Load Reports
+                const { data: reports } = await supabaseSelect('csr_reports', { order: { column: 'sort_order', ascending: true } });
+                if (reports && reports.length > 0) {
+                    const downloadActions = document.querySelector('.csr-download-actions');
+                    if (downloadActions) {
+                        downloadActions.innerHTML = reports.slice(0, 2).map((report, index) => `
+                            <a href="${report.url}" class="btn ${index === 0 ? 'btn-primary' : 'btn-outline'}" target="_blank">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    ${index === 0 ?
+                                        '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line>' :
+                                        '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line>'
+                                    }
+                                </svg>
+                                ${index === 0 ? '下載 ' + report.title : '歷年報告書'}
+                            </a>
+                        `).join('');
+                    }
+                }
+
+                // Re-init scroll animations
+                initScrollAnimations();
+
+            } catch (error) {
+                console.error('載入 CSR 資料失敗:', error);
+            }
+        });
+
+        function getIconSvg(iconType) {
+            const icons = {
+                shield: '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path></svg>',
+                clock: '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>',
+                users: '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>',
+                heart: '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>',
+                leaf: '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6.13 1L6 16a2 2 0 0 0 2 2h15"></path><path d="M1 6.13S4.5 7 7.5 7c4.5 0 7.5-2 7.5-2s3 2 7.5 2c3 0 6.5-.87 6.5-.87"></path></svg>',
+                star: '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>'
+            };
+            return icons[iconType] || icons.shield;
+        }
+
+        function initScrollAnimations() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.animate-on-scroll').forEach(el => {
+                observer.observe(el);
+            });
+        }
+    </script>
 </body>
 </html>
