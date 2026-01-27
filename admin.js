@@ -4,7 +4,7 @@
 
 // Check authentication
 if (sessionStorage.getItem('isLoggedIn') !== 'true') {
-    window.location.href = 'login.html';
+    window.location.href = 'yourremit-login.html';
 }
 
 // Initialize data - 將從 Supabase 或 localStorage 載入
@@ -353,7 +353,7 @@ function initLogout() {
         if (confirm('確定要登出嗎？')) {
             sessionStorage.removeItem('isLoggedIn');
             sessionStorage.removeItem('username');
-            window.location.href = 'login.html';
+            window.location.href = 'yourremit-login.html';
         }
     });
 }

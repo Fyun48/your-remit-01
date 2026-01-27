@@ -1504,6 +1504,108 @@ input, textarea, select {
 }
 
 /* ================================
+   Career Section
+================================ */
+.career-section {
+    padding: var(--space-3xl) 0;
+    background: linear-gradient(180deg, var(--color-gray-100) 0%, var(--color-white) 100%);
+}
+
+.career-header {
+    text-align: center;
+    margin-bottom: var(--space-2xl);
+}
+
+.career-header .section-subtitle {
+    max-width: 600px;
+    margin: 0 auto;
+    color: var(--color-gray-600);
+}
+
+.career-benefits {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-xl);
+    margin-bottom: var(--space-2xl);
+}
+
+.benefit-card {
+    background: var(--color-white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-base);
+}
+
+.benefit-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+}
+
+.benefit-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto var(--space-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(27, 58, 87, 0.1) 0%, rgba(45, 189, 182, 0.1) 100%);
+    border-radius: 50%;
+    color: var(--color-primary);
+}
+
+.benefit-card h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-gray-900);
+    margin-bottom: var(--space-sm);
+}
+
+.benefit-card p {
+    font-size: 0.9rem;
+    color: var(--color-gray-600);
+    line-height: 1.5;
+}
+
+.career-cta {
+    text-align: center;
+    padding: var(--space-xl);
+    background: var(--color-white);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+}
+
+.career-cta p {
+    color: var(--color-gray-700);
+    margin-bottom: var(--space-lg);
+    font-size: 1.1rem;
+}
+
+.career-cta .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+/* Career Responsive */
+@media (max-width: 1024px) {
+    .career-benefits {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .career-benefits {
+        grid-template-columns: 1fr;
+    }
+
+    .benefit-card {
+        padding: var(--space-lg);
+    }
+}
+
+/* ================================
    Footer
 ================================ */
 .footer {
@@ -1513,13 +1615,13 @@ input, textarea, select {
 }
 
 .footer-top {
-    padding: var(--space-4xl) 0 var(--space-2xl);
+    padding: var(--space-2xl) 0 var(--space-xl);
 }
 
 .footer-grid {
     display: grid;
-    grid-template-columns: 1.5fr repeat(3, 1fr);
-    gap: var(--space-3xl);
+    grid-template-columns: 1.5fr repeat(4, 1fr);
+    gap: var(--space-2xl);
 }
 
 .footer-logo {
@@ -1965,8 +2067,8 @@ input, textarea, select {
     }
 
     .footer-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: var(--space-2xl);
+        grid-template-columns: repeat(4, 1fr);
+        gap: var(--space-xl);
     }
 
     .footer-brand {
@@ -1981,10 +2083,6 @@ input, textarea, select {
 
     .footer-brand .footer-social {
         justify-content: center;
-    }
-
-    .footer-app-download {
-        grid-column: 1 / -1;
         text-align: center;
         margin-top: var(--space-xl);
     }

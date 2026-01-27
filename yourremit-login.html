@@ -497,7 +497,7 @@
                 sessionStorage.setItem('username', username);
                 
                 // Redirect to admin panel
-                window.location.href = 'admin.html';
+                window.location.href = 'yourremit-admin.html';
             } else {
                 // Show error message
                 errorMessage.classList.add('show');
@@ -511,7 +511,7 @@
 
         // Check if already logged in
         if (sessionStorage.getItem('isLoggedIn') === 'true') {
-            window.location.href = 'admin.html';
+            window.location.href = 'yourremit-admin.html';
         }
     </script>
 </body>
