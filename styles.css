@@ -1612,3 +1612,123 @@ input, textarea, select {
     }
 }
 
+/* ================================
+   App Download QR Codes
+================================ */
+
+/* Hero Section QR Codes */
+.hero-app-download {
+    margin-top: var(--space-xl);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-md);
+}
+
+.app-download-label {
+    font-size: 0.9rem;
+    color: var(--color-gray-400);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.app-qr-codes {
+    display: flex;
+    gap: var(--space-lg);
+}
+
+.qr-code-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: var(--space-md);
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    transition: all var(--transition-base);
+}
+
+.qr-code-item:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.qr-code-item img {
+    width: 100px;
+    height: 100px;
+    border-radius: var(--radius-md);
+    background: white;
+    padding: 6px;
+}
+
+.qr-code-item span {
+    font-size: 0.85rem;
+    color: var(--color-white);
+    font-weight: 500;
+}
+
+/* Footer Section QR Codes */
+.footer-app-download {
+    min-width: 180px;
+}
+
+.footer-qr-codes {
+    display: flex;
+    gap: var(--space-md);
+    margin-top: var(--space-md);
+}
+
+.footer-qr-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.footer-qr-item img {
+    width: 80px;
+    height: 80px;
+    border-radius: var(--radius-md);
+    background: white;
+    padding: 4px;
+    transition: transform var(--transition-base);
+}
+
+.footer-qr-item:hover img {
+    transform: scale(1.05);
+}
+
+.footer-qr-item span {
+    font-size: 0.75rem;
+    color: var(--color-gray-400);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero-app-download {
+        align-items: center;
+        margin-top: var(--space-lg);
+    }
+
+    .app-qr-codes {
+        gap: var(--space-md);
+    }
+
+    .qr-code-item img {
+        width: 80px;
+        height: 80px;
+    }
+
+    .footer-app-download {
+        width: 100%;
+        text-align: center;
+    }
+
+    .footer-qr-codes {
+        justify-content: center;
+    }
+}
+
