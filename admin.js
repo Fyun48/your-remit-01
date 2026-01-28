@@ -179,6 +179,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         initServiceDetailEditor();
         initAppSettings();
         initCsrSection();
+        initTranslationsSection();
         updateStats();
 
         hideLoadingState();
@@ -209,6 +210,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         initServiceDetailEditor();
         initAppSettings();
         initCsrSection();
+        initTranslationsSection();
         updateStats();
     }
 });
@@ -4658,4 +4660,342 @@ window.deleteCsrStat = deleteCsrStat;
 window.closeCsrReportModal = closeCsrReportModal;
 window.editCsrReport = editCsrReport;
 window.deleteCsrReport = deleteCsrReport;
+
+// ================================
+// Translations Management Section
+// ================================
+
+let translationsData = [];
+let translationsFilteredData = [];
+
+// Initialize translations section
+async function initTranslationsSection() {
+    console.log('[Translations] Initializing...');
+
+    // Load translations from Supabase
+    await loadTranslations();
+
+    // Setup event listeners
+    setupTranslationsEventListeners();
+}
+
+// Load translations from database
+async function loadTranslations() {
+    try {
+        const { data, error } = await supabase
+            .from('translations')
+            .select('*')
+            .order('category', { ascending: true })
+            .order('key', { ascending: true });
+
+        if (error) throw error;
+
+        translationsData = data || [];
+        translationsFilteredData = [...translationsData];
+        renderTranslationsTable();
+
+        console.log(`[Translations] Loaded ${translationsData.length} translations`);
+    } catch (error) {
+        console.error('[Translations] Load error:', error);
+        showToast('載入翻譯資料失敗', 'error');
+    }
+}
+
+// Render translations table
+function renderTranslationsTable() {
+    const tbody = document.getElementById('translationsTableBody');
+    const emptyState = document.getElementById('translationsEmpty');
+    const tableContainer = document.querySelector('.translations-table-container');
+
+    if (!tbody) return;
+
+    if (translationsFilteredData.length === 0) {
+        tableContainer.style.display = 'none';
+        emptyState.style.display = 'flex';
+        return;
+    }
+
+    tableContainer.style.display = 'block';
+    emptyState.style.display = 'none';
+
+    tbody.innerHTML = translationsFilteredData.map(item => `
+        <tr data-id="${item.id}">
+            <td class="col-key">${escapeHtml(item.key)}</td>
+            <td class="col-zhtw">
+                <div class="cell-content">${item.zh_tw ? escapeHtml(item.zh_tw) : '<span class="empty-cell">-</span>'}</div>
+            </td>
+            <td class="col-en">
+                <div class="cell-content">${item.en ? escapeHtml(item.en) : '<span class="empty-cell">-</span>'}</div>
+            </td>
+            <td class="col-vi">
+                <div class="cell-content">${item.vi ? escapeHtml(item.vi) : '<span class="empty-cell">-</span>'}</div>
+            </td>
+            <td class="col-id">
+                <div class="cell-content">${item.ind ? escapeHtml(item.ind) : '<span class="empty-cell">-</span>'}</div>
+            </td>
+            <td class="col-th">
+                <div class="cell-content">${item.th ? escapeHtml(item.th) : '<span class="empty-cell">-</span>'}</div>
+            </td>
+            <td class="col-actions">
+                <div class="translation-actions">
+                    <button class="edit-btn" onclick="editTranslation('${item.id}')" title="編輯">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                        </svg>
+                    </button>
+                    <button class="delete-btn" onclick="deleteTranslation('${item.id}')" title="刪除">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        </svg>
+                    </button>
+                </div>
+            </td>
+        </tr>
+    `).join('');
+}
+
+// Setup event listeners
+function setupTranslationsEventListeners() {
+    // Add translation button
+    const addBtn = document.getElementById('addTranslationBtn');
+    const addFirstBtn = document.getElementById('addFirstTranslation');
+
+    if (addBtn) {
+        addBtn.addEventListener('click', () => openTranslationModal());
+    }
+    if (addFirstBtn) {
+        addFirstBtn.addEventListener('click', () => openTranslationModal());
+    }
+
+    // Clear cache button
+    const clearCacheBtn = document.getElementById('clearTranslationCache');
+    if (clearCacheBtn) {
+        clearCacheBtn.addEventListener('click', clearTranslationCache);
+    }
+
+    // Category filter
+    const categoryFilter = document.getElementById('translationCategoryFilter');
+    if (categoryFilter) {
+        categoryFilter.addEventListener('change', filterTranslations);
+    }
+
+    // Search input
+    const searchInput = document.getElementById('translationSearch');
+    if (searchInput) {
+        searchInput.addEventListener('input', debounce(filterTranslations, 300));
+    }
+
+    // Modal close buttons
+    const closeModalBtn = document.getElementById('closeTranslationModal');
+    const cancelBtn = document.getElementById('cancelTranslation');
+
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', closeTranslationModal);
+    }
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', closeTranslationModal);
+    }
+
+    // Form submit
+    const form = document.getElementById('translationForm');
+    if (form) {
+        form.addEventListener('submit', handleTranslationSubmit);
+    }
+
+    // Close modal on overlay click
+    const modal = document.getElementById('translationModal');
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeTranslationModal();
+        });
+    }
+}
+
+// Filter translations
+function filterTranslations() {
+    const category = document.getElementById('translationCategoryFilter')?.value || '';
+    const search = document.getElementById('translationSearch')?.value?.toLowerCase() || '';
+
+    translationsFilteredData = translationsData.filter(item => {
+        const matchCategory = !category || item.category === category;
+        const matchSearch = !search ||
+            item.key.toLowerCase().includes(search) ||
+            (item.zh_tw && item.zh_tw.toLowerCase().includes(search)) ||
+            (item.en && item.en.toLowerCase().includes(search));
+
+        return matchCategory && matchSearch;
+    });
+
+    renderTranslationsTable();
+}
+
+// Open translation modal
+function openTranslationModal(id = null) {
+    const modal = document.getElementById('translationModal');
+    const title = document.getElementById('translationModalTitle');
+    const form = document.getElementById('translationForm');
+
+    // Reset form
+    form.reset();
+    document.getElementById('translationId').value = '';
+
+    if (id) {
+        // Edit mode
+        title.textContent = '編輯翻譯';
+        const item = translationsData.find(t => t.id === id);
+        if (item) {
+            document.getElementById('translationId').value = item.id;
+            document.getElementById('translationKey').value = item.key || '';
+            document.getElementById('translationCategory').value = item.category || 'common';
+            document.getElementById('translationZhTw').value = item.zh_tw || '';
+            document.getElementById('translationEn').value = item.en || '';
+            document.getElementById('translationVi').value = item.vi || '';
+            document.getElementById('translationInd').value = item.ind || '';
+            document.getElementById('translationTh').value = item.th || '';
+        }
+    } else {
+        // Add mode
+        title.textContent = '新增翻譯';
+    }
+
+    modal.classList.add('active');
+}
+
+// Close translation modal
+function closeTranslationModal() {
+    const modal = document.getElementById('translationModal');
+    modal.classList.remove('active');
+}
+
+// Handle form submit
+async function handleTranslationSubmit(e) {
+    e.preventDefault();
+
+    const id = document.getElementById('translationId').value;
+    const key = document.getElementById('translationKey').value.trim();
+    const category = document.getElementById('translationCategory').value;
+    const zh_tw = document.getElementById('translationZhTw').value.trim();
+    const en = document.getElementById('translationEn').value.trim();
+    const vi = document.getElementById('translationVi').value.trim();
+    const ind = document.getElementById('translationInd').value.trim();
+    const th = document.getElementById('translationTh').value.trim();
+
+    if (!key || !zh_tw) {
+        showToast('請填寫鍵值和繁體中文', 'error');
+        return;
+    }
+
+    const data = {
+        key,
+        category,
+        zh_tw,
+        en: en || null,
+        vi: vi || null,
+        ind: ind || null,
+        th: th || null,
+        updated_at: new Date().toISOString()
+    };
+
+    try {
+        if (id) {
+            // Update
+            const { error } = await supabase
+                .from('translations')
+                .update(data)
+                .eq('id', id);
+
+            if (error) throw error;
+            showToast('翻譯已更新', 'success');
+        } else {
+            // Insert
+            const { error } = await supabase
+                .from('translations')
+                .insert([data]);
+
+            if (error) throw error;
+            showToast('翻譯已新增', 'success');
+        }
+
+        closeTranslationModal();
+        await loadTranslations();
+
+    } catch (error) {
+        console.error('[Translations] Save error:', error);
+        if (error.message?.includes('duplicate')) {
+            showToast('此鍵值已存在', 'error');
+        } else {
+            showToast('儲存失敗，請稍後再試', 'error');
+        }
+    }
+}
+
+// Edit translation
+function editTranslation(id) {
+    openTranslationModal(id);
+}
+
+// Delete translation
+async function deleteTranslation(id) {
+    if (!confirm('確定要刪除此翻譯嗎？')) return;
+
+    try {
+        const { error } = await supabase
+            .from('translations')
+            .delete()
+            .eq('id', id);
+
+        if (error) throw error;
+
+        showToast('翻譯已刪除', 'success');
+        await loadTranslations();
+
+    } catch (error) {
+        console.error('[Translations] Delete error:', error);
+        showToast('刪除失敗，請稍後再試', 'error');
+    }
+}
+
+// Clear translation cache
+function clearTranslationCache() {
+    // Clear all i18n cache from localStorage
+    const keysToRemove = [];
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('i18n_cache')) {
+            keysToRemove.push(key);
+        }
+    }
+
+    keysToRemove.forEach(key => localStorage.removeItem(key));
+
+    showToast(`已清除 ${keysToRemove.length} 個快取項目`, 'success');
+}
+
+// Helper: Escape HTML
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// Helper: Debounce
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// Make translations functions globally available
+window.initTranslationsSection = initTranslationsSection;
+window.editTranslation = editTranslation;
+window.deleteTranslation = deleteTranslation;
+window.closeTranslationModal = closeTranslationModal;
 
