@@ -22,6 +22,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     // 載入 App QR Code 設定
     await loadAppQRCodes();
 
+    // 載入網站設定（聯絡資訊、社群連結）
+    await loadSiteSettings();
+
     // 載入內容後再初始化計數動畫
     initCounterAnimation();
 });
@@ -65,6 +68,54 @@ async function loadAppQRCodes() {
         });
     } catch (error) {
         console.log('App QR settings not available, using defaults');
+    }
+}
+
+/**
+ * 載入網站設定（聯絡資訊、社群連結）
+ * 從 content_settings 資料表的 contact 區塊讀取
+ */
+async function loadSiteSettings() {
+    try {
+        const { data, error } = await supabaseSelect('content_settings', { limit: 1 });
+        if (error || !data || data.length === 0) {
+            console.log('Content settings not available, using defaults');
+            return;
+        }
+
+        const contentData = data[0].settings || {};
+        const contact = contentData.contact || {};
+
+        // 更新 Footer 聯絡資訊
+        const phoneEl = document.getElementById('contact-phone');
+        const emailEl = document.getElementById('contact-email');
+        const addressEl = document.getElementById('contact-address');
+
+        if (phoneEl && contact.phone) phoneEl.textContent = contact.phone;
+        if (emailEl && contact.email) emailEl.textContent = contact.email;
+        if (addressEl && contact.address) addressEl.textContent = contact.address;
+
+        // 更新懸浮社群按鈕連結
+        const linkedinBtn = document.getElementById('float-linkedin');
+        const facebookBtn = document.getElementById('float-facebook');
+        const instagramBtn = document.getElementById('float-instagram');
+
+        if (linkedinBtn && contact.linkedin_url) linkedinBtn.href = contact.linkedin_url;
+        if (facebookBtn && contact.facebook_url) facebookBtn.href = contact.facebook_url;
+        if (instagramBtn && contact.instagram_url) instagramBtn.href = contact.instagram_url;
+
+        // 更新 Footer 社群連結
+        const footerFacebook = document.querySelector('.footer-social a[aria-label="Facebook"]');
+        const footerLine = document.querySelector('.footer-social a[aria-label="Line"]');
+        const footerInstagram = document.querySelector('.footer-social a[aria-label="Instagram"]');
+
+        if (footerFacebook && contact.facebook_url) footerFacebook.href = contact.facebook_url;
+        if (footerLine && contact.line_url) footerLine.href = contact.line_url;
+        if (footerInstagram && contact.instagram_url) footerInstagram.href = contact.instagram_url;
+
+        console.log('Contact settings loaded successfully');
+    } catch (error) {
+        console.log('Failed to load contact settings:', error);
     }
 }
 
@@ -920,18 +971,22 @@ function initScrollAnimations() {
 }
 
 /**
- * 回到頂部按鈕
+ * 回到頂部按鈕與懸浮社群按鈕
  */
 function initBackToTop() {
     const backToTop = document.querySelector('.back-to-top');
-    
-    if (!backToTop) return;
+    const floatingSocial = document.querySelector('.floating-social');
+    const floatTop = document.getElementById('float-top');
+    const floatEmail = document.getElementById('float-email');
 
     const toggleVisibility = () => {
-        if (window.scrollY > 500) {
-            backToTop.classList.add('visible');
+        const showThreshold = 300;
+        if (window.scrollY > showThreshold) {
+            if (backToTop) backToTop.classList.add('visible');
+            if (floatingSocial) floatingSocial.classList.add('visible');
         } else {
-            backToTop.classList.remove('visible');
+            if (backToTop) backToTop.classList.remove('visible');
+            if (floatingSocial) floatingSocial.classList.remove('visible');
         }
     };
 
@@ -950,13 +1005,35 @@ function initBackToTop() {
         }
     });
 
-    // 點擊回到頂部
-    backToTop.addEventListener('click', () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
+    // 點擊回到頂部（原始按鈕）
+    if (backToTop) {
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         });
-    });
+    }
+
+    // 點擊懸浮回到頂部按鈕
+    if (floatTop) {
+        floatTop.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    }
+
+    // 點擊 Email 按鈕
+    if (floatEmail) {
+        floatEmail.addEventListener('click', (e) => {
+            e.preventDefault();
+            const emailSpan = document.getElementById('contact-email');
+            const email = emailSpan ? emailSpan.textContent : 'service@yourremit.com';
+            window.location.href = `mailto:${email}`;
+        });
+    }
 }
 
 /**

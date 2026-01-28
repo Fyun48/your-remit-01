@@ -38,8 +38,12 @@ let contentData = {
     },
     contact: {
         phone: '02-2796-5959',
-        email: 'service@jinyouhui.com.tw',
-        address: '台北市內湖區安美街181號'
+        email: 'service@yourremit.com',
+        address: '台北市內湖區安美街181號',
+        facebook_url: '',
+        instagram_url: '',
+        linkedin_url: '',
+        line_url: ''
     }
 };
 

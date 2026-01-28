@@ -1620,8 +1620,8 @@ input, textarea, select {
 
 .footer-grid {
     display: grid;
-    grid-template-columns: 1.5fr repeat(4, 1fr);
-    gap: var(--space-2xl);
+    grid-template-columns: 1.5fr repeat(5, 1fr);
+    gap: var(--space-xl);
 }
 
 .footer-logo {
@@ -2067,7 +2067,7 @@ input, textarea, select {
     }
 
     .footer-grid {
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         gap: var(--space-xl);
     }
 
@@ -2088,6 +2088,19 @@ input, textarea, select {
     }
 
     .footer-app-download .footer-qr-codes {
+        justify-content: center;
+    }
+
+    .footer-contact {
+        grid-column: 1 / -1;
+        text-align: center;
+    }
+
+    .footer-contact .contact-list {
+        align-items: center;
+    }
+
+    .footer-contact .contact-list li {
         justify-content: center;
     }
 }
@@ -2450,6 +2463,180 @@ input, textarea, select {
 
     .footer-qr-codes {
         justify-content: center;
+    }
+}
+
+/* ================================
+   Footer Contact Info
+================================ */
+.footer-contact {
+    min-width: 200px;
+}
+
+.footer-contact .contact-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.footer-contact .contact-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    color: var(--color-gray-400);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.footer-contact .contact-list li svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: var(--color-accent);
+}
+
+.footer-contact .contact-list li span {
+    word-break: break-word;
+}
+
+/* ================================
+   Floating Social Buttons
+================================ */
+.floating-social {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 900;
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-base);
+}
+
+.floating-social.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.floating-btn {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.floating-btn:hover {
+    background: var(--color-accent);
+    transform: translateX(-4px);
+    box-shadow: 0 4px 12px rgba(45, 189, 182, 0.3);
+}
+
+.floating-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* LinkedIn */
+#float-linkedin {
+    background: #0A66C2;
+}
+
+#float-linkedin:hover {
+    background: #004182;
+}
+
+/* Facebook */
+#float-facebook {
+    background: #1877F2;
+}
+
+#float-facebook:hover {
+    background: #0d5bc4;
+}
+
+/* Instagram */
+#float-instagram {
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+}
+
+#float-instagram:hover {
+    background: linear-gradient(45deg, #dc2743 0%, #cc2366 50%, #bc1888 100%);
+}
+
+/* Email */
+#float-email {
+    background: var(--color-accent);
+}
+
+#float-email:hover {
+    background: var(--color-accent-dark);
+}
+
+/* Back to Top */
+.floating-top {
+    height: auto;
+    padding: 10px 8px;
+    flex-direction: column;
+    gap: 2px;
+    background: var(--color-primary);
+    margin-top: 8px;
+}
+
+.floating-top span {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.floating-top:hover {
+    background: var(--color-accent);
+}
+
+/* Hide old back-to-top button when floating social is visible */
+.floating-social.visible ~ .footer .back-to-top {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .floating-social {
+        right: 12px;
+        gap: 6px;
+    }
+
+    .floating-btn {
+        width: 40px;
+        height: 40px;
+    }
+
+    .floating-btn svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .floating-top {
+        padding: 8px 6px;
+    }
+
+    .floating-top span {
+        font-size: 9px;
+    }
+
+    .footer-contact {
+        width: 100%;
     }
 }
 
