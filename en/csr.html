@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-B345XE122S"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+
+        // 預設拒絕追蹤，等待用戶同意
+        gtag('consent', 'default', {
+            'analytics_storage': 'denied',
+            'ad_storage': 'denied'
+        });
+
+        gtag('js', new Date());
+        gtag('config', 'G-B345XE122S', {
+            'anonymize_ip': true
+        });
+
+        // 如果用戶之前已同意，立即啟用追蹤
+        if (localStorage.getItem('cookieConsent') === 'accepted') {
+            gtag('consent', 'update', {
+                'analytics_storage': 'granted',
+                'ad_storage': 'granted'
+            });
+        }
+    </script>
+    <!-- Microsoft Clarity -->
+    <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){
+            if (localStorage.getItem('cookieConsent') !== 'accepted') return;
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "v8f7fdqqm7");
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>企業責任 | 金優匯 Your Remit</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <!-- 頂部導航 -->
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <div class="logo-group">
+                    <span class="logo-yourremit">Your Remit</span>
+                    <div class="logo-yourpay">
+                        <svg class="logo-icon" width="28" height="32" viewBox="0 0 36 44">
+                            <path d="M4 8 Q4 4 8 4 L8 4 Q8 0 16 0 Q28 0 32 8 L26 14 Q24 10 18 10 Q12 10 12 14 L12 14 L12 40 Q12 44 8 44 Q4 44 4 40 Z" fill="#1B3A57"/>
+                            <path d="M20 22 Q20 18 24 18 L32 18 L32 26 Q32 34 24 34 L20 34 L20 28 Q20 26 24 26 L26 26 L26 24 Q26 22 24 22 Z" fill="#2DBDB6"/>
+                        </svg>
+                        <span>your<em>pay</em></span>
+                    </div>
+                </div>
+            </a>
+
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="news.html" class="nav-link">最新消息</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="csr.html" class="nav-link active">企業責任</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="index.html#career" class="nav-link">人才招募</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="index.html#about" class="nav-link">關於我們</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="app-download.html" class="nav-link">App 下載</a>
+                    </li>
+                    <li class="nav-item has-dropdown">
+                        <a href="index.html#services" class="nav-link">
+                            服務項目
+                            <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </a>
+                        <ul class="dropdown">
+                            <li><a href="service-detail.html?id=1">國際匯款服務</a></li>
+                            <li><a href="service-detail.html?id=2">金融科技</a></li>
+                            <li><a href="service-detail.html?id=3">企業顧問</a></li>
+                            <li><a href="service-detail.html?id=4">投資理財</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item has-dropdown">
+                        <a href="investors.html" class="nav-link">
+                            投資人關係
+                            <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </a>
+                        <ul class="dropdown">
+                            <li><a href="investors-financials.html">財務報告</a></li>
+                            <li><a href="investors-announcements.html">公司公告</a></li>
+                            <li><a href="investors-governance.html">公司治理</a></li>
+                            <li><a href="investors-shareholders.html">股東會資訊</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="header-actions">
+                <div class="lang-switch">
+                    <a href="#" class="lang-active">繁中</a>
+                    <span class="lang-divider">|</span>
+                    <a href="#">EN</a>
+                </div>
+            </div>
+
+            <button class="mobile-menu-btn" aria-label="開啟選單">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- 頁面標題區 -->
+    <section class="csr-hero">
+        <div class="csr-hero-bg">
+            <div class="csr-hero-overlay"></div>
+            <img src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=1920&q=80" alt="企業責任" class="csr-hero-image">
+        </div>
+        <div class="container">
+            <span class="section-tag">CSR</span>
+            <h1 class="page-title">企業社會責任</h1>
+            <p class="page-subtitle">以誠信經營為本，善盡企業公民責任，創造永續價值</p>
+        </div>
+    </section>
+
+    <!-- 核心理念 -->
+    <section class="csr-values">
+        <div class="container">
+            <div class="csr-values-grid">
+                <div class="csr-value-card animate-on-scroll">
+                    <div class="csr-value-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            <path d="M9 12l2 2 4-4"></path>
+                        </svg>
+                    </div>
+                    <h3>誠信經營</h3>
+                    <p>堅守法規與商業道德，建立透明的治理機制，維護客戶與股東權益</p>
+                </div>
+                <div class="csr-value-card animate-on-scroll">
+                    <div class="csr-value-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M12 6v6l4 2"></path>
+                        </svg>
+                    </div>
+                    <h3>永續發展</h3>
+                    <p>推動綠色營運，降低環境衝擊，為地球永續盡一份心力</p>
+                </div>
+                <div class="csr-value-card animate-on-scroll">
+                    <div class="csr-value-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+                    <h3>社會參與</h3>
+                    <p>積極投入公益活動，關懷弱勢族群，促進社會共好</p>
+                </div>
+                <div class="csr-value-card animate-on-scroll">
+                    <div class="csr-value-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                    </div>
+                    <h3>員工關懷</h3>
+                    <p>打造友善職場環境，重視員工發展，實現工作與生活平衡</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CSR 主要內容 -->
+    <section class="csr-content">
+        <div class="container">
+            <!-- 環境保護 -->
+            <article class="csr-article animate-on-scroll">
+                <div class="csr-article-image">
+                    <img src="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=600&h=400&fit=crop" alt="環境保護">
+                    <div class="csr-article-badge">Environment</div>
+                </div>
+                <div class="csr-article-content">
+                    <h2>環境保護</h2>
+                    <h3>綠色營運，守護地球</h3>
+                    <p>金優匯致力於減少營運過程中的環境足跡，我們實施多項綠色措施：</p>
+                    <ul class="csr-list">
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            全面推動無紙化作業，年減少用紙量達 85%
+                        </li>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            辦公室採用節能設備，年節電量超過 30%
+                        </li>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            鼓勵員工使用大眾運輸，提供交通補助
+                        </li>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            定期舉辦淨灘、植樹等環保活動
+                        </li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- 社會公益 -->
+            <article class="csr-article reverse animate-on-scroll">
+                <div class="csr-article-image">
+                    <img src="https://images.unsplash.com/photo-1593113598332-cd288d649433?w=600&h=400&fit=crop" alt="社會公益">
+                    <div class="csr-article-badge">Community</div>
+                </div>
+                <div class="csr-article-content">
+                    <h2>社會公益</h2>
+                    <h3>回饋社會，傳遞溫暖</h3>
+                    <p>我們相信企業的成功來自於社會的支持，因此積極回饋社會：</p>
+                    <ul class="csr-list">
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            設立「金優匯獎學金」，每年資助 50 位清寒學子
+                        </li>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            與社福機構合作，定期探訪獨居長者
+                        </li>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            捐助偏鄉學校數位設備，縮短城鄉數位落差
+                        </li>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            員工志工服務時數每年超過 2,000 小時
+                        </li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- 員工照顧 -->
+            <article class="csr-article animate-on-scroll">
+                <div class="csr-article-image">
+                    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&h=400&fit=crop" alt="員工照顧">
+                    <div class="csr-article-badge">People</div>
+                </div>
+                <div class="csr-article-content">
+                    <h2>員工照顧</h2>
+                    <h3>以人為本，共同成長</h3>
+                    <p>員工是公司最重要的資產，我們提供完善的照顧制度：</p>
+                    <ul class="csr-list">
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            具競爭力的薪資福利與年度分紅制度
+                        </li>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            完整的教育訓練與職涯發展計畫
+                        </li>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            彈性工時與遠端工作選項
+                        </li>
+                        <li>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            員工健康檢查與心理諮商服務
+                        </li>
+                    </ul>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- CSR 數據 -->
+    <section class="csr-stats">
+        <div class="container">
+            <div class="csr-stats-grid">
+                <div class="csr-stat-item animate-on-scroll">
+                    <span class="csr-stat-number" data-count="85">85</span>
+                    <span class="csr-stat-unit">%</span>
+                    <span class="csr-stat-label">無紙化作業比例</span>
+                </div>
+                <div class="csr-stat-item animate-on-scroll">
+                    <span class="csr-stat-number" data-count="2000">2,000</span>
+                    <span class="csr-stat-unit">+</span>
+                    <span class="csr-stat-label">年度志工服務時數</span>
+                </div>
+                <div class="csr-stat-item animate-on-scroll">
+                    <span class="csr-stat-number" data-count="50">50</span>
+                    <span class="csr-stat-unit">位</span>
+                    <span class="csr-stat-label">獎學金受益學生</span>
+                </div>
+                <div class="csr-stat-item animate-on-scroll">
+                    <span class="csr-stat-number" data-count="30">30</span>
+                    <span class="csr-stat-unit">%</span>
+                    <span class="csr-stat-label">年度節電成效</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CSR 報告下載 -->
+    <section class="csr-download">
+        <div class="container">
+            <div class="csr-download-card animate-on-scroll">
+                <div class="csr-download-content">
+                    <h2>企業社會責任報告書</h2>
+                    <p>詳細了解金優匯在環境保護、社會參與及公司治理方面的承諾與成果</p>
+                </div>
+                <div class="csr-download-actions">
+                    <a href="#" class="btn btn-primary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        下載 2024 年報告
+                    </a>
+                    <a href="#" class="btn btn-outline">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                        歷年報告書
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-main">
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-brand">
+                        <a href="index.html" class="footer-logo">
+                            <div class="logo-group">
+                                <span class="logo-yourremit">Your Remit</span>
+                                <div class="logo-yourpay">
+                                    <svg class="logo-icon" width="28" height="32" viewBox="0 0 36 44">
+                                        <path d="M4 8 Q4 4 8 4 L8 4 Q8 0 16 0 Q28 0 32 8 L26 14 Q24 10 18 10 Q12 10 12 14 L12 14 L12 40 Q12 44 8 44 Q4 44 4 40 Z" fill="#1B3A57"/>
+                                        <path d="M20 22 Q20 18 24 18 L32 18 L32 26 Q32 34 24 34 L20 34 L20 28 Q20 26 24 26 L26 26 L26 24 Q26 22 24 22 Z" fill="#2DBDB6"/>
+                                    </svg>
+                                    <span>your<em>pay</em></span>
+                                </div>
+                            </div>
+                        </a>
+                        <p class="footer-desc">金優匯股份有限公司</p>
+                        <div class="footer-social">
+                            <a href="#" class="social-link" id="footer-facebook" aria-label="Facebook" target="_blank">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                                </svg>
+                            </a>
+                            <a href="#" class="social-link" id="footer-line" aria-label="Line" target="_blank">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"></path>
+                                </svg>
+                            </a>
+                            <a href="#" class="social-link" id="footer-instagram" aria-label="Instagram" target="_blank">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="footer-links">
+                        <h4 class="footer-title">關於金優匯</h4>
+                        <ul>
+                            <li><a href="index.html#about">公司簡介</a></li>
+                            <li><a href="#">經營理念</a></li>
+                            <li><a href="#">發展沿革</a></li>
+                            <li><a href="#">據點資訊</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-links">
+                        <h4 class="footer-title">服務項目</h4>
+                        <ul>
+                            <li><a href="service-detail.html?id=1">國際匯款服務</a></li>
+                            <li><a href="service-detail.html?id=2">金融科技</a></li>
+                            <li><a href="service-detail.html?id=3">企業顧問</a></li>
+                            <li><a href="service-detail.html?id=4">投資理財</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-links">
+                        <h4 class="footer-title">客戶服務</h4>
+                        <ul>
+                            <li><a href="#">常見問題</a></li>
+                            <li><a href="index.html#contact">聯絡我們</a></li>
+                            <li><a href="#">隱私權政策</a></li>
+                            <li><a href="#">服務條款</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-links">
+                        <h4 class="footer-title">投資人專區</h4>
+                        <ul>
+                            <li><a href="investors-financials.html">財務報告</a></li>
+                            <li><a href="investors-announcements.html">公司公告</a></li>
+                            <li><a href="investors-governance.html">公司治理</a></li>
+                            <li><a href="investors-shareholders.html">股東會資訊</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-contact" id="footer-contact">
+                        <h4 class="footer-title">聯絡資訊</h4>
+                        <ul class="contact-list">
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                </svg>
+                                <span id="contact-phone">02-2796-5959</span>
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                </svg>
+                                <span id="contact-email">service@yourremit.com</span>
+                            </li>
+                            <li>
+                                <a href="#" id="contact-address-link" class="address-link" target="_blank">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                        <circle cx="12" cy="10" r="3"></circle>
+                                    </svg>
+                                    <span id="contact-address">台北市內湖區安美街181號</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="footer-bottom-content">
+                    <p class="copyright">Copyright © 2025 金優匯股份有限公司 Your Remit | yourpay. All Rights Reserved.</p>
+                </div>
+            </div>
+        </div>
+
+    </footer>
+
+    <!-- Floating Social Buttons -->
+    <div class="floating-social">
+        <a href="#" class="floating-btn" id="float-linkedin" aria-label="LinkedIn" target="_blank">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+            </svg>
+        </a>
+        <a href="#" class="floating-btn" id="float-facebook" aria-label="Facebook" target="_blank">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+            </svg>
+        </a>
+        <a href="#" class="floating-btn" id="float-instagram" aria-label="Instagram" target="_blank">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+            </svg>
+        </a>
+        <a href="#" class="floating-btn" id="float-email" aria-label="Email">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+        </a>
+        <button class="floating-btn floating-top" id="float-top" aria-label="回到頂部">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="19" x2="12" y2="5"></line>
+                <polyline points="5 12 12 5 19 12"></polyline>
+            </svg>
+            <span>TOP</span>
+        </button>
+    </div>
+
+    <script src="../api-client.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // CSR Page Dynamic Content Loader
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('CSR 頁面載入中...');
+
+            // Load Hero
+            try {
+                const { data: settings, error: settingsError } = await supabaseSelect('csr_settings', { limit: 1 });
+                console.log('Settings:', settings, 'Error:', settingsError);
+                if (settings && settings.length > 0 && settings[0].hero) {
+                    const hero = settings[0].hero;
+                    const heroTitle = document.querySelector('.csr-hero .page-title');
+                    const heroSubtitle = document.querySelector('.csr-hero .page-subtitle');
+                    const heroImage = document.querySelector('.csr-hero-image');
+
+                    if (heroTitle && hero.title) heroTitle.textContent = hero.title;
+                    if (heroSubtitle && hero.subtitle) heroSubtitle.textContent = hero.subtitle;
+                    if (heroImage && hero.image) heroImage.src = hero.image;
+                }
+            } catch (e) {
+                console.error('Hero 載入失敗:', e);
+            }
+
+            // Load Values
+            try {
+                const { data: values, error: valuesError } = await supabaseSelect('csr_values', { order: { column: 'sort_order', ascending: true } });
+                console.log('Values:', values, 'Error:', valuesError);
+                if (values && values.length > 0) {
+                    const valuesContainer = document.querySelector('.csr-values-grid');
+                    console.log('Values container found:', valuesContainer);
+                    if (valuesContainer) {
+                        const html = values.map(value => {
+                            const iconSvg = getIconSvg(value.icon);
+                            return `
+                                <div class="csr-value-card animate-on-scroll">
+                                    <div class="csr-value-icon">${iconSvg}</div>
+                                    <h3>${value.title}</h3>
+                                    <p>${value.description}</p>
+                                </div>
+                            `;
+                        }).join('');
+                        console.log('Values HTML length:', html.length);
+                        valuesContainer.innerHTML = html;
+                        console.log('Values container innerHTML set, children:', valuesContainer.children.length);
+                    }
+                }
+            } catch (e) {
+                console.error('Values 載入失敗:', e);
+            }
+
+            // Load Articles
+            try {
+                const { data: articles, error: articlesError } = await supabaseSelect('csr_articles', { order: { column: 'sort_order', ascending: true } });
+                console.log('Articles:', articles, 'Error:', articlesError);
+                if (articles && articles.length > 0) {
+                    const articlesContainer = document.querySelector('.csr-content .container');
+                    if (articlesContainer) {
+                        articlesContainer.innerHTML = articles.map((article, index) => {
+                            let points = [];
+                            try {
+                                points = Array.isArray(article.points) ? article.points : JSON.parse(article.points || '[]');
+                            } catch (e) {
+                                console.error('解析 points 失敗:', e);
+                            }
+                            const isReverse = index % 2 === 1;
+                            return `
+                                <article class="csr-article ${isReverse ? 'reverse' : ''} animate-on-scroll">
+                                    <div class="csr-article-image">
+                                        <img src="${article.image || ''}" alt="${article.title}">
+                                        <div class="csr-article-badge">${article.category}</div>
+                                    </div>
+                                    <div class="csr-article-content">
+                                        <h2>${article.title}</h2>
+                                        <h3>${article.subtitle}</h3>
+                                        <p>${article.intro || ''}</p>
+                                        <ul class="csr-list">
+                                            ${points.map(point => `
+                                                <li>
+                                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                                    </svg>
+                                                    ${point}
+                                                </li>
+                                            `).join('')}
+                                        </ul>
+                                    </div>
+                                </article>
+                            `;
+                        }).join('');
+                    }
+                }
+            } catch (e) {
+                console.error('Articles 載入失敗:', e);
+            }
+
+            // Load Stats
+            try {
+                const { data: stats, error: statsError } = await supabaseSelect('csr_stats', { order: { column: 'sort_order', ascending: true } });
+                console.log('Stats:', stats, 'Error:', statsError);
+                if (stats && stats.length > 0) {
+                    const statsContainer = document.querySelector('.csr-stats-grid');
+                    if (statsContainer) {
+                        statsContainer.innerHTML = stats.map(stat => `
+                            <div class="csr-stat-item animate-on-scroll">
+                                <span class="csr-stat-number">${stat.number}</span>
+                                <span class="csr-stat-unit">${stat.unit}</span>
+                                <span class="csr-stat-label">${stat.label}</span>
+                            </div>
+                        `).join('');
+                    }
+                }
+            } catch (e) {
+                console.error('Stats 載入失敗:', e);
+            }
+
+            // Load Reports
+            try {
+                const { data: reports, error: reportsError } = await supabaseSelect('csr_reports', { order: { column: 'sort_order', ascending: true } });
+                console.log('Reports:', reports, 'Error:', reportsError);
+                if (reports && reports.length > 0) {
+                    const downloadActions = document.querySelector('.csr-download-actions');
+                    if (downloadActions) {
+                        downloadActions.innerHTML = reports.slice(0, 2).map((report, index) => `
+                            <a href="${report.url}" class="btn ${index === 0 ? 'btn-primary' : 'btn-outline'}" target="_blank">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    ${index === 0 ?
+                                        '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line>' :
+                                        '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line>'
+                                    }
+                                </svg>
+                                ${index === 0 ? '下載 ' + report.title : '歷年報告書'}
+                            </a>
+                        `).join('');
+                    }
+                }
+            } catch (e) {
+                console.error('Reports 載入失敗:', e);
+            }
+
+            // Re-init scroll animations
+            initScrollAnimations();
+            console.log('CSR 頁面載入完成');
+        });
+
+        function getIconSvg(iconType) {
+            const icons = {
+                shield: '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path></svg>',
+                clock: '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>',
+                users: '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>',
+                heart: '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>',
+                leaf: '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6.13 1L6 16a2 2 0 0 0 2 2h15"></path><path d="M1 6.13S4.5 7 7.5 7c4.5 0 7.5-2 7.5-2s3 2 7.5 2c3 0 6.5-.87 6.5-.87"></path></svg>',
+                star: '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>'
+            };
+            return icons[iconType] || icons.shield;
+        }
+
+        function initScrollAnimations() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.animate-on-scroll').forEach(el => {
+                observer.observe(el);
+            });
+        }
+    </script>
+</body>
+</html>

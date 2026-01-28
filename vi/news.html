@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-B345XE122S"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+
+        // 預設拒絕追蹤，等待用戶同意
+        gtag('consent', 'default', {
+            'analytics_storage': 'denied',
+            'ad_storage': 'denied'
+        });
+
+        gtag('js', new Date());
+        gtag('config', 'G-B345XE122S', {
+            'anonymize_ip': true
+        });
+
+        // 如果用戶之前已同意，立即啟用追蹤
+        if (localStorage.getItem('cookieConsent') === 'accepted') {
+            gtag('consent', 'update', {
+                'analytics_storage': 'granted',
+                'ad_storage': 'granted'
+            });
+        }
+    </script>
+    <!-- Microsoft Clarity -->
+    <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){
+            if (localStorage.getItem('cookieConsent') !== 'accepted') return;
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "v8f7fdqqm7");
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>最新消息 | 金優匯 Your Remit</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <!-- 頂部導航 -->
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <div class="logo-group">
+                    <span class="logo-yourremit">Your Remit</span>
+                    <div class="logo-yourpay">
+                        <svg class="logo-icon" width="28" height="32" viewBox="0 0 36 44">
+                            <path d="M4 8 Q4 4 8 4 L8 4 Q8 0 16 0 Q28 0 32 8 L26 14 Q24 10 18 10 Q12 10 12 14 L12 14 L12 40 Q12 44 8 44 Q4 44 4 40 Z" fill="#1B3A57"/>
+                            <path d="M20 22 Q20 18 24 18 L32 18 L32 26 Q32 34 24 34 L20 34 L20 28 Q20 26 24 26 L26 26 L26 24 Q26 22 24 22 Z" fill="#2DBDB6"/>
+                        </svg>
+                        <span>your<em>pay</em></span>
+                    </div>
+                </div>
+            </a>
+
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="news.html" class="nav-link active">最新消息</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="csr.html" class="nav-link">企業責任</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="index.html#career" class="nav-link">人才招募</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="index.html#about" class="nav-link">關於我們</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="app-download.html" class="nav-link">App 下載</a>
+                    </li>
+                    <li class="nav-item has-dropdown">
+                        <a href="index.html#services" class="nav-link">
+                            服務項目
+                            <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </a>
+                        <ul class="dropdown">
+                            <li><a href="service-detail.html?id=1">國際匯款服務</a></li>
+                            <li><a href="service-detail.html?id=2">金融科技</a></li>
+                            <li><a href="service-detail.html?id=3">企業顧問</a></li>
+                            <li><a href="service-detail.html?id=4">投資理財</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item has-dropdown">
+                        <a href="investors.html" class="nav-link">
+                            投資人關係
+                            <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </a>
+                        <ul class="dropdown">
+                            <li><a href="investors-financials.html">財務報告</a></li>
+                            <li><a href="investors-announcements.html">公司公告</a></li>
+                            <li><a href="investors-governance.html">公司治理</a></li>
+                            <li><a href="investors-shareholders.html">股東會資訊</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="header-actions">
+                <div class="lang-switch">
+                    <a href="#" class="lang-active">繁中</a>
+                    <span class="lang-divider">|</span>
+                    <a href="#">EN</a>
+                </div>
+            </div>
+
+            <button class="mobile-menu-btn" aria-label="開啟選單">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- 頁面標題區 -->
+    <section class="page-hero">
+        <div class="container">
+            <span class="section-tag">News</span>
+            <h1 class="page-title">最新消息</h1>
+            <p class="page-subtitle">掌握金優匯最新動態與服務資訊</p>
+        </div>
+    </section>
+
+    <!-- 最新消息列表 -->
+    <section class="news-page-section">
+        <div class="container">
+            <!-- 篩選標籤 -->
+            <div class="news-filter">
+                <button class="filter-btn active" data-category="all">全部</button>
+                <button class="filter-btn" data-category="服務公告">服務公告</button>
+                <button class="filter-btn" data-category="活動資訊">活動資訊</button>
+                <button class="filter-btn" data-category="媒體報導">媒體報導</button>
+            </div>
+
+            <!-- 消息列表 -->
+            <div class="news-list" id="news-list">
+                <!-- 消息會由 JavaScript 動態載入 -->
+                <article class="news-item">
+                    <div class="news-item-date">
+                        <span class="date-day">18</span>
+                        <span class="date-month">2025/12</span>
+                    </div>
+                    <div class="news-item-content">
+                        <span class="news-item-category">服務公告</span>
+                        <h3 class="news-item-title">2025年農曆新年營業時間調整公告</h3>
+                        <p class="news-item-excerpt">為配合農曆新年假期，本公司營業時間將進行調整，敬請客戶提前安排匯款事宜。春節期間如有緊急需求，請撥打客服專線。</p>
+                        <a href="#" class="news-item-link">閱讀更多 →</a>
+                    </div>
+                </article>
+
+                <article class="news-item">
+                    <div class="news-item-date">
+                        <span class="date-day">15</span>
+                        <span class="date-month">2025/12</span>
+                    </div>
+                    <div class="news-item-content">
+                        <span class="news-item-category">活動資訊</span>
+                        <h3 class="news-item-title">金優匯年終感恩回饋活動開跑</h3>
+                        <p class="news-item-excerpt">感謝客戶一年來的支持，年終特別推出匯款手續費優惠活動，詳情請洽各服務據點或撥打客服專線。</p>
+                        <a href="#" class="news-item-link">閱讀更多 →</a>
+                    </div>
+                </article>
+
+                <article class="news-item">
+                    <div class="news-item-date">
+                        <span class="date-day">10</span>
+                        <span class="date-month">2025/12</span>
+                    </div>
+                    <div class="news-item-content">
+                        <span class="news-item-category">媒體報導</span>
+                        <h3 class="news-item-title">金優匯榮獲2024年度最佳金融服務獎</h3>
+                        <p class="news-item-excerpt">本公司以卓越的服務品質與創新的金融科技，獲得業界肯定，榮獲年度最佳金融服務獎。</p>
+                        <a href="#" class="news-item-link">閱讀更多 →</a>
+                    </div>
+                </article>
+
+                <article class="news-item">
+                    <div class="news-item-date">
+                        <span class="date-day">01</span>
+                        <span class="date-month">2025/12</span>
+                    </div>
+                    <div class="news-item-content">
+                        <span class="news-item-category">服務公告</span>
+                        <h3 class="news-item-title">新增東南亞匯款服務據點</h3>
+                        <p class="news-item-excerpt">為提供更便捷的服務，金優匯於越南、泰國新增合作據點，匯款更快速、更安全。</p>
+                        <a href="#" class="news-item-link">閱讀更多 →</a>
+                    </div>
+                </article>
+
+                <article class="news-item">
+                    <div class="news-item-date">
+                        <span class="date-day">25</span>
+                        <span class="date-month">2025/11</span>
+                    </div>
+                    <div class="news-item-content">
+                        <span class="news-item-category">活動資訊</span>
+                        <h3 class="news-item-title">金優匯App 2.0 全新改版上線</h3>
+                        <p class="news-item-excerpt">全新介面設計、更流暢的操作體驗，即刻下載體驗最新版本，享受更便捷的匯款服務。</p>
+                        <a href="#" class="news-item-link">閱讀更多 →</a>
+                    </div>
+                </article>
+            </div>
+
+            <!-- 分頁 -->
+            <div class="pagination">
+                <button class="pagination-btn" disabled>← 上一頁</button>
+                <div class="pagination-numbers">
+                    <span class="pagination-num active">1</span>
+                    <span class="pagination-num">2</span>
+                    <span class="pagination-num">3</span>
+                </div>
+                <button class="pagination-btn">下一頁 →</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-main">
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-brand">
+                        <a href="#" class="footer-logo">
+                            <div class="logo-group">
+                                <span class="logo-yourremit">Your Remit</span>
+                                <div class="logo-yourpay">
+                                    <svg class="logo-icon" width="28" height="32" viewBox="0 0 36 44">
+                                        <path d="M4 8 Q4 4 8 4 L8 4 Q8 0 16 0 Q28 0 32 8 L26 14 Q24 10 18 10 Q12 10 12 14 L12 14 L12 40 Q12 44 8 44 Q4 44 4 40 Z" fill="#1B3A57"/>
+                                        <path d="M20 22 Q20 18 24 18 L32 18 L32 26 Q32 34 24 34 L20 34 L20 28 Q20 26 24 26 L26 26 L26 24 Q26 22 24 22 Z" fill="#2DBDB6"/>
+                                    </svg>
+                                    <span>your<em>pay</em></span>
+                                </div>
+                            </div>
+                        </a>
+                        <p class="footer-desc">金優匯股份有限公司</p>
+                        <div class="footer-social">
+                            <a href="#" class="social-link" id="footer-facebook" aria-label="Facebook" target="_blank">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                                </svg>
+                            </a>
+                            <a href="#" class="social-link" id="footer-line" aria-label="Line" target="_blank">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"></path>
+                                </svg>
+                            </a>
+                            <a href="#" class="social-link" id="footer-instagram" aria-label="Instagram" target="_blank">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="footer-links">
+                        <h4 class="footer-title">關於金優匯</h4>
+                        <ul>
+                            <li><a href="#">公司簡介</a></li>
+                            <li><a href="#">經營理念</a></li>
+                            <li><a href="#">發展沿革</a></li>
+                            <li><a href="#">據點資訊</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-links">
+                        <h4 class="footer-title">服務項目</h4>
+                        <ul>
+                            <li><a href="#">國際匯款服務</a></li>
+                            <li><a href="#">金融科技</a></li>
+                            <li><a href="#">企業顧問</a></li>
+                            <li><a href="#">投資理財</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-links">
+                        <h4 class="footer-title">客戶服務</h4>
+                        <ul>
+                            <li><a href="#">常見問題</a></li>
+                            <li><a href="#">聯絡我們</a></li>
+                            <li><a href="#">隱私權政策</a></li>
+                            <li><a href="#">服務條款</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-links">
+                        <h4 class="footer-title">投資人專區</h4>
+                        <ul>
+                            <li><a href="investors-financials.html">財務報告</a></li>
+                            <li><a href="investors-announcements.html">公司公告</a></li>
+                            <li><a href="investors-governance.html">公司治理</a></li>
+                            <li><a href="investors-shareholders.html">股東會資訊</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-contact" id="footer-contact">
+                        <h4 class="footer-title">聯絡資訊</h4>
+                        <ul class="contact-list">
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                </svg>
+                                <span id="contact-phone">02-2796-5959</span>
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                </svg>
+                                <span id="contact-email">service@yourremit.com</span>
+                            </li>
+                            <li>
+                                <a href="#" id="contact-address-link" class="address-link" target="_blank">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                        <circle cx="12" cy="10" r="3"></circle>
+                                    </svg>
+                                    <span id="contact-address">台北市內湖區安美街181號</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="footer-bottom-content">
+                    <p class="copyright">Copyright © 2025 金優匯股份有限公司 Your Remit | yourpay. All Rights Reserved.</p>
+                </div>
+            </div>
+        </div>
+
+    </footer>
+
+    <!-- Floating Social Buttons -->
+    <div class="floating-social">
+        <a href="#" class="floating-btn" id="float-linkedin" aria-label="LinkedIn" target="_blank">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+            </svg>
+        </a>
+        <a href="#" class="floating-btn" id="float-facebook" aria-label="Facebook" target="_blank">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+            </svg>
+        </a>
+        <a href="#" class="floating-btn" id="float-instagram" aria-label="Instagram" target="_blank">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+            </svg>
+        </a>
+        <a href="#" class="floating-btn" id="float-email" aria-label="Email">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+        </a>
+        <button class="floating-btn floating-top" id="float-top" aria-label="回到頂部">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="19" x2="12" y2="5"></line>
+                <polyline points="5 12 12 5 19 12"></polyline>
+            </svg>
+            <span>TOP</span>
+        </button>
+    </div>
+
+    <!-- API Client -->
+    <script src="../api-client.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
