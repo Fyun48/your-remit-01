@@ -3091,41 +3091,43 @@ input, textarea, select {
 /* ================================
    Viewport Fill - Desktop
    Header + Banner + Hero = 100vh
+   Ratio: Nav : Banner : Hero = 1 : 5.8 : 4.2
+   Banner = 58%, Hero = 42% of remaining space
 ================================ */
 @media (min-width: 1025px) {
     .home-viewport-fill .banner-slider {
-        height: calc(100vh - var(--header-height) - 500px);
-        min-height: 350px;
-        max-height: 600px;
+        height: calc((100vh - var(--header-height)) * 0.58);
+        min-height: 380px;
+        max-height: 700px;
     }
 
     .home-viewport-fill .hero {
-        height: 500px;
-        min-height: 400px;
+        height: calc((100vh - var(--header-height)) * 0.42);
+        min-height: 320px;
     }
 }
 
 /* For larger screens (1440p+) */
 @media (min-width: 1025px) and (min-height: 900px) {
     .home-viewport-fill .banner-slider {
-        height: calc(100vh - var(--header-height) - 520px);
-        max-height: 650px;
+        height: calc((100vh - var(--header-height)) * 0.58);
+        max-height: 750px;
     }
 
     .home-viewport-fill .hero {
-        height: 520px;
+        height: calc((100vh - var(--header-height)) * 0.42);
     }
 }
 
 /* For very large screens (4K) */
 @media (min-width: 1025px) and (min-height: 1200px) {
     .home-viewport-fill .banner-slider {
-        height: calc(100vh - var(--header-height) - 580px);
-        max-height: 800px;
+        height: calc((100vh - var(--header-height)) * 0.58);
+        max-height: 850px;
     }
 
     .home-viewport-fill .hero {
-        height: 580px;
+        height: calc((100vh - var(--header-height)) * 0.42);
     }
 }
 
