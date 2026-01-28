@@ -486,10 +486,14 @@
         // 取得儲存的帳密（如果有的話）
         function getCredentials() {
             const stored = localStorage.getItem('adminCredentials');
+            console.log('localStorage adminCredentials:', stored);
             if (stored) {
                 try {
-                    return JSON.parse(stored);
+                    const parsed = JSON.parse(stored);
+                    console.log('Parsed credentials:', parsed);
+                    return parsed;
                 } catch (e) {
+                    console.error('Failed to parse credentials:', e);
                     return null;
                 }
             }
@@ -507,6 +511,10 @@
             const credentials = getCredentials();
             const validUsername = credentials ? credentials.username : DEFAULT_USERNAME;
             const validPassword = credentials ? credentials.password : DEFAULT_PASSWORD;
+
+            console.log('輸入帳號:', username);
+            console.log('有效帳號:', validUsername);
+            console.log('密碼比對:', password === validPassword);
 
             // 驗證帳密
             if (username === validUsername && password === validPassword) {
@@ -530,6 +538,15 @@
         // 檢查是否已登入
         if (sessionStorage.getItem('isLoggedIn') === 'true') {
             window.location.href = 'yourremit-admin.html';
+        }
+
+        // 顯示目前儲存的帳密（除錯用）
+        console.log('=== 登入頁面載入 ===');
+        const currentCreds = getCredentials();
+        if (currentCreds) {
+            console.log('目前儲存的帳號:', currentCreds.username);
+        } else {
+            console.log('沒有儲存的帳密，使用預設值');
         }
     </script>
 </body>

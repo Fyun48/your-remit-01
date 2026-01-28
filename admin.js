@@ -2705,6 +2705,8 @@ function getAdminCredentials() {
 function saveAdminCredentials(username, password) {
     const credentials = { username, password };
     localStorage.setItem('adminCredentials', JSON.stringify(credentials));
+    console.log('已儲存新的帳密:', { username, password: '***' });
+    console.log('localStorage 內容:', localStorage.getItem('adminCredentials'));
 }
 
 // Toast notification
