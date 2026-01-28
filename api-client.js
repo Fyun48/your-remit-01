@@ -374,14 +374,60 @@ async function getAdminCredentialsFromDB() {
 
 async function saveAdminCredentialsToDB(username, password) {
     try {
-        const { data: existing } = await supabaseSelect('admin_settings', { limit: 1 });
+        console.log('=== 開始儲存帳密 ===');
+        console.log('新帳號:', username);
+        console.log('新密碼:', password);
+
+        const { data: existing, error: selectError } = await supabaseSelect('admin_settings', { limit: 1 });
+        console.log('查詢現有資料:', existing);
+        console.log('查詢錯誤:', selectError);
+
         if (existing && existing.length > 0) {
-            return await supabaseUpdate('admin_settings', existing[0].id, { username, password });
+            const recordId = existing[0].id;
+            console.log('更新現有記錄, ID:', recordId);
+
+            // 直接使用 fetch 進行更新，確保正確處理
+            const updateUrl = `${SUPABASE_REST_URL}/admin_settings?id=eq.${recordId}`;
+            console.log('更新 URL:', updateUrl);
+
+            const updatePayload = { username, password, updated_at: new Date().toISOString() };
+            console.log('更新內容:', updatePayload);
+
+            const response = await fetch(updateUrl, {
+                method: 'PATCH',
+                headers: {
+                    'apikey': SUPABASE_ANON_KEY,
+                    'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                    'Content-Type': 'application/json',
+                    'Prefer': 'return=representation'
+                },
+                body: JSON.stringify(updatePayload)
+            });
+
+            console.log('HTTP 狀態:', response.status);
+            const responseText = await response.text();
+            console.log('回應內容:', responseText);
+
+            if (!response.ok) {
+                throw new Error(`更新失敗: ${response.status} - ${responseText}`);
+            }
+
+            const result = responseText ? JSON.parse(responseText) : [];
+            console.log('解析結果:', result);
+
+            if (Array.isArray(result) && result.length === 0) {
+                throw new Error('更新失敗：沒有找到匹配的記錄或 RLS 政策阻擋');
+            }
+
+            return { data: result, error: null };
         } else {
-            return await supabaseInsert('admin_settings', { username, password });
+            console.log('新增記錄');
+            const result = await supabaseInsert('admin_settings', { username, password });
+            console.log('新增結果:', result);
+            return result;
         }
     } catch (e) {
-        console.error('Error saving admin credentials:', e);
-        return { error: e.message };
+        console.error('儲存帳密錯誤:', e);
+        return { data: null, error: e.message || e };
     }
 }
