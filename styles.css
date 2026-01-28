@@ -2501,6 +2501,25 @@ input, textarea, select {
     word-break: break-word;
 }
 
+.footer-contact .address-link {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    color: var(--color-gray-400);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.footer-contact .address-link:hover {
+    color: var(--color-accent);
+}
+
+.footer-contact .address-link svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: var(--color-accent);
+}
+
 /* ================================
    Floating Social Buttons
 ================================ */

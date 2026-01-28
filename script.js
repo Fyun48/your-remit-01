@@ -80,6 +80,7 @@ async function loadSiteSettings() {
         const { data, error } = await supabaseSelect('content_settings', { limit: 1 });
         if (error || !data || data.length === 0) {
             console.log('Content settings not available, using defaults');
+            initAddressLink(); // 使用預設地址
             return;
         }
 
@@ -95,6 +96,9 @@ async function loadSiteSettings() {
         if (emailEl && contact.email) emailEl.textContent = contact.email;
         if (addressEl && contact.address) addressEl.textContent = contact.address;
 
+        // 更新地址的 Google Maps 連結
+        initAddressLink();
+
         // 更新懸浮社群按鈕連結
         const linkedinBtn = document.getElementById('float-linkedin');
         const facebookBtn = document.getElementById('float-facebook');
@@ -104,10 +108,10 @@ async function loadSiteSettings() {
         if (facebookBtn && contact.facebook_url) facebookBtn.href = contact.facebook_url;
         if (instagramBtn && contact.instagram_url) instagramBtn.href = contact.instagram_url;
 
-        // 更新 Footer 社群連結
-        const footerFacebook = document.querySelector('.footer-social a[aria-label="Facebook"]');
-        const footerLine = document.querySelector('.footer-social a[aria-label="Line"]');
-        const footerInstagram = document.querySelector('.footer-social a[aria-label="Instagram"]');
+        // 更新 Footer 社群連結（與懸浮按鈕同步）
+        const footerFacebook = document.getElementById('footer-facebook');
+        const footerLine = document.getElementById('footer-line');
+        const footerInstagram = document.getElementById('footer-instagram');
 
         if (footerFacebook && contact.facebook_url) footerFacebook.href = contact.facebook_url;
         if (footerLine && contact.line_url) footerLine.href = contact.line_url;
@@ -116,6 +120,21 @@ async function loadSiteSettings() {
         console.log('Contact settings loaded successfully');
     } catch (error) {
         console.log('Failed to load contact settings:', error);
+        initAddressLink(); // 發生錯誤時也要初始化地址連結
+    }
+}
+
+/**
+ * 初始化地址的 Google Maps 連結
+ */
+function initAddressLink() {
+    const addressLink = document.getElementById('contact-address-link');
+    const addressEl = document.getElementById('contact-address');
+
+    if (addressLink && addressEl) {
+        const address = addressEl.textContent || '台北市內湖區安美街181號';
+        const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+        addressLink.href = googleMapsUrl;
     }
 }
 
