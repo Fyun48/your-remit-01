@@ -277,15 +277,16 @@ function hideCookieBanner(banner) {
  * 啟用追蹤功能（用戶同意後）
  */
 function enableTracking() {
-    // 這裡可以放 Google Analytics、Facebook Pixel 等追蹤代碼
     console.log('Cookie 已接受，追蹤功能已啟用');
 
-    // 範例：如果要加入 Google Analytics，可以在這裡初始化
-    // if (typeof gtag !== 'undefined') {
-    //     gtag('consent', 'update', {
-    //         'analytics_storage': 'granted'
-    //     });
-    // }
+    // 啟用 Google Analytics 4 追蹤
+    if (typeof gtag !== 'undefined') {
+        gtag('consent', 'update', {
+            'analytics_storage': 'granted',
+            'ad_storage': 'granted'
+        });
+        console.log('Google Analytics 4 追蹤已啟用');
+    }
 }
 
 /**
