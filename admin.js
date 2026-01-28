@@ -2614,9 +2614,18 @@ function getTimeAgo(date) {
 
 // Settings
 async function initSettings() {
+    console.log('=== initSettings 開始 ===');
     const siteForm = document.getElementById('siteSettingsForm');
     const accountForm = document.getElementById('accountSettingsForm');
     const currentUsernameEl = document.getElementById('currentUsername');
+
+    console.log('siteForm:', siteForm);
+    console.log('accountForm:', accountForm);
+
+    if (!accountForm) {
+        console.error('accountSettingsForm 元素不存在！');
+        return;
+    }
 
     // 從 Supabase 載入目前的帳號名稱
     const credentials = await getAdminCredentialsAsync();
@@ -2624,16 +2633,21 @@ async function initSettings() {
         currentUsernameEl.textContent = credentials.username;
     }
 
-    siteForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        showToast('網站設定已儲存！');
-    });
+    if (siteForm) {
+        siteForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            showToast('網站設定已儲存！');
+        });
+    }
 
     accountForm.addEventListener('submit', async (e) => {
         e.preventDefault();
+        console.log('=== 帳號表單提交 ===');
         const newUsername = accountForm.querySelector('[name="newUsername"]').value.trim();
         const newPassword = accountForm.querySelector('[name="newPassword"]').value;
         const confirmPassword = accountForm.querySelector('[name="confirmPassword"]').value;
+        console.log('輸入的新帳號:', newUsername);
+        console.log('輸入的新密碼:', newPassword ? '(有輸入)' : '(空)');
 
         // 從 Supabase 取得目前的帳密
         const currentCredentials = await getAdminCredentialsAsync();
@@ -2670,8 +2684,11 @@ async function initSettings() {
             return;
         }
 
+        console.log('準備儲存 - 帳號:', updatedUsername, '密碼:', updatedPassword);
+
         // 儲存新的帳密到 Supabase
         const result = await saveAdminCredentialsToDB(updatedUsername, updatedPassword);
+        console.log('saveAdminCredentialsToDB 回傳結果:', result);
 
         if (!result.error) {
             // 更新顯示的帳號名稱
