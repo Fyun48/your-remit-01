@@ -499,6 +499,27 @@ input, textarea, select {
     padding: var(--space-2xl) 0;
 }
 
+/* Hero 粒子裝飾 */
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image:
+        radial-gradient(circle at 20% 30%, rgba(45, 189, 182, 0.08) 0%, transparent 25%),
+        radial-gradient(circle at 80% 70%, rgba(45, 189, 182, 0.06) 0%, transparent 25%),
+        radial-gradient(circle at 40% 80%, rgba(45, 189, 182, 0.04) 0%, transparent 20%);
+    animation: heroParticles 20s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes heroParticles {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(1.05); }
+}
+
 .hero-bg {
     position: absolute;
     inset: 0;
@@ -508,8 +529,16 @@ input, textarea, select {
 .hero-gradient {
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse at 30% 20%, rgba(45, 189, 182, 0.15) 0%, transparent 50%),
-                radial-gradient(ellipse at 70% 80%, rgba(27, 58, 87, 0.3) 0%, transparent 50%);
+    background:
+        radial-gradient(ellipse at 30% 20%, rgba(45, 189, 182, 0.2) 0%, transparent 40%),
+        radial-gradient(ellipse at 70% 80%, rgba(27, 58, 87, 0.35) 0%, transparent 45%),
+        radial-gradient(ellipse at 50% 50%, rgba(45, 189, 182, 0.05) 0%, transparent 60%);
+    animation: gradientShift 15s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.85; }
 }
 
 .hero-shape {
@@ -590,14 +619,22 @@ input, textarea, select {
 .hero-badge {
     display: inline-block;
     padding: var(--space-xs) var(--space-md);
-    background: rgba(45, 189, 182, 0.15);
-    border: 1px solid rgba(45, 189, 182, 0.3);
+    background: rgba(45, 189, 182, 0.12);
+    border: 1px solid rgba(45, 189, 182, 0.35);
     border-radius: var(--radius-full);
-    color: var(--color-accent);
+    color: var(--color-accent-light);
     font-size: var(--text-small);
     font-weight: 500;
     letter-spacing: 2px;
     margin-bottom: var(--space-md);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 0 20px rgba(45, 189, 182, 0.15);
+    animation: badgePulse 3s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(45, 189, 182, 0.15); }
+    50% { box-shadow: 0 0 30px rgba(45, 189, 182, 0.25); }
 }
 
 .hero-title {
@@ -618,6 +655,26 @@ input, textarea, select {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    position: relative;
+    text-shadow: 0 0 80px rgba(45, 189, 182, 0.5);
+}
+
+.hero-title-highlight::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--gradient-accent);
+    border-radius: 2px;
+    opacity: 0.6;
+    animation: underlineGlow 2s ease-in-out infinite;
+}
+
+@keyframes underlineGlow {
+    0%, 100% { opacity: 0.4; transform: scaleX(0.95); }
+    50% { opacity: 0.8; transform: scaleX(1); }
 }
 
 .hero-subtitle {
@@ -659,26 +716,87 @@ input, textarea, select {
 .btn-primary {
     background: var(--gradient-accent);
     color: var(--color-white);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+    z-index: -1;
+}
+
+.btn-primary:hover::before {
+    left: 100%;
 }
 
 .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-glow);
+    transform: translateY(-3px);
+    box-shadow:
+        0 0 20px rgba(45, 189, 182, 0.4),
+        0 0 40px rgba(45, 189, 182, 0.2),
+        0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 .btn-glow {
-    animation: glow 2s ease-in-out infinite;
+    animation: btnGlow 2.5s ease-in-out infinite;
+    box-shadow:
+        0 0 15px rgba(45, 189, 182, 0.3),
+        0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes btnGlow {
+    0%, 100% {
+        box-shadow:
+            0 0 15px rgba(45, 189, 182, 0.3),
+            0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    50% {
+        box-shadow:
+            0 0 25px rgba(45, 189, 182, 0.5),
+            0 0 50px rgba(45, 189, 182, 0.2),
+            0 4px 20px rgba(0, 0, 0, 0.15);
+    }
 }
 
 .btn-outline-light {
-    background: transparent;
+    background: rgba(255, 255, 255, 0.05);
     color: var(--color-white);
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-outline-light::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 .btn-outline-light:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.12);
     border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.btn-outline-light:hover::before {
+    opacity: 1;
 }
 
 /* Hero Visual */
@@ -696,11 +814,54 @@ input, textarea, select {
     align-items: center;
     gap: var(--space-sm);
     padding: var(--space-lg) var(--space-xl);
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0.05) 100%
+    );
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
     border-radius: var(--radius-xl);
     color: var(--color-white);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Glassmorphism 光澤效果 */
+.hero-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -50%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.1),
+        transparent
+    );
+    transform: skewX(-20deg);
+    transition: left 0.6s ease;
+}
+
+.hero-card:hover::before {
+    left: 150%;
+}
+
+.hero-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    border-color: rgba(45, 189, 182, 0.4);
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.2),
+        0 0 30px rgba(45, 189, 182, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .hero-card .card-icon {
@@ -711,11 +872,24 @@ input, textarea, select {
     justify-content: center;
     background: var(--gradient-accent);
     border-radius: var(--radius-lg);
+    position: relative;
+    box-shadow: 0 4px 15px rgba(45, 189, 182, 0.3);
+    transition: all 0.3s ease;
+}
+
+.hero-card:hover .card-icon {
+    transform: scale(1.1);
+    box-shadow: 0 6px 25px rgba(45, 189, 182, 0.5);
 }
 
 .hero-card span {
     font-size: var(--text-small);
     font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.hero-card:hover span {
+    color: var(--color-accent-light);
 }
 
 /* Scroll Indicator */
@@ -1795,11 +1969,32 @@ input, textarea, select {
 
 @keyframes float {
     0%, 100% {
-        transform: translateY(0);
+        transform: translateY(0) rotate(0deg);
+    }
+    25% {
+        transform: translateY(-10px) rotate(0.5deg);
     }
     50% {
-        transform: translateY(-20px);
+        transform: translateY(-18px) rotate(0deg);
     }
+    75% {
+        transform: translateY(-10px) rotate(-0.5deg);
+    }
+}
+
+/* 不同卡片的差異化浮動 */
+.hero-card-1 {
+    animation: float 5s ease-in-out infinite;
+}
+
+.hero-card-2 {
+    animation: float 6s ease-in-out infinite;
+    animation-delay: -2s;
+}
+
+.hero-card-3 {
+    animation: float 5.5s ease-in-out infinite;
+    animation-delay: -1s;
 }
 
 @keyframes pulse {
