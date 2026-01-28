@@ -68,57 +68,53 @@
             <nav class="nav">
                 <ul class="nav-list">
                     <li class="nav-item">
-                        <a href="news.html" class="nav-link">最新消息</a>
+                        <a href="news.html" class="nav-link" data-i18n="nav.news">最新消息</a>
                     </li>
                     <li class="nav-item">
-                        <a href="csr.html" class="nav-link">企業責任</a>
+                        <a href="csr.html" class="nav-link" data-i18n="nav.csr">企業責任</a>
                     </li>
                     <li class="nav-item">
-                        <a href="#career" class="nav-link">人才招募</a>
+                        <a href="#career" class="nav-link" data-i18n="nav.careers">人才招募</a>
                     </li>
                     <li class="nav-item">
-                        <a href="#about" class="nav-link">關於我們</a>
+                        <a href="#about" class="nav-link" data-i18n="nav.about">關於我們</a>
                     </li>
                     <li class="nav-item">
-                        <a href="app-download.html" class="nav-link">App 下載</a>
+                        <a href="app-download.html" class="nav-link" data-i18n="nav.download">App 下載</a>
                     </li>
                     <li class="nav-item has-dropdown">
                         <a href="#services" class="nav-link">
-                            服務項目
+                            <span data-i18n="nav.services">服務項目</span>
                             <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="6 9 12 15 18 9"></polyline>
                             </svg>
                         </a>
                         <ul class="dropdown">
-                            <li><a href="service-detail.html?id=1">國際匯款服務</a></li>
-                            <li><a href="service-detail.html?id=2">金融科技</a></li>
-                            <li><a href="service-detail.html?id=3">企業顧問</a></li>
-                            <li><a href="service-detail.html?id=4">投資理財</a></li>
+                            <li><a href="service-detail.html?id=1" data-i18n="service.remittance">國際匯款服務</a></li>
+                            <li><a href="service-detail.html?id=2" data-i18n="service.fintech">金融科技</a></li>
+                            <li><a href="service-detail.html?id=3" data-i18n="service.consulting">企業顧問</a></li>
+                            <li><a href="service-detail.html?id=4" data-i18n="service.investment">投資理財</a></li>
                         </ul>
                     </li>
                     <li class="nav-item has-dropdown">
                         <a href="investors.html" class="nav-link">
-                            投資人關係
+                            <span data-i18n="nav.investors">投資人關係</span>
                             <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="6 9 12 15 18 9"></polyline>
                             </svg>
                         </a>
                         <ul class="dropdown">
-                            <li><a href="investors-financials.html">財務報告</a></li>
-                            <li><a href="investors-announcements.html">公司公告</a></li>
-                            <li><a href="investors-governance.html">公司治理</a></li>
-                            <li><a href="investors-shareholders.html">股東會資訊</a></li>
+                            <li><a href="investors-financials.html" data-i18n="investor.financial">財務報告</a></li>
+                            <li><a href="investors-announcements.html" data-i18n="investor.announcement">公司公告</a></li>
+                            <li><a href="investors-governance.html" data-i18n="investor.governance">公司治理</a></li>
+                            <li><a href="investors-shareholders.html" data-i18n="investor.shareholder">股東會資訊</a></li>
                         </ul>
                     </li>
                 </ul>
             </nav>
 
-            <div class="header-actions">
-                <div class="lang-switch">
-                    <a href="#" class="lang-active">繁中</a>
-                    <span class="lang-divider">|</span>
-                    <a href="#">EN</a>
-                </div>
+            <div class="header-actions nav-right">
+                <!-- 語言切換器由 i18n.js 動態生成 -->
             </div>
 
             <button class="mobile-menu-btn" aria-label="開啟選單">
@@ -166,27 +162,27 @@
             <div class="hero-layout">
                 <!-- 左側：標題區塊 -->
                 <div class="hero-left">
-                    <div class="hero-badge animate-fade-in-up">專業 · 信賴 · 創新</div>
+                    <div class="hero-badge animate-fade-in-up" data-i18n="hero.badge">專業 · 信賴 · 創新</div>
                     <h1 class="hero-title">
-                        <span class="hero-title-line animate-fade-in-up delay-100">金融服務</span>
-                        <span class="hero-title-line hero-title-highlight animate-fade-in-up delay-200">新紀元</span>
+                        <span class="hero-title-line animate-fade-in-up delay-100" data-i18n="hero.title1">金融服務</span>
+                        <span class="hero-title-line hero-title-highlight animate-fade-in-up delay-200" data-i18n="hero.title2">新紀元</span>
                     </h1>
                 </div>
 
                 <!-- 右側：描述與按鈕 -->
                 <div class="hero-right">
-                    <p class="hero-subtitle animate-fade-in-up delay-300">
+                    <p class="hero-subtitle animate-fade-in-up delay-300" data-i18n="hero.subtitle">
                         為您提供最專業的金融解決方案，跨境匯款、投資理財、企業顧問一站式服務
                     </p>
                     <div class="hero-cta animate-fade-in-up delay-400">
                         <a href="news.html" class="btn btn-primary btn-glow">
-                            最新消息
+                            <span data-i18n="hero.cta_news">最新消息</span>
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <line x1="5" y1="12" x2="19" y2="12"></line>
                                 <polyline points="12 5 19 12 12 19"></polyline>
                             </svg>
                         </a>
-                        <a href="#about" class="btn btn-outline-light">關於我們</a>
+                        <a href="#about" class="btn btn-outline-light" data-i18n="hero.cta_about">關於我們</a>
                     </div>
                     <!-- 視覺裝飾 -->
                     <div class="hero-visual">
@@ -198,7 +194,7 @@
                                     <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
                                 </svg>
                             </div>
-                            <span>全球匯款</span>
+                            <span data-i18n="hero.card_global">全球匯款</span>
                         </div>
                         <div class="hero-card hero-card-2 animate-float delay-200">
                             <div class="card-icon">
@@ -206,7 +202,7 @@
                                     <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
                                 </svg>
                             </div>
-                            <span>金融服務</span>
+                            <span data-i18n="hero.card_finance">金融服務</span>
                         </div>
                         <div class="hero-card hero-card-3 animate-float delay-400">
                             <div class="card-icon">
@@ -215,7 +211,7 @@
                                     <polyline points="22 4 12 14.01 9 11.01"></polyline>
                                 </svg>
                             </div>
-                            <span>安全可靠</span>
+                            <span data-i18n="hero.card_secure">安全可靠</span>
                         </div>
                     </div>
                 </div>
@@ -584,8 +580,10 @@
         </button>
     </div>
 
-    <!-- API Client（用於連接 NeonDB 資料庫） -->
+    <!-- API Client（用於連接 Supabase 資料庫） -->
     <script src="api-client.js"></script>
+    <!-- 多國語系 -->
+    <script src="i18n.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
