@@ -479,37 +479,55 @@
     </div>
 
     <script>
-        // Default credentials (for demo purposes)
+        // 預設帳密（首次使用或重設時）
         const DEFAULT_USERNAME = 'admin';
         const DEFAULT_PASSWORD = 'admin123';
 
+        // 取得儲存的帳密（如果有的話）
+        function getCredentials() {
+            const stored = localStorage.getItem('adminCredentials');
+            if (stored) {
+                try {
+                    return JSON.parse(stored);
+                } catch (e) {
+                    return null;
+                }
+            }
+            return null;
+        }
+
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             const errorMessage = document.getElementById('errorMessage');
 
-            // Check credentials
-            if (username === DEFAULT_USERNAME && password === DEFAULT_PASSWORD) {
-                // Store login state
+            // 取得目前的帳密設定
+            const credentials = getCredentials();
+            const validUsername = credentials ? credentials.username : DEFAULT_USERNAME;
+            const validPassword = credentials ? credentials.password : DEFAULT_PASSWORD;
+
+            // 驗證帳密
+            if (username === validUsername && password === validPassword) {
+                // 儲存登入狀態
                 sessionStorage.setItem('isLoggedIn', 'true');
                 sessionStorage.setItem('username', username);
-                
-                // Redirect to admin panel
+
+                // 導向後台
                 window.location.href = 'yourremit-admin.html';
             } else {
-                // Show error message
+                // 顯示錯誤訊息
                 errorMessage.classList.add('show');
-                
-                // Remove error after 3 seconds
+
+                // 3 秒後移除錯誤訊息
                 setTimeout(() => {
                     errorMessage.classList.remove('show');
                 }, 3000);
             }
         });
 
-        // Check if already logged in
+        // 檢查是否已登入
         if (sessionStorage.getItem('isLoggedIn') === 'true') {
             window.location.href = 'yourremit-admin.html';
         }

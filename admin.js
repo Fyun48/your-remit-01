@@ -2616,30 +2616,95 @@ function getTimeAgo(date) {
 function initSettings() {
     const siteForm = document.getElementById('siteSettingsForm');
     const accountForm = document.getElementById('accountSettingsForm');
-    
+    const currentUsernameEl = document.getElementById('currentUsername');
+
+    // 載入目前的帳號名稱
+    const credentials = getAdminCredentials();
+    if (currentUsernameEl) {
+        currentUsernameEl.textContent = credentials.username;
+    }
+
     siteForm.addEventListener('submit', (e) => {
         e.preventDefault();
         showToast('網站設定已儲存！');
     });
-    
+
     accountForm.addEventListener('submit', (e) => {
         e.preventDefault();
+        const newUsername = accountForm.querySelector('[name="newUsername"]').value.trim();
         const newPassword = accountForm.querySelector('[name="newPassword"]').value;
         const confirmPassword = accountForm.querySelector('[name="confirmPassword"]').value;
-        
-        if (newPassword !== confirmPassword) {
-            alert('兩次輸入的密碼不一致');
+
+        // 取得目前的帳密
+        const currentCredentials = getAdminCredentials();
+        let updatedUsername = currentCredentials.username;
+        let updatedPassword = currentCredentials.password;
+        let hasChanges = false;
+
+        // 檢查是否要更新帳號
+        if (newUsername && newUsername.length > 0) {
+            if (newUsername.length < 3) {
+                alert('帳號長度至少需要 3 個字元');
+                return;
+            }
+            updatedUsername = newUsername;
+            hasChanges = true;
+        }
+
+        // 檢查是否要更新密碼
+        if (newPassword && newPassword.length > 0) {
+            if (newPassword !== confirmPassword) {
+                alert('兩次輸入的密碼不一致');
+                return;
+            }
+            if (newPassword.length < 6) {
+                alert('密碼長度至少需要 6 個字元');
+                return;
+            }
+            updatedPassword = newPassword;
+            hasChanges = true;
+        }
+
+        if (!hasChanges) {
+            alert('請輸入新的帳號或密碼');
             return;
         }
-        
-        if (newPassword.length > 0 && newPassword.length < 6) {
-            alert('密碼長度至少需要 6 個字元');
-            return;
+
+        // 儲存新的帳密
+        saveAdminCredentials(updatedUsername, updatedPassword);
+
+        // 更新顯示的帳號名稱
+        if (currentUsernameEl) {
+            currentUsernameEl.textContent = updatedUsername;
         }
-        
+
+        // 更新 session 中的帳號（如果有更改）
+        if (newUsername && newUsername.length > 0) {
+            sessionStorage.setItem('username', updatedUsername);
+        }
+
         accountForm.reset();
-        showToast('密碼已更新！');
+        showToast('帳號設定已更新！請使用新的帳號密碼重新登入。');
     });
+}
+
+// 取得管理員帳密
+function getAdminCredentials() {
+    const stored = localStorage.getItem('adminCredentials');
+    if (stored) {
+        try {
+            return JSON.parse(stored);
+        } catch (e) {
+            return { username: 'admin', password: 'admin123' };
+        }
+    }
+    return { username: 'admin', password: 'admin123' };
+}
+
+// 儲存管理員帳密
+function saveAdminCredentials(username, password) {
+    const credentials = { username, password };
+    localStorage.setItem('adminCredentials', JSON.stringify(credentials));
 }
 
 // Toast notification
