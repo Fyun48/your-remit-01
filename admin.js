@@ -2671,20 +2671,27 @@ function initSettings() {
         }
 
         // 儲存新的帳密
-        saveAdminCredentials(updatedUsername, updatedPassword);
+        const saveSuccess = saveAdminCredentials(updatedUsername, updatedPassword);
 
-        // 更新顯示的帳號名稱
-        if (currentUsernameEl) {
-            currentUsernameEl.textContent = updatedUsername;
+        if (saveSuccess) {
+            // 更新顯示的帳號名稱
+            if (currentUsernameEl) {
+                currentUsernameEl.textContent = updatedUsername;
+            }
+
+            // 更新 session 中的帳號（如果有更改）
+            if (newUsername && newUsername.length > 0) {
+                sessionStorage.setItem('username', updatedUsername);
+            }
+
+            accountForm.reset();
+
+            // 顯示確認訊息
+            alert(`帳號設定已儲存！\n\n新帳號：${updatedUsername}\n\n請登出後使用新的帳號密碼重新登入。`);
+            showToast('帳號設定已更新！');
+        } else {
+            alert('儲存失敗！請檢查瀏覽器是否允許 localStorage。');
         }
-
-        // 更新 session 中的帳號（如果有更改）
-        if (newUsername && newUsername.length > 0) {
-            sessionStorage.setItem('username', updatedUsername);
-        }
-
-        accountForm.reset();
-        showToast('帳號設定已更新！請使用新的帳號密碼重新登入。');
     });
 }
 
@@ -2703,10 +2710,28 @@ function getAdminCredentials() {
 
 // 儲存管理員帳密
 function saveAdminCredentials(username, password) {
-    const credentials = { username, password };
-    localStorage.setItem('adminCredentials', JSON.stringify(credentials));
-    console.log('已儲存新的帳密:', { username, password: '***' });
-    console.log('localStorage 內容:', localStorage.getItem('adminCredentials'));
+    try {
+        const credentials = { username, password };
+        localStorage.setItem('adminCredentials', JSON.stringify(credentials));
+
+        // 驗證是否儲存成功
+        const saved = localStorage.getItem('adminCredentials');
+        console.log('已儲存新的帳密:', { username, password: '***' });
+        console.log('localStorage 內容:', saved);
+
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            if (parsed.username === username && parsed.password === password) {
+                console.log('驗證成功：帳密已正確儲存');
+                return true;
+            }
+        }
+        console.error('驗證失敗：帳密未正確儲存');
+        return false;
+    } catch (e) {
+        console.error('儲存帳密時發生錯誤:', e);
+        return false;
+    }
 }
 
 // Toast notification
