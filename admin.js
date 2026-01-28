@@ -2613,13 +2613,13 @@ function getTimeAgo(date) {
 }
 
 // Settings
-function initSettings() {
+async function initSettings() {
     const siteForm = document.getElementById('siteSettingsForm');
     const accountForm = document.getElementById('accountSettingsForm');
     const currentUsernameEl = document.getElementById('currentUsername');
 
-    // 載入目前的帳號名稱
-    const credentials = getAdminCredentials();
+    // 從 Supabase 載入目前的帳號名稱
+    const credentials = await getAdminCredentialsAsync();
     if (currentUsernameEl) {
         currentUsernameEl.textContent = credentials.username;
     }
@@ -2629,14 +2629,14 @@ function initSettings() {
         showToast('網站設定已儲存！');
     });
 
-    accountForm.addEventListener('submit', (e) => {
+    accountForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const newUsername = accountForm.querySelector('[name="newUsername"]').value.trim();
         const newPassword = accountForm.querySelector('[name="newPassword"]').value;
         const confirmPassword = accountForm.querySelector('[name="confirmPassword"]').value;
 
-        // 取得目前的帳密
-        const currentCredentials = getAdminCredentials();
+        // 從 Supabase 取得目前的帳密
+        const currentCredentials = await getAdminCredentialsAsync();
         let updatedUsername = currentCredentials.username;
         let updatedPassword = currentCredentials.password;
         let hasChanges = false;
@@ -2670,10 +2670,10 @@ function initSettings() {
             return;
         }
 
-        // 儲存新的帳密
-        const saveSuccess = saveAdminCredentials(updatedUsername, updatedPassword);
+        // 儲存新的帳密到 Supabase
+        const result = await saveAdminCredentialsToDB(updatedUsername, updatedPassword);
 
-        if (saveSuccess) {
+        if (!result.error) {
             // 更新顯示的帳號名稱
             if (currentUsernameEl) {
                 currentUsernameEl.textContent = updatedUsername;
@@ -2687,51 +2687,25 @@ function initSettings() {
             accountForm.reset();
 
             // 顯示確認訊息
-            alert(`帳號設定已儲存！\n\n新帳號：${updatedUsername}\n\n請登出後使用新的帳號密碼重新登入。`);
+            alert(`帳號設定已儲存到資料庫！\n\n新帳號：${updatedUsername}\n\n請登出後使用新的帳號密碼重新登入。`);
             showToast('帳號設定已更新！');
         } else {
-            alert('儲存失敗！請檢查瀏覽器是否允許 localStorage。');
+            alert('儲存失敗！錯誤：' + result.error);
         }
     });
 }
 
-// 取得管理員帳密
-function getAdminCredentials() {
-    const stored = localStorage.getItem('adminCredentials');
-    if (stored) {
-        try {
-            return JSON.parse(stored);
-        } catch (e) {
-            return { username: 'admin', password: 'admin123' };
+// 從 Supabase 取得管理員帳密
+async function getAdminCredentialsAsync() {
+    try {
+        const data = await getAdminCredentialsFromDB();
+        if (data) {
+            return { username: data.username, password: data.password };
         }
+    } catch (e) {
+        console.error('取得帳密失敗:', e);
     }
     return { username: 'admin', password: 'admin123' };
-}
-
-// 儲存管理員帳密
-function saveAdminCredentials(username, password) {
-    try {
-        const credentials = { username, password };
-        localStorage.setItem('adminCredentials', JSON.stringify(credentials));
-
-        // 驗證是否儲存成功
-        const saved = localStorage.getItem('adminCredentials');
-        console.log('已儲存新的帳密:', { username, password: '***' });
-        console.log('localStorage 內容:', saved);
-
-        if (saved) {
-            const parsed = JSON.parse(saved);
-            if (parsed.username === username && parsed.password === password) {
-                console.log('驗證成功：帳密已正確儲存');
-                return true;
-            }
-        }
-        console.error('驗證失敗：帳密未正確儲存');
-        return false;
-    } catch (e) {
-        console.error('儲存帳密時發生錯誤:', e);
-        return false;
-    }
 }
 
 // Toast notification

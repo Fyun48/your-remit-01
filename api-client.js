@@ -356,3 +356,32 @@ async function getVisitorLogs() {
 async function logVisitor(visitorData) {
     return supabaseInsert('visitor_logs', visitorData);
 }
+
+// Admin Credentials (stored in Supabase)
+async function getAdminCredentialsFromDB() {
+    try {
+        const { data, error } = await supabaseSelect('admin_settings', { limit: 1 });
+        if (error) {
+            console.error('Failed to get admin credentials:', error);
+            return null;
+        }
+        return data && data.length > 0 ? data[0] : null;
+    } catch (e) {
+        console.error('Error fetching admin credentials:', e);
+        return null;
+    }
+}
+
+async function saveAdminCredentialsToDB(username, password) {
+    try {
+        const { data: existing } = await supabaseSelect('admin_settings', { limit: 1 });
+        if (existing && existing.length > 0) {
+            return await supabaseUpdate('admin_settings', existing[0].id, { username, password });
+        } else {
+            return await supabaseInsert('admin_settings', { username, password });
+        }
+    } catch (e) {
+        console.error('Error saving admin credentials:', e);
+        return { error: e.message };
+    }
+}

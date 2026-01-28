@@ -478,37 +478,40 @@
         </div>
     </div>
 
+    <script src="api-client.js"></script>
     <script>
         // 預設帳密（首次使用或重設時）
         const DEFAULT_USERNAME = 'admin';
         const DEFAULT_PASSWORD = 'admin123';
 
-        // 取得儲存的帳密（如果有的話）
-        function getCredentials() {
-            const stored = localStorage.getItem('adminCredentials');
-            console.log('localStorage adminCredentials:', stored);
-            if (stored) {
-                try {
-                    const parsed = JSON.parse(stored);
-                    console.log('Parsed credentials:', parsed);
-                    return parsed;
-                } catch (e) {
-                    console.error('Failed to parse credentials:', e);
-                    return null;
+        // 從 Supabase 取得儲存的帳密
+        async function getCredentialsFromDB() {
+            try {
+                const data = await getAdminCredentialsFromDB();
+                console.log('從 Supabase 取得的帳密:', data);
+                if (data) {
+                    return { username: data.username, password: data.password };
                 }
+            } catch (e) {
+                console.error('取得帳密失敗:', e);
             }
             return null;
         }
 
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
 
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             const errorMessage = document.getElementById('errorMessage');
+            const loginBtn = document.querySelector('.login-btn');
 
-            // 取得目前的帳密設定
-            const credentials = getCredentials();
+            // 顯示載入中
+            loginBtn.textContent = '驗證中...';
+            loginBtn.disabled = true;
+
+            // 從 Supabase 取得目前的帳密設定
+            const credentials = await getCredentialsFromDB();
             const validUsername = credentials ? credentials.username : DEFAULT_USERNAME;
             const validPassword = credentials ? credentials.password : DEFAULT_PASSWORD;
 
@@ -527,6 +530,8 @@
             } else {
                 // 顯示錯誤訊息
                 errorMessage.classList.add('show');
+                loginBtn.innerHTML = '登入 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>';
+                loginBtn.disabled = false;
 
                 // 3 秒後移除錯誤訊息
                 setTimeout(() => {
@@ -540,14 +545,16 @@
             window.location.href = 'yourremit-admin.html';
         }
 
-        // 顯示目前儲存的帳密（除錯用）
-        console.log('=== 登入頁面載入 ===');
-        const currentCreds = getCredentials();
-        if (currentCreds) {
-            console.log('目前儲存的帳號:', currentCreds.username);
-        } else {
-            console.log('沒有儲存的帳密，使用預設值');
-        }
+        // 頁面載入時檢查 Supabase 連線
+        (async function() {
+            console.log('=== 登入頁面載入 ===');
+            const creds = await getCredentialsFromDB();
+            if (creds) {
+                console.log('目前儲存的帳號:', creds.username);
+            } else {
+                console.log('沒有儲存的帳密，使用預設值 (admin/admin123)');
+            }
+        })();
     </script>
 </body>
 </html>
