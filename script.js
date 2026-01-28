@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     initBackToTop();
     initContactForm();
     initSmoothScroll();
+    initCookieConsent();
     trackVisitor();
 
     // 載入並更新內容設定（統計數字、聯絡資訊等）
@@ -194,6 +195,104 @@ function loadNewsData() {
 
     // 重新初始化 tabs（因為 news cards 已更新）
     initNewsTabs();
+}
+
+/**
+ * Cookie 同意橫幅
+ */
+function initCookieConsent() {
+    // 檢查是否已經同意過
+    const consentStatus = localStorage.getItem('cookieConsent');
+    if (consentStatus) {
+        return; // 已經做過選擇，不再顯示
+    }
+
+    // 建立 Cookie 橫幅 HTML
+    const banner = document.createElement('div');
+    banner.className = 'cookie-banner';
+    banner.innerHTML = `
+        <div class="cookie-content">
+            <div class="cookie-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M12 6v6l4 2"></path>
+                </svg>
+            </div>
+            <div class="cookie-text">
+                <h4>我們使用 Cookies</h4>
+                <p>我們使用 Cookies 和類似技術來改善您的瀏覽體驗、分析網站流量，並提供個人化內容。點擊「接受」即表示您同意我們使用 Cookies。</p>
+            </div>
+            <div class="cookie-actions">
+                <button class="cookie-btn cookie-btn-accept" id="cookieAccept">接受</button>
+                <button class="cookie-btn cookie-btn-decline" id="cookieDecline">拒絕</button>
+                <a href="#" class="cookie-link" id="cookieMore">了解更多</a>
+            </div>
+        </div>
+    `;
+
+    // 加入頁面
+    document.body.appendChild(banner);
+
+    // 動畫顯示（延遲一下讓頁面載入完成）
+    setTimeout(() => {
+        banner.classList.add('show');
+    }, 1000);
+
+    // 接受按鈕
+    document.getElementById('cookieAccept').addEventListener('click', () => {
+        localStorage.setItem('cookieConsent', 'accepted');
+        localStorage.setItem('cookieConsentDate', new Date().toISOString());
+        hideCookieBanner(banner);
+        // 可以在這裡啟用追蹤功能
+        enableTracking();
+    });
+
+    // 拒絕按鈕
+    document.getElementById('cookieDecline').addEventListener('click', () => {
+        localStorage.setItem('cookieConsent', 'declined');
+        localStorage.setItem('cookieConsentDate', new Date().toISOString());
+        hideCookieBanner(banner);
+    });
+
+    // 了解更多（可連結到隱私政策頁面）
+    document.getElementById('cookieMore').addEventListener('click', (e) => {
+        e.preventDefault();
+        // 可以改成連結到隱私政策頁面
+        alert('隱私權政策：我們收集的資料包括訪問時間、頁面瀏覽、裝置資訊等，用於改善網站體驗和分析流量。我們不會將您的個人資料出售給第三方。');
+    });
+}
+
+/**
+ * 隱藏 Cookie 橫幅
+ */
+function hideCookieBanner(banner) {
+    banner.classList.remove('show');
+    banner.classList.add('hide');
+    setTimeout(() => {
+        banner.remove();
+    }, 300);
+}
+
+/**
+ * 啟用追蹤功能（用戶同意後）
+ */
+function enableTracking() {
+    // 這裡可以放 Google Analytics、Facebook Pixel 等追蹤代碼
+    console.log('Cookie 已接受，追蹤功能已啟用');
+
+    // 範例：如果要加入 Google Analytics，可以在這裡初始化
+    // if (typeof gtag !== 'undefined') {
+    //     gtag('consent', 'update', {
+    //         'analytics_storage': 'granted'
+    //     });
+    // }
+}
+
+/**
+ * 檢查用戶是否已同意 Cookie
+ */
+function hasCookieConsent() {
+    return localStorage.getItem('cookieConsent') === 'accepted';
 }
 
 /**
