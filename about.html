@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-B345XE122S"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+
+        gtag('consent', 'default', {
+            'analytics_storage': 'denied',
+            'ad_storage': 'denied'
+        });
+
+        gtag('js', new Date());
+        gtag('config', 'G-B345XE122S', {
+            'anonymize_ip': true
+        });
+
+        if (localStorage.getItem('cookieConsent') === 'accepted') {
+            gtag('consent', 'update', {
+                'analytics_storage': 'granted',
+                'ad_storage': 'granted'
+            });
+        }
+    </script>
+    <!-- Microsoft Clarity -->
+    <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){
+            if (localStorage.getItem('cookieConsent') !== 'accepted') return;
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "v8f7fdqqm7");
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>關於金優匯 | Your Remit</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* About Page Specific Styles */
+        .about-hero {
+            position: relative;
+            padding: 180px 0 100px;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+            color: white;
+            overflow: hidden;
+        }
+
+        .about-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .about-hero .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .about-hero .page-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+
+        .about-hero .page-subtitle {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            max-width: 600px;
+        }
+
+        /* About Navigation */
+        .about-nav {
+            background: white;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 80px;
+            z-index: 100;
+        }
+
+        .about-nav-list {
+            display: flex;
+            justify-content: center;
+            gap: 0;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .about-nav-list li a {
+            display: block;
+            padding: 1.25rem 2rem;
+            color: var(--color-text);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .about-nav-list li a:hover,
+        .about-nav-list li a.active {
+            color: var(--color-primary);
+        }
+
+        .about-nav-list li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 3px;
+            background: var(--color-accent);
+            transition: width 0.3s ease;
+        }
+
+        .about-nav-list li a:hover::after,
+        .about-nav-list li a.active::after {
+            width: 60%;
+        }
+
+        /* Section Styles */
+        .about-section {
+            padding: var(--space-4xl) 0;
+        }
+
+        .about-section:nth-child(even) {
+            background: var(--color-bg-alt);
+        }
+
+        .about-section .section-header {
+            text-align: center;
+            margin-bottom: var(--space-3xl);
+        }
+
+        .about-section .section-tag {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(45, 189, 182, 0.1);
+            color: var(--color-accent);
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .about-section .section-title {
+            font-size: clamp(2rem, 4vw, 2.75rem);
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+        }
+
+        .about-section .section-subtitle {
+            font-size: 1.125rem;
+            color: var(--color-text-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Intro Section */
+        .intro-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-3xl);
+            align-items: center;
+        }
+
+        .intro-content h3 {
+            font-size: 1.5rem;
+            color: var(--color-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .intro-content p {
+            font-size: 1.125rem;
+            line-height: 1.8;
+            color: var(--color-text);
+            margin-bottom: 1.5rem;
+        }
+
+        .intro-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 2.5rem;
+            padding-top: 2.5rem;
+            border-top: 1px solid var(--color-border);
+        }
+
+        .intro-stat {
+            text-align: center;
+        }
+
+        .intro-stat-number {
+            display: block;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--color-accent);
+            line-height: 1;
+        }
+
+        .intro-stat-label {
+            display: block;
+            font-size: 0.875rem;
+            color: var(--color-text-light);
+            margin-top: 0.5rem;
+        }
+
+        .intro-image {
+            position: relative;
+            border-radius: var(--radius-2xl);
+            overflow: hidden;
+            box-shadow: var(--shadow-2xl);
+        }
+
+        .intro-image img {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+        }
+
+        .intro-image-badge {
+            position: absolute;
+            bottom: 2rem;
+            left: 2rem;
+            background: white;
+            padding: 1.5rem 2rem;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .intro-image-badge span {
+            display: block;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .intro-image-badge small {
+            color: var(--color-text-light);
+        }
+
+        /* Philosophy Section */
+        .philosophy-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .philosophy-card {
+            background: white;
+            border-radius: var(--radius-xl);
+            padding: 2.5rem 2rem;
+            text-align: center;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .philosophy-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--color-accent);
+        }
+
+        .philosophy-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, rgba(45, 189, 182, 0.1) 0%, rgba(27, 58, 87, 0.1) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-accent);
+        }
+
+        .philosophy-card h3 {
+            font-size: 1.25rem;
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+        }
+
+        .philosophy-card p {
+            font-size: 0.9375rem;
+            color: var(--color-text-light);
+            line-height: 1.7;
+        }
+
+        /* History Section */
+        .history-timeline {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .history-timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, var(--color-accent) 0%, var(--color-primary) 100%);
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            position: relative;
+            width: 50%;
+            padding: 0 3rem 4rem;
+        }
+
+        .timeline-item:nth-child(odd) {
+            left: 0;
+            text-align: right;
+            padding-right: 4rem;
+            padding-left: 0;
+        }
+
+        .timeline-item:nth-child(even) {
+            left: 50%;
+            text-align: left;
+            padding-left: 4rem;
+            padding-right: 0;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: var(--color-accent);
+            border: 4px solid white;
+            border-radius: 50%;
+            box-shadow: var(--shadow-md);
+            top: 0;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-dot {
+            right: -10px;
+        }
+
+        .timeline-item:nth-child(even) .timeline-dot {
+            left: -10px;
+        }
+
+        .timeline-year {
+            display: inline-block;
+            background: var(--color-primary);
+            color: white;
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .timeline-content {
+            background: white;
+            padding: 1.5rem 2rem;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+        }
+
+        .timeline-content h3 {
+            font-size: 1.125rem;
+            color: var(--color-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-content p {
+            font-size: 0.9375rem;
+            color: var(--color-text-light);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Locations Section */
+        .locations-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .location-card {
+            background: white;
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+        }
+
+        .location-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .location-image {
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .location-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .location-card:hover .location-image img {
+            transform: scale(1.05);
+        }
+
+        .location-content {
+            padding: 1.5rem 2rem 2rem;
+        }
+
+        .location-badge {
+            display: inline-block;
+            background: rgba(45, 189, 182, 0.1);
+            color: var(--color-accent);
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .location-content h3 {
+            font-size: 1.25rem;
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+        }
+
+        .location-info {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .location-info li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            font-size: 0.9375rem;
+            color: var(--color-text-light);
+            margin-bottom: 0.75rem;
+        }
+
+        .location-info li svg {
+            flex-shrink: 0;
+            color: var(--color-accent);
+            margin-top: 2px;
+        }
+
+        .location-info li:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .intro-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .intro-image {
+                order: -1;
+            }
+
+            .philosophy-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .locations-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .about-nav-list {
+                flex-wrap: wrap;
+            }
+
+            .about-nav-list li a {
+                padding: 1rem 1.25rem;
+                font-size: 0.875rem;
+            }
+
+            .intro-stats {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1rem;
+            }
+
+            .intro-stat-number {
+                font-size: 1.75rem;
+            }
+
+            .philosophy-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .history-timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item,
+            .timeline-item:nth-child(odd),
+            .timeline-item:nth-child(even) {
+                width: 100%;
+                left: 0;
+                text-align: left;
+                padding-left: 4rem;
+                padding-right: 0;
+            }
+
+            .timeline-item:nth-child(odd) .timeline-dot,
+            .timeline-item:nth-child(even) .timeline-dot {
+                left: 10px;
+            }
+
+            .locations-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <div class="logo-group">
+                    <span class="logo-yourremit">Your Remit</span>
+                    <div class="logo-yourpay">
+                        <svg class="logo-icon" width="28" height="32" viewBox="0 0 36 44">
+                            <path d="M4 8 Q4 4 8 4 L8 4 Q8 0 16 0 Q28 0 32 8 L26 14 Q24 10 18 10 Q12 10 12 14 L12 14 L12 40 Q12 44 8 44 Q4 44 4 40 Z" fill="#1B3A57"/>
+                            <path d="M20 22 Q20 18 24 18 L32 18 L32 26 Q32 34 24 34 L20 34 L20 28 Q20 26 24 26 L26 26 L26 24 Q26 22 24 22 Z" fill="#2DBDB6"/>
+                        </svg>
+                        <span>your<em>pay</em></span>
+                    </div>
+                </div>
+            </a>
+
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="news.html" class="nav-link" data-i18n="nav.news">最新消息</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="csr.html" class="nav-link" data-i18n="nav.csr">企業責任</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="index.html#career" class="nav-link" data-i18n="nav.career">人才招募</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="about.html" class="nav-link" data-i18n="nav.about">關於我們</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="app-download.html" class="nav-link" data-i18n="nav.app">App 下載</a>
+                    </li>
+                    <li class="nav-item has-dropdown">
+                        <a href="#services" class="nav-link">
+                            <span data-i18n="nav.services">服務項目</span>
+                            <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </a>
+                        <ul class="dropdown">
+                            <li><a href="service-detail.html?id=1" data-i18n="service.remittance">國際匯款服務</a></li>
+                            <li><a href="service-detail.html?id=2" data-i18n="service.fintech">金融科技</a></li>
+                            <li><a href="service-detail.html?id=3" data-i18n="service.consulting">企業顧問</a></li>
+                            <li><a href="service-detail.html?id=4" data-i18n="service.investment">投資理財</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item has-dropdown">
+                        <a href="investors.html" class="nav-link">
+                            <span data-i18n="nav.investors">投資人關係</span>
+                            <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </a>
+                        <ul class="dropdown">
+                            <li><a href="investors-financials.html" data-i18n="investor.financial">財務報告</a></li>
+                            <li><a href="investors-announcements.html" data-i18n="investor.announcements">公司公告</a></li>
+                            <li><a href="investors-governance.html" data-i18n="investor.governance">公司治理</a></li>
+                            <li><a href="investors-shareholders.html" data-i18n="investor.shareholders">股東會資訊</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="header-actions nav-right">
+            </div>
+
+            <button class="mobile-menu-btn" aria-label="開啟選單">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="about-hero">
+        <div class="container">
+            <span class="section-tag">About Us</span>
+            <h1 class="page-title" data-i18n="about.hero_title">關於金優匯</h1>
+            <p class="page-subtitle" data-i18n="about.hero_subtitle">深耕金融服務領域，以專業、誠信、創新的精神，為客戶創造最大價值</p>
+        </div>
+    </section>
+
+    <!-- About Navigation -->
+    <nav class="about-nav">
+        <div class="container">
+            <ul class="about-nav-list">
+                <li><a href="#intro" class="active" data-i18n="footer.about_intro">公司簡介</a></li>
+                <li><a href="#philosophy" data-i18n="footer.about_philosophy">經營理念</a></li>
+                <li><a href="#history" data-i18n="footer.about_history">發展沿革</a></li>
+                <li><a href="#locations" data-i18n="footer.about_locations">據點資訊</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Company Intro Section -->
+    <section id="intro" class="about-section">
+        <div class="container">
+            <div class="intro-grid">
+                <div class="intro-content animate-on-scroll">
+                    <span class="section-tag">Company Profile</span>
+                    <h2 class="section-title" data-i18n="about.intro_title">公司簡介</h2>
+                    <h3 data-i18n="about.intro_slogan">專業金融服務的領航者</h3>
+                    <p data-i18n="about.intro_p1">金優匯股份有限公司成立於 2010 年，是台灣領先的跨境金融服務提供商。我們專注於國際匯款、金融科技、企業顧問及投資理財等服務，致力為個人及企業客戶提供最專業、便捷的金融解決方案。</p>
+                    <p data-i18n="about.intro_p2">憑藉多年的專業經驗與創新技術，我們已服務超過 50,000 位客戶，建立遍及全球的合作網絡。我們的使命是讓金融服務更加普惠、透明，讓每一位客戶都能享受安全、高效的金融體驗。</p>
+
+                    <div class="intro-stats">
+                        <div class="intro-stat">
+                            <span class="intro-stat-number">15+</span>
+                            <span class="intro-stat-label" data-i18n="about.stat_years">年服務經驗</span>
+                        </div>
+                        <div class="intro-stat">
+                            <span class="intro-stat-number">50K+</span>
+                            <span class="intro-stat-label" data-i18n="about.stat_clients">服務客戶</span>
+                        </div>
+                        <div class="intro-stat">
+                            <span class="intro-stat-number">30+</span>
+                            <span class="intro-stat-label" data-i18n="about.stat_branches">服務據點</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="intro-image animate-on-scroll">
+                    <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&h=600&fit=crop" alt="金優匯總部大樓">
+                    <div class="intro-image-badge">
+                        <span>2010</span>
+                        <small data-i18n="about.since">創立於</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Philosophy Section -->
+    <section id="philosophy" class="about-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Philosophy</span>
+                <h2 class="section-title" data-i18n="about.philosophy_title">經營理念</h2>
+                <p class="section-subtitle" data-i18n="about.philosophy_subtitle">以客戶為中心，以誠信為基石，持續創新追求卓越</p>
+            </div>
+
+            <div class="philosophy-grid">
+                <div class="philosophy-card animate-on-scroll">
+                    <div class="philosophy-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            <path d="M9 12l2 2 4-4"></path>
+                        </svg>
+                    </div>
+                    <h3 data-i18n="about.value1_title">誠信為本</h3>
+                    <p data-i18n="about.value1_desc">堅守商業道德與法規遵循，建立透明的治理機制，維護客戶與股東的最大權益，贏得長期信任。</p>
+                </div>
+                <div class="philosophy-card animate-on-scroll">
+                    <div class="philosophy-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M12 16v-4"></path>
+                            <path d="M12 8h.01"></path>
+                        </svg>
+                    </div>
+                    <h3 data-i18n="about.value2_title">客戶至上</h3>
+                    <p data-i18n="about.value2_desc">深入了解客戶需求，提供量身訂製的解決方案，以專業服務超越客戶期待，創造最大價值。</p>
+                </div>
+                <div class="philosophy-card animate-on-scroll">
+                    <div class="philosophy-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        </svg>
+                    </div>
+                    <h3 data-i18n="about.value3_title">追求卓越</h3>
+                    <p data-i18n="about.value3_desc">不斷精進專業能力，導入最新金融科技，優化服務流程，追求業界領先的服務品質。</p>
+                </div>
+                <div class="philosophy-card animate-on-scroll">
+                    <div class="philosophy-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                        </svg>
+                    </div>
+                    <h3 data-i18n="about.value4_title">創新突破</h3>
+                    <p data-i18n="about.value4_desc">擁抱科技創新，積極探索金融服務新模式，以數位轉型推動產業升級，引領市場趨勢。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- History Section -->
+    <section id="history" class="about-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">History</span>
+                <h2 class="section-title" data-i18n="about.history_title">發展沿革</h2>
+                <p class="section-subtitle" data-i18n="about.history_subtitle">十五年的成長歷程，見證金優匯從創立到茁壯的每一步</p>
+            </div>
+
+            <div class="history-timeline">
+                <div class="timeline-item animate-on-scroll">
+                    <div class="timeline-dot"></div>
+                    <span class="timeline-year">2010</span>
+                    <div class="timeline-content">
+                        <h3 data-i18n="about.history_2010_title">公司創立</h3>
+                        <p data-i18n="about.history_2010_desc">金優匯股份有限公司於台北正式成立，以跨境匯款服務起家，致力於為海外工作者提供安全便捷的匯款管道。</p>
+                    </div>
+                </div>
+                <div class="timeline-item animate-on-scroll">
+                    <div class="timeline-dot"></div>
+                    <span class="timeline-year">2013</span>
+                    <div class="timeline-content">
+                        <h3 data-i18n="about.history_2013_title">服務擴展</h3>
+                        <p data-i18n="about.history_2013_desc">取得金融監理機關核准，擴大服務範圍至企業金融顧問服務，協助中小企業進行跨境交易與財務規劃。</p>
+                    </div>
+                </div>
+                <div class="timeline-item animate-on-scroll">
+                    <div class="timeline-dot"></div>
+                    <span class="timeline-year">2016</span>
+                    <div class="timeline-content">
+                        <h3 data-i18n="about.history_2016_title">數位轉型</h3>
+                        <p data-i18n="about.history_2016_desc">推出線上匯款平台與行動 App，導入金融科技應用，大幅提升服務效率與客戶體驗。</p>
+                    </div>
+                </div>
+                <div class="timeline-item animate-on-scroll">
+                    <div class="timeline-dot"></div>
+                    <span class="timeline-year">2019</span>
+                    <div class="timeline-content">
+                        <h3 data-i18n="about.history_2019_title">據點拓展</h3>
+                        <p data-i18n="about.history_2019_desc">在台灣北中南設立多處服務據點，並與東南亞主要銀行建立合作關係，服務網絡覆蓋更廣。</p>
+                    </div>
+                </div>
+                <div class="timeline-item animate-on-scroll">
+                    <div class="timeline-dot"></div>
+                    <span class="timeline-year">2022</span>
+                    <div class="timeline-content">
+                        <h3 data-i18n="about.history_2022_title">投資理財服務</h3>
+                        <p data-i18n="about.history_2022_desc">新增投資理財服務線，提供客戶全方位的財富管理方案，成為一站式金融服務平台。</p>
+                    </div>
+                </div>
+                <div class="timeline-item animate-on-scroll">
+                    <div class="timeline-dot"></div>
+                    <span class="timeline-year">2025</span>
+                    <div class="timeline-content">
+                        <h3 data-i18n="about.history_2025_title">邁向未來</h3>
+                        <p data-i18n="about.history_2025_desc">持續深化數位創新，拓展國際合作夥伴，以 AI 技術優化服務流程，為客戶創造更多價值。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Locations Section -->
+    <section id="locations" class="about-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Locations</span>
+                <h2 class="section-title" data-i18n="about.locations_title">據點資訊</h2>
+                <p class="section-subtitle" data-i18n="about.locations_subtitle">遍佈全台的服務網絡，讓您隨時都能享受專業金融服務</p>
+            </div>
+
+            <div class="locations-grid">
+                <div class="location-card animate-on-scroll">
+                    <div class="location-image">
+                        <img src="https://images.unsplash.com/photo-1508394522741-82ac9c15ba69?w=600&h=400&fit=crop" alt="台北總公司">
+                    </div>
+                    <div class="location-content">
+                        <span class="location-badge" data-i18n="about.hq">總公司</span>
+                        <h3 data-i18n="about.location_taipei">台北總公司</h3>
+                        <ul class="location-info">
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                                <span>台北市內湖區安美街181號</span>
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                </svg>
+                                <span>02-2796-5959</span>
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                                <span data-i18n="about.hours">週一至週五 09:00-18:00</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="location-card animate-on-scroll">
+                    <div class="location-image">
+                        <img src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=600&h=400&fit=crop" alt="台中分公司">
+                    </div>
+                    <div class="location-content">
+                        <span class="location-badge" data-i18n="about.branch">分公司</span>
+                        <h3 data-i18n="about.location_taichung">台中分公司</h3>
+                        <ul class="location-info">
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                                <span>台中市西屯區台灣大道三段99號</span>
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                </svg>
+                                <span>04-2255-6789</span>
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                                <span data-i18n="about.hours">週一至週五 09:00-18:00</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="location-card animate-on-scroll">
+                    <div class="location-image">
+                        <img src="https://images.unsplash.com/photo-1562280963-8a5475740a10?w=600&h=400&fit=crop" alt="高雄分公司">
+                    </div>
+                    <div class="location-content">
+                        <span class="location-badge" data-i18n="about.branch">分公司</span>
+                        <h3 data-i18n="about.location_kaohsiung">高雄分公司</h3>
+                        <ul class="location-info">
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                                <span>高雄市前鎮區中山二路260號</span>
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                </svg>
+                                <span>07-3366-8899</span>
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                                <span data-i18n="about.hours">週一至週五 09:00-18:00</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-top">
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-brand">
+                        <a href="index.html" class="footer-logo">
+                            <div class="logo-group">
+                                <span class="logo-yourremit">Your Remit</span>
+                                <div class="logo-yourpay">
+                                    <svg class="logo-icon" width="28" height="32" viewBox="0 0 36 44">
+                                        <path d="M4 8 Q4 4 8 4 L8 4 Q8 0 16 0 Q28 0 32 8 L26 14 Q24 10 18 10 Q12 10 12 14 L12 14 L12 40 Q12 44 8 44 Q4 44 4 40 Z" fill="#1B3A57"/>
+                                        <path d="M20 22 Q20 18 24 18 L32 18 L32 26 Q32 34 24 34 L20 34 L20 28 Q20 26 24 26 L26 26 L26 24 Q26 22 24 22 Z" fill="#2DBDB6"/>
+                                    </svg>
+                                    <span>your<em>pay</em></span>
+                                </div>
+                            </div>
+                        </a>
+                        <p class="footer-desc" data-i18n="footer.company">金優匯股份有限公司</p>
+                        <div class="footer-social">
+                            <a href="#" class="social-link" aria-label="Facebook" target="_blank">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                                </svg>
+                            </a>
+                            <a href="#" class="social-link" aria-label="Line" target="_blank">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"></path>
+                                </svg>
+                            </a>
+                            <a href="#" class="social-link" aria-label="Instagram" target="_blank">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="footer-links">
+                        <h4 class="footer-title" data-i18n="footer.about_title">關於金優匯</h4>
+                        <ul>
+                            <li><a href="about.html#intro" data-i18n="footer.about_intro">公司簡介</a></li>
+                            <li><a href="about.html#philosophy" data-i18n="footer.about_philosophy">經營理念</a></li>
+                            <li><a href="about.html#history" data-i18n="footer.about_history">發展沿革</a></li>
+                            <li><a href="about.html#locations" data-i18n="footer.about_locations">據點資訊</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-links">
+                        <h4 class="footer-title" data-i18n="footer.services_title">服務項目</h4>
+                        <ul>
+                            <li><a href="service-detail.html?id=1" data-i18n="service.remittance">國際匯款服務</a></li>
+                            <li><a href="service-detail.html?id=2" data-i18n="service.fintech">金融科技</a></li>
+                            <li><a href="service-detail.html?id=3" data-i18n="service.consulting">企業顧問</a></li>
+                            <li><a href="service-detail.html?id=4" data-i18n="service.investment">投資理財</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-links">
+                        <h4 class="footer-title" data-i18n="footer.support_title">客戶服務</h4>
+                        <ul>
+                            <li><a href="#" data-i18n="footer.support_faq">常見問題</a></li>
+                            <li><a href="index.html#contact" data-i18n="footer.contact">聯絡我們</a></li>
+                            <li><a href="#" data-i18n="footer.privacy">隱私權政策</a></li>
+                            <li><a href="#" data-i18n="footer.terms">服務條款</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-links">
+                        <h4 class="footer-title" data-i18n="footer.investor_title">投資人專區</h4>
+                        <ul>
+                            <li><a href="investors-financials.html" data-i18n="investor.financial">財務報告</a></li>
+                            <li><a href="investors-announcements.html" data-i18n="investor.announcements">公司公告</a></li>
+                            <li><a href="investors-governance.html" data-i18n="investor.governance">公司治理</a></li>
+                            <li><a href="investors-shareholders.html" data-i18n="investor.shareholders">股東會資訊</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-contact">
+                        <h4 class="footer-title" data-i18n="footer.contact_title">聯絡資訊</h4>
+                        <ul class="contact-list">
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                </svg>
+                                <span>02-2796-5959</span>
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                </svg>
+                                <span>service@yourremit.com</span>
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                                <span>台北市內湖區安美街181號</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="footer-bottom-content">
+                    <p class="copyright" data-i18n="footer.copyright">Copyright © 2025 金優匯股份有限公司 Your Remit | yourpay. All Rights Reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Social Buttons -->
+    <div class="floating-social">
+        <a href="#" class="floating-btn" aria-label="LinkedIn" target="_blank">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+            </svg>
+        </a>
+        <a href="#" class="floating-btn" aria-label="Facebook" target="_blank">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+            </svg>
+        </a>
+        <a href="#" class="floating-btn" aria-label="Instagram" target="_blank">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+            </svg>
+        </a>
+        <a href="mailto:service@yourremit.com" class="floating-btn" aria-label="Email">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+        </a>
+        <button class="floating-btn floating-top" id="float-top" aria-label="回到頂部">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="19" x2="12" y2="5"></line>
+                <polyline points="5 12 12 5 19 12"></polyline>
+            </svg>
+            <span>TOP</span>
+        </button>
+    </div>
+
+    <script src="api-client.js"></script>
+    <script src="i18n.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // About page navigation highlight
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.about-section[id]');
+            const navLinks = document.querySelectorAll('.about-nav-list a');
+
+            // Smooth scroll for nav links
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetSection = document.getElementById(targetId);
+                    if (targetSection) {
+                        const headerOffset = 160;
+                        const elementPosition = targetSection.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // Update active nav on scroll
+            function updateActiveNav() {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 200;
+                    if (window.pageYOffset >= sectionTop) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + current) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+
+            window.addEventListener('scroll', updateActiveNav);
+            updateActiveNav();
+
+            // Handle hash on page load
+            if (window.location.hash) {
+                setTimeout(() => {
+                    const targetSection = document.querySelector(window.location.hash);
+                    if (targetSection) {
+                        const headerOffset = 160;
+                        const elementPosition = targetSection.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                }, 100);
+            }
+
+            // Scroll animations
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.animate-on-scroll').forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>
