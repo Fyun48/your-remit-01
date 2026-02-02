@@ -97,6 +97,15 @@ async function loadSiteSettings() {
         if (emailEl && contact.email) emailEl.textContent = contact.email;
         if (addressEl && contact.address) addressEl.textContent = contact.address;
 
+        // 更新首頁聯絡區塊
+        const indexPhoneEl = document.getElementById('index-contact-phone');
+        const indexEmailEl = document.getElementById('index-contact-email');
+        const indexAddressEl = document.getElementById('index-contact-address');
+
+        if (indexPhoneEl && contact.phone) indexPhoneEl.textContent = contact.phone;
+        if (indexEmailEl && contact.email) indexEmailEl.textContent = contact.email;
+        if (indexAddressEl && contact.address) indexAddressEl.textContent = contact.address;
+
         // 更新地址的 Google Maps 連結
         initAddressLink();
 

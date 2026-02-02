@@ -1254,44 +1254,43 @@
             try {
                 const { data, error } = await getContentSettings();
                 if (data && data.length > 0 && data[0].settings) {
-                    const settings = data[0].settings;
+                    const contact = data[0].settings.contact || {};
 
                     // Update phone
-                    if (settings.phone) {
+                    if (contact.phone) {
                         const phoneEl = document.getElementById('section-contact-phone');
                         const footerPhoneEl = document.getElementById('contact-phone');
                         if (phoneEl) {
-                            phoneEl.textContent = settings.phone;
-                            phoneEl.href = 'tel:' + settings.phone.replace(/-/g, '');
+                            phoneEl.textContent = contact.phone;
+                            phoneEl.href = 'tel:' + contact.phone.replace(/-/g, '');
                         }
-                        if (footerPhoneEl) footerPhoneEl.textContent = settings.phone;
+                        if (footerPhoneEl) footerPhoneEl.textContent = contact.phone;
                     }
 
                     // Update email
-                    if (settings.email) {
+                    if (contact.email) {
                         const emailEl = document.getElementById('section-contact-email');
                         const footerEmailEl = document.getElementById('contact-email');
                         if (emailEl) {
-                            emailEl.textContent = settings.email;
-                            emailEl.href = 'mailto:' + settings.email;
+                            emailEl.textContent = contact.email;
+                            emailEl.href = 'mailto:' + contact.email;
                         }
-                        if (footerEmailEl) footerEmailEl.textContent = settings.email;
+                        if (footerEmailEl) footerEmailEl.textContent = contact.email;
                     }
 
                     // Update address
-                    if (settings.address) {
+                    if (contact.address) {
                         const addressEl = document.getElementById('section-contact-address');
                         const footerAddressEl = document.getElementById('contact-address');
-                        if (addressEl) addressEl.textContent = settings.address;
-                        if (footerAddressEl) footerAddressEl.textContent = settings.address;
-                    }
+                        if (addressEl) addressEl.textContent = contact.address;
+                        if (footerAddressEl) footerAddressEl.textContent = contact.address;
 
-                    // Update map link
-                    if (settings.mapUrl) {
+                        // Update map link with address
                         const mapEl = document.getElementById('section-contact-map');
                         const footerMapEl = document.getElementById('contact-address-link');
-                        if (mapEl) mapEl.href = settings.mapUrl;
-                        if (footerMapEl) footerMapEl.href = settings.mapUrl;
+                        const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contact.address)}`;
+                        if (mapEl) mapEl.href = googleMapsUrl;
+                        if (footerMapEl) footerMapEl.href = googleMapsUrl;
                     }
                 }
             } catch (e) {
