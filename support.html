@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-B345XE122S"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('consent', 'default', { 'analytics_storage': 'denied', 'ad_storage': 'denied' });
+        gtag('js', new Date());
+        gtag('config', 'G-B345XE122S', { 'anonymize_ip': true });
+        if (localStorage.getItem('cookieConsent') === 'accepted') {
+            gtag('consent', 'update', { 'analytics_storage': 'granted', 'ad_storage': 'granted' });
+        }
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>客戶服務 | 金優匯 Your Remit</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Support Page Styles */
+        .support-hero {
+            position: relative;
+            padding: 180px 0 100px;
+            background: linear-gradient(135deg, #2DBDB6 0%, #1B3A57 100%);
+            color: white;
+            overflow: hidden;
+        }
+
+        .support-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .support-hero .container { position: relative; z-index: 1; }
+        .support-hero .page-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+        .support-hero .page-subtitle {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            max-width: 600px;
+        }
+
+        /* Support Navigation */
+        .support-nav {
+            background: white;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 80px;
+            z-index: 100;
+        }
+        .support-nav-list {
+            display: flex;
+            justify-content: center;
+            gap: 0;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .support-nav-list li a {
+            display: block;
+            padding: 1.25rem 2rem;
+            color: var(--color-text);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .support-nav-list li a:hover,
+        .support-nav-list li a.active {
+            color: var(--color-accent);
+        }
+        .support-nav-list li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 3px;
+            background: var(--color-accent);
+            transition: width 0.3s ease;
+        }
+        .support-nav-list li a:hover::after,
+        .support-nav-list li a.active::after {
+            width: 60%;
+        }
+
+        /* Section Base */
+        .support-section {
+            padding: var(--space-4xl) 0;
+        }
+        .support-section:nth-child(even) {
+            background: var(--color-bg-alt);
+        }
+        .support-section .section-header {
+            text-align: center;
+            margin-bottom: var(--space-3xl);
+        }
+        .support-section .section-tag {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(45, 189, 182, 0.1);
+            color: var(--color-accent);
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        .support-section .section-title {
+            font-size: clamp(2rem, 4vw, 2.75rem);
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+        }
+        .support-section .section-subtitle {
+            font-size: 1.125rem;
+            color: var(--color-text-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* FAQ Section */
+        .faq-categories {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+        .faq-category-btn {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid var(--color-border);
+            background: white;
+            border-radius: 50px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .faq-category-btn:hover,
+        .faq-category-btn.active {
+            border-color: var(--color-accent);
+            background: var(--color-accent);
+            color: white;
+        }
+
+        .faq-list {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .faq-item {
+            background: white;
+            border-radius: var(--radius-lg);
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            border: 1px solid var(--color-border);
+        }
+        .faq-question {
+            width: 100%;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: none;
+            border: none;
+            font-size: 1.0625rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.3s ease;
+        }
+        .faq-question:hover {
+            background: rgba(45, 189, 182, 0.05);
+        }
+        .faq-question svg {
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+            color: var(--color-accent);
+        }
+        .faq-item.active .faq-question svg {
+            transform: rotate(180deg);
+        }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+        }
+        .faq-answer-content {
+            padding: 0 2rem 1.5rem;
+            color: var(--color-text-light);
+            line-height: 1.8;
+        }
+
+        /* Contact Section */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 4rem;
+            align-items: start;
+        }
+        .contact-info-cards {
+            display: grid;
+            gap: 1.5rem;
+        }
+        .contact-info-card {
+            background: white;
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+            transition: all 0.3s ease;
+        }
+        .contact-info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        .contact-info-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--color-accent) 0%, #1B3A57 100%);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            flex-shrink: 0;
+        }
+        .contact-info-content h3 {
+            font-size: 1.125rem;
+            color: var(--color-primary);
+            margin-bottom: 0.5rem;
+        }
+        .contact-info-content p {
+            color: var(--color-text-light);
+            margin: 0;
+            line-height: 1.6;
+        }
+        .contact-info-content a {
+            color: var(--color-accent);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .contact-info-content a:hover {
+            text-decoration: underline;
+        }
+
+        .contact-form-wrapper {
+            background: white;
+            border-radius: var(--radius-2xl);
+            padding: 3rem;
+            box-shadow: var(--shadow-lg);
+        }
+        .contact-form-wrapper h3 {
+            font-size: 1.5rem;
+            color: var(--color-primary);
+            margin-bottom: 0.5rem;
+        }
+        .contact-form-wrapper > p {
+            color: var(--color-text-light);
+            margin-bottom: 2rem;
+        }
+        .contact-form .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        .contact-form .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .contact-form label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--color-text);
+        }
+        .contact-form input,
+        .contact-form select,
+        .contact-form textarea {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        .contact-form input:focus,
+        .contact-form select:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: var(--color-accent);
+            box-shadow: 0 0 0 4px rgba(45, 189, 182, 0.1);
+        }
+        .contact-form textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+        .contact-form .btn-submit {
+            width: 100%;
+            padding: 1.25rem;
+            background: linear-gradient(135deg, var(--color-accent) 0%, #1B3A57 100%);
+            color: white;
+            border: none;
+            border-radius: var(--radius-lg);
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .contact-form .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(45, 189, 182, 0.3);
+        }
+
+        /* Privacy & Terms Sections */
+        .policy-content {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: var(--radius-2xl);
+            padding: 3rem 4rem;
+            box-shadow: var(--shadow-lg);
+        }
+        .policy-toc {
+            background: var(--color-bg-alt);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+        .policy-toc h4 {
+            font-size: 1rem;
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+        }
+        .policy-toc ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+        }
+        .policy-toc a {
+            color: var(--color-text-light);
+            text-decoration: none;
+            font-size: 0.9375rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s ease;
+        }
+        .policy-toc a:hover {
+            color: var(--color-accent);
+        }
+        .policy-toc a::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--color-accent);
+            border-radius: 50%;
+        }
+
+        .policy-section {
+            margin-bottom: 3rem;
+        }
+        .policy-section:last-child {
+            margin-bottom: 0;
+        }
+        .policy-section h3 {
+            font-size: 1.375rem;
+            color: var(--color-primary);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--color-accent);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .policy-section h3 .section-num {
+            background: var(--color-accent);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            font-weight: 700;
+        }
+        .policy-section p {
+            color: var(--color-text);
+            line-height: 1.9;
+            margin-bottom: 1rem;
+        }
+        .policy-section ul {
+            color: var(--color-text);
+            line-height: 1.9;
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .policy-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .policy-update-info {
+            background: rgba(45, 189, 182, 0.1);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem 2rem;
+            margin-top: 3rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .policy-update-info svg {
+            color: var(--color-accent);
+            flex-shrink: 0;
+        }
+        .policy-update-info p {
+            margin: 0;
+            color: var(--color-text);
+            font-size: 0.9375rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+        }
+        @media (max-width: 768px) {
+            .support-nav-list {
+                flex-wrap: wrap;
+            }
+            .support-nav-list li a {
+                padding: 1rem 1.25rem;
+                font-size: 0.875rem;
+            }
+            .contact-form .form-row {
+                grid-template-columns: 1fr;
+            }
+            .policy-content {
+                padding: 2rem;
+            }
+            .policy-toc ul {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <div class="logo-group">
+                    <span class="logo-yourremit">Your Remit</span>
+                    <div class="logo-yourpay">
+                        <svg class="logo-icon" width="28" height="32" viewBox="0 0 36 44">
+                            <path d="M4 8 Q4 4 8 4 L8 4 Q8 0 16 0 Q28 0 32 8 L26 14 Q24 10 18 10 Q12 10 12 14 L12 14 L12 40 Q12 44 8 44 Q4 44 4 40 Z" fill="#1B3A57"/>
+                            <path d="M20 22 Q20 18 24 18 L32 18 L32 26 Q32 34 24 34 L20 34 L20 28 Q20 26 24 26 L26 26 L26 24 Q26 22 24 22 Z" fill="#2DBDB6"/>
+                        </svg>
+                        <span>your<em>pay</em></span>
+                    </div>
+                </div>
+            </a>
+
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="news.html" class="nav-link" data-i18n="nav.news">最新消息</a></li>
+                    <li class="nav-item"><a href="csr.html" class="nav-link" data-i18n="nav.csr">企業責任</a></li>
+                    <li class="nav-item"><a href="index.html#career" class="nav-link" data-i18n="nav.career">人才招募</a></li>
+                    <li class="nav-item"><a href="about.html" class="nav-link" data-i18n="nav.about">關於我們</a></li>
+                    <li class="nav-item"><a href="app-download.html" class="nav-link" data-i18n="nav.app">App 下載</a></li>
+                    <li class="nav-item has-dropdown">
+                        <a href="#services" class="nav-link">
+                            <span data-i18n="nav.services">服務項目</span>
+                            <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </a>
+                        <ul class="dropdown">
+                            <li><a href="service-detail.html?id=1" data-i18n="service.remittance">國際匯款服務</a></li>
+                            <li><a href="service-detail.html?id=2" data-i18n="service.fintech">金融科技</a></li>
+                            <li><a href="service-detail.html?id=3" data-i18n="service.consulting">企業顧問</a></li>
+                            <li><a href="service-detail.html?id=4" data-i18n="service.investment">投資理財</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item has-dropdown">
+                        <a href="investors.html" class="nav-link">
+                            <span data-i18n="nav.investors">投資人關係</span>
+                            <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </a>
+                        <ul class="dropdown">
+                            <li><a href="investors-financials.html" data-i18n="investor.financial">財務報告</a></li>
+                            <li><a href="investors-announcements.html" data-i18n="investor.announcements">公司公告</a></li>
+                            <li><a href="investors-governance.html" data-i18n="investor.governance">公司治理</a></li>
+                            <li><a href="investors-shareholders.html" data-i18n="investor.shareholders">股東會資訊</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="header-actions nav-right"></div>
+            <button class="mobile-menu-btn" aria-label="開啟選單"><span></span><span></span><span></span></button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="support-hero">
+        <div class="container">
+            <span class="section-tag">Support Center</span>
+            <h1 class="page-title" data-i18n="support.hero_title">客戶服務中心</h1>
+            <p class="page-subtitle" data-i18n="support.hero_subtitle">我們致力於提供最優質的服務體驗，有任何問題都歡迎與我們聯繫</p>
+        </div>
+    </section>
+
+    <!-- Support Navigation -->
+    <nav class="support-nav">
+        <div class="container">
+            <ul class="support-nav-list">
+                <li><a href="#faq" class="active" data-i18n="footer.support_faq">常見問題</a></li>
+                <li><a href="#contact" data-i18n="footer.contact">聯絡我們</a></li>
+                <li><a href="#privacy" data-i18n="footer.privacy">隱私權政策</a></li>
+                <li><a href="#terms" data-i18n="footer.terms">服務條款</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="support-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">FAQ</span>
+                <h2 class="section-title" data-i18n="support.faq_title">常見問題</h2>
+                <p class="section-subtitle" data-i18n="support.faq_subtitle">快速找到您需要的答案，解決常見疑問</p>
+            </div>
+
+            <div class="faq-categories">
+                <button class="faq-category-btn active" data-category="all">全部問題</button>
+                <button class="faq-category-btn" data-category="remittance">匯款相關</button>
+                <button class="faq-category-btn" data-category="account">帳戶問題</button>
+                <button class="faq-category-btn" data-category="security">安全性</button>
+                <button class="faq-category-btn" data-category="app">App 使用</button>
+            </div>
+
+            <div class="faq-list" id="faq-list">
+                <!-- FAQ items will be loaded dynamically -->
+                <div class="faq-item" data-category="remittance">
+                    <button class="faq-question">
+                        <span>如何進行國際匯款？</span>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>進行國際匯款非常簡單，只需以下步驟：</p>
+                            <ol>
+                                <li>登入金優匯 App 或網站</li>
+                                <li>選擇「國際匯款」服務</li>
+                                <li>輸入收款人資訊（姓名、銀行帳號、SWIFT Code）</li>
+                                <li>輸入匯款金額，系統會自動顯示匯率與手續費</li>
+                                <li>確認資訊後，完成身份驗證即可送出</li>
+                            </ol>
+                            <p>一般情況下，匯款會在 1-3 個工作日內到達收款帳戶。</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item" data-category="remittance">
+                    <button class="faq-question">
+                        <span>匯款有金額限制嗎？</span>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>依照金融法規規定，個人每日匯款上限為新台幣 50 萬元，每年累計上限為新台幣 500 萬元。企業用戶則根據營業規模有不同額度，詳情請洽客服專線。若需要更高額度，可申請提升額度服務，需提供相關證明文件。</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item" data-category="remittance">
+                    <button class="faq-question">
+                        <span>匯款手續費如何計算？</span>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>我們的手續費採用透明計價方式：</p>
+                            <ul>
+                                <li>基本手續費：每筆 NT$100 起</li>
+                                <li>匯款金額 10 萬以上：手續費 0.1%</li>
+                                <li>VIP 會員享優惠費率</li>
+                            </ul>
+                            <p>在您送出匯款前，系統會清楚顯示所有費用明細，絕無隱藏收費。</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item" data-category="account">
+                    <button class="faq-question">
+                        <span>如何開立金優匯帳戶？</span>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>開立帳戶完全免費，只需準備：</p>
+                            <ul>
+                                <li>有效身分證件（身分證或護照）</li>
+                                <li>可接收驗證碼的手機號碼</li>
+                                <li>電子郵件信箱</li>
+                            </ul>
+                            <p>下載 App 後依指示完成註冊，通過身分驗證後即可開始使用所有服務。整個流程約需 5-10 分鐘。</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item" data-category="account">
+                    <button class="faq-question">
+                        <span>忘記密碼怎麼辦？</span>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>您可以透過以下方式重設密碼：</p>
+                            <ol>
+                                <li>在登入頁面點擊「忘記密碼」</li>
+                                <li>輸入註冊時使用的電子郵件或手機號碼</li>
+                                <li>系統會發送驗證碼至您的信箱或手機</li>
+                                <li>輸入驗證碼後即可設定新密碼</li>
+                            </ol>
+                            <p>若仍無法重設，請聯繫客服協助處理。</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item" data-category="security">
+                    <button class="faq-question">
+                        <span>金優匯如何保障交易安全？</span>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>我們採用多重安全機制保護您的資金與資料：</p>
+                            <ul>
+                                <li>SSL/TLS 256 位元加密傳輸</li>
+                                <li>雙因素身份驗證（2FA）</li>
+                                <li>24 小時交易監控系統</li>
+                                <li>生物辨識登入（指紋/臉部辨識）</li>
+                                <li>符合 PCI-DSS 國際安全標準</li>
+                            </ul>
+                            <p>金優匯已取得金管會核准之電子支付機構許可，受政府監管，您可安心使用。</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item" data-category="security">
+                    <button class="faq-question">
+                        <span>發現可疑交易該怎麼處理？</span>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>若發現帳戶有異常活動，請立即：</p>
+                            <ol>
+                                <li>撥打 24 小時客服專線：02-2796-5959</li>
+                                <li>在 App 中點擊「緊急凍結帳戶」</li>
+                                <li>立即更改登入密碼</li>
+                            </ol>
+                            <p>我們的風控團隊會在最短時間內協助您處理，並追蹤可疑交易來源。</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item" data-category="app">
+                    <button class="faq-question">
+                        <span>App 支援哪些作業系統？</span>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>金優匯 App 支援以下系統：</p>
+                            <ul>
+                                <li>iOS 14.0 以上版本（iPhone 8 以上機型）</li>
+                                <li>Android 8.0 以上版本</li>
+                            </ul>
+                            <p>您也可以透過網頁版使用完整服務功能，支援 Chrome、Safari、Edge 等主流瀏覽器。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="support-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Contact Us</span>
+                <h2 class="section-title" data-i18n="support.contact_title">聯絡我們</h2>
+                <p class="section-subtitle" data-i18n="support.contact_subtitle">有任何問題或建議，歡迎透過以下方式與我們聯繫</p>
+            </div>
+
+            <div class="contact-grid">
+                <div class="contact-info-cards">
+                    <div class="contact-info-card animate-on-scroll">
+                        <div class="contact-info-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                            </svg>
+                        </div>
+                        <div class="contact-info-content">
+                            <h3>客服專線</h3>
+                            <p><a href="tel:02-2796-5959">02-2796-5959</a></p>
+                            <p>服務時間：週一至週五 09:00-18:00</p>
+                        </div>
+                    </div>
+                    <div class="contact-info-card animate-on-scroll">
+                        <div class="contact-info-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                        </div>
+                        <div class="contact-info-content">
+                            <h3>電子郵件</h3>
+                            <p><a href="mailto:service@yourremit.com">service@yourremit.com</a></p>
+                            <p>我們會在 24 小時內回覆您的來信</p>
+                        </div>
+                    </div>
+                    <div class="contact-info-card animate-on-scroll">
+                        <div class="contact-info-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                        </div>
+                        <div class="contact-info-content">
+                            <h3>總公司地址</h3>
+                            <p>台北市內湖區安美街181號</p>
+                            <p><a href="https://maps.google.com" target="_blank">查看地圖導航 →</a></p>
+                        </div>
+                    </div>
+                    <div class="contact-info-card animate-on-scroll">
+                        <div class="contact-info-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                        </div>
+                        <div class="contact-info-content">
+                            <h3>線上客服</h3>
+                            <p>App 內建即時客服功能</p>
+                            <p>24 小時全年無休服務</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-form-wrapper animate-on-scroll">
+                    <h3>線上留言</h3>
+                    <p>填寫以下表單，我們會盡快與您聯繫</p>
+                    <form class="contact-form" id="support-contact-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="form-name">姓名 *</label>
+                                <input type="text" id="form-name" name="name" required placeholder="請輸入您的姓名">
+                            </div>
+                            <div class="form-group">
+                                <label for="form-phone">聯絡電話</label>
+                                <input type="tel" id="form-phone" name="phone" placeholder="請輸入聯絡電話">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="form-email">電子郵件 *</label>
+                            <input type="email" id="form-email" name="email" required placeholder="請輸入電子郵件">
+                        </div>
+                        <div class="form-group">
+                            <label for="contact-subject">問題類型</label>
+                            <select id="contact-subject" name="subject">
+                                <option value="">請選擇問題類型</option>
+                                <option value="remittance">匯款相關</option>
+                                <option value="account">帳戶問題</option>
+                                <option value="app">App 使用</option>
+                                <option value="complaint">投訴與建議</option>
+                                <option value="other">其他</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="contact-message">留言內容 *</label>
+                            <textarea id="contact-message" name="message" required placeholder="請詳細描述您的問題或需求..."></textarea>
+                        </div>
+                        <button type="submit" class="btn-submit">送出留言</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Privacy Policy Section -->
+    <section id="privacy" class="support-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Privacy Policy</span>
+                <h2 class="section-title" data-i18n="support.privacy_title">隱私權政策</h2>
+                <p class="section-subtitle" data-i18n="support.privacy_subtitle">我們重視您的隱私權，請詳閱以下說明了解我們如何保護您的個人資料</p>
+            </div>
+
+            <div class="policy-content animate-on-scroll">
+                <div class="policy-toc">
+                    <h4>目錄</h4>
+                    <ul>
+                        <li><a href="#privacy-1">資料蒐集範圍</a></li>
+                        <li><a href="#privacy-2">資料使用目的</a></li>
+                        <li><a href="#privacy-3">資料保護措施</a></li>
+                        <li><a href="#privacy-4">第三方分享政策</a></li>
+                        <li><a href="#privacy-5">Cookie 使用說明</a></li>
+                        <li><a href="#privacy-6">您的權利</a></li>
+                    </ul>
+                </div>
+
+                <div class="policy-section" id="privacy-1">
+                    <h3><span class="section-num">1</span>資料蒐集範圍</h3>
+                    <p>為提供您完善的金融服務，我們可能蒐集以下個人資料：</p>
+                    <ul>
+                        <li><strong>基本資料：</strong>姓名、身分證字號、出生日期、國籍</li>
+                        <li><strong>聯絡資訊：</strong>電話號碼、電子郵件、通訊地址</li>
+                        <li><strong>金融資訊：</strong>銀行帳戶、交易紀錄、匯款歷史</li>
+                        <li><strong>裝置資訊：</strong>IP 位址、裝置識別碼、瀏覽器類型</li>
+                    </ul>
+                </div>
+
+                <div class="policy-section" id="privacy-2">
+                    <h3><span class="section-num">2</span>資料使用目的</h3>
+                    <p>我們蒐集的資料僅用於以下目的：</p>
+                    <ul>
+                        <li>提供並改善金融服務品質</li>
+                        <li>進行身分驗證與防詐騙偵測</li>
+                        <li>遵循法規要求與主管機關規定</li>
+                        <li>發送重要通知與服務更新資訊</li>
+                        <li>進行內部統計分析與服務優化</li>
+                    </ul>
+                </div>
+
+                <div class="policy-section" id="privacy-3">
+                    <h3><span class="section-num">3</span>資料保護措施</h3>
+                    <p>我們採用業界最高標準的安全措施保護您的資料：</p>
+                    <ul>
+                        <li>所有資料傳輸採用 SSL/TLS 加密技術</li>
+                        <li>敏感資料以 AES-256 加密儲存</li>
+                        <li>定期進行資安稽核與滲透測試</li>
+                        <li>員工接受嚴格的資安教育訓練</li>
+                        <li>建立完善的存取控制與監控機制</li>
+                    </ul>
+                </div>
+
+                <div class="policy-section" id="privacy-4">
+                    <h3><span class="section-num">4</span>第三方分享政策</h3>
+                    <p>除以下情況外，我們不會將您的個人資料分享給第三方：</p>
+                    <ul>
+                        <li>取得您的明確同意</li>
+                        <li>配合司法或主管機關的合法調查</li>
+                        <li>與合作銀行進行必要的交易處理</li>
+                        <li>委託經授權的服務提供商（須遵守保密義務）</li>
+                    </ul>
+                </div>
+
+                <div class="policy-section" id="privacy-5">
+                    <h3><span class="section-num">5</span>Cookie 使用說明</h3>
+                    <p>我們使用 Cookie 及類似技術來提升您的使用體驗：</p>
+                    <ul>
+                        <li><strong>必要 Cookie：</strong>維持網站基本功能運作</li>
+                        <li><strong>分析 Cookie：</strong>了解網站使用狀況以進行改善</li>
+                        <li><strong>行銷 Cookie：</strong>提供個人化內容與廣告</li>
+                    </ul>
+                    <p>您可以透過瀏覽器設定管理 Cookie 偏好，但部分功能可能因此受限。</p>
+                </div>
+
+                <div class="policy-section" id="privacy-6">
+                    <h3><span class="section-num">6</span>您的權利</h3>
+                    <p>依據個人資料保護法，您享有以下權利：</p>
+                    <ul>
+                        <li>查詢或請求閱覽您的個人資料</li>
+                        <li>請求製給個人資料複本</li>
+                        <li>請求補充或更正個人資料</li>
+                        <li>請求停止蒐集、處理或利用個人資料</li>
+                        <li>請求刪除個人資料</li>
+                    </ul>
+                    <p>如需行使上述權利，請透過客服管道與我們聯繫。</p>
+                </div>
+
+                <div class="policy-update-info">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <p><strong>最後更新日期：</strong>2025 年 1 月 15 日。我們可能會不定期更新本政策，重大變更將透過網站公告或電子郵件通知您。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Terms of Service Section -->
+    <section id="terms" class="support-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Terms of Service</span>
+                <h2 class="section-title" data-i18n="support.terms_title">服務條款</h2>
+                <p class="section-subtitle" data-i18n="support.terms_subtitle">使用金優匯服務前，請詳閱以下條款內容</p>
+            </div>
+
+            <div class="policy-content animate-on-scroll">
+                <div class="policy-toc">
+                    <h4>目錄</h4>
+                    <ul>
+                        <li><a href="#terms-1">服務說明</a></li>
+                        <li><a href="#terms-2">帳戶規範</a></li>
+                        <li><a href="#terms-3">交易規則</a></li>
+                        <li><a href="#terms-4">費用說明</a></li>
+                        <li><a href="#terms-5">免責聲明</a></li>
+                        <li><a href="#terms-6">爭議處理</a></li>
+                    </ul>
+                </div>
+
+                <div class="policy-section" id="terms-1">
+                    <h3><span class="section-num">1</span>服務說明</h3>
+                    <p>金優匯股份有限公司（以下簡稱「本公司」）提供以下金融服務：</p>
+                    <ul>
+                        <li>國際匯款服務：跨境資金轉帳與外幣兌換</li>
+                        <li>金融科技服務：數位支付與帳戶管理</li>
+                        <li>企業顧問服務：跨境商務與財務諮詢</li>
+                        <li>投資理財服務：基金、保險等金融商品</li>
+                    </ul>
+                    <p>本公司保留修改、暫停或終止任何服務的權利，並將事先公告。</p>
+                </div>
+
+                <div class="policy-section" id="terms-2">
+                    <h3><span class="section-num">2</span>帳戶規範</h3>
+                    <p>使用本服務須遵守以下規範：</p>
+                    <ul>
+                        <li>申請人須年滿 20 歲，具完全行為能力</li>
+                        <li>須提供真實、正確、完整的個人資料</li>
+                        <li>帳戶僅限本人使用，不得轉讓或借予他人</li>
+                        <li>妥善保管帳號密碼，因保管不當造成的損失由用戶自行負責</li>
+                        <li>禁止將本服務用於任何違法活動</li>
+                    </ul>
+                </div>
+
+                <div class="policy-section" id="terms-3">
+                    <h3><span class="section-num">3</span>交易規則</h3>
+                    <p>進行交易時，請注意以下事項：</p>
+                    <ul>
+                        <li>匯款指示一經確認送出，原則上不可撤銷</li>
+                        <li>匯率以交易當下系統顯示為準</li>
+                        <li>收款方資訊錯誤導致的延遲或損失，由匯款人自行負責</li>
+                        <li>大額交易可能需要額外的身分驗證</li>
+                        <li>本公司有權拒絕可疑或違規交易</li>
+                    </ul>
+                </div>
+
+                <div class="policy-section" id="terms-4">
+                    <h3><span class="section-num">4</span>費用說明</h3>
+                    <p>本服務收費標準如下：</p>
+                    <ul>
+                        <li>匯款手續費：依匯款金額與目的地國家計算</li>
+                        <li>匯率差價：買賣匯率間之價差</li>
+                        <li>帳戶管理費：基本帳戶免費，進階功能另計</li>
+                        <li>其他費用：如電報費、中轉行費用等</li>
+                    </ul>
+                    <p>所有費用將在交易確認前清楚顯示，詳細費率表請參閱官網公告。</p>
+                </div>
+
+                <div class="policy-section" id="terms-5">
+                    <h3><span class="section-num">5</span>免責聲明</h3>
+                    <p>以下情況本公司不承擔責任：</p>
+                    <ul>
+                        <li>因不可抗力（天災、戰爭、政府行為等）造成的服務中斷</li>
+                        <li>因電信網路或第三方系統問題導致的延遲或錯誤</li>
+                        <li>用戶自身疏失或違反使用規範造成的損失</li>
+                        <li>收款國家政策變動導致的資金凍結或退回</li>
+                        <li>投資理財商品的市場風險與可能虧損</li>
+                    </ul>
+                </div>
+
+                <div class="policy-section" id="terms-6">
+                    <h3><span class="section-num">6</span>爭議處理</h3>
+                    <p>如有爭議，處理程序如下：</p>
+                    <ul>
+                        <li>首先透過客服管道進行協商</li>
+                        <li>協商不成可向金融消費評議中心申訴</li>
+                        <li>本條款以中華民國法律為準據法</li>
+                        <li>因本條款所生爭訟，以臺灣臺北地方法院為第一審管轄法院</li>
+                    </ul>
+                </div>
+
+                <div class="policy-update-info">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <p><strong>最後更新日期：</strong>2025 年 1 月 15 日。繼續使用本服務即表示您同意受本條款約束。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-top">
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-brand">
+                        <a href="index.html" class="footer-logo">
+                            <div class="logo-group">
+                                <span class="logo-yourremit">Your Remit</span>
+                                <div class="logo-yourpay">
+                                    <svg class="logo-icon" width="28" height="32" viewBox="0 0 36 44">
+                                        <path d="M4 8 Q4 4 8 4 L8 4 Q8 0 16 0 Q28 0 32 8 L26 14 Q24 10 18 10 Q12 10 12 14 L12 14 L12 40 Q12 44 8 44 Q4 44 4 40 Z" fill="#1B3A57"/>
+                                        <path d="M20 22 Q20 18 24 18 L32 18 L32 26 Q32 34 24 34 L20 34 L20 28 Q20 26 24 26 L26 26 L26 24 Q26 22 24 22 Z" fill="#2DBDB6"/>
+                                    </svg>
+                                    <span>your<em>pay</em></span>
+                                </div>
+                            </div>
+                        </a>
+                        <p class="footer-desc" data-i18n="footer.company">金優匯股份有限公司</p>
+                        <div class="footer-social">
+                            <a href="#" class="social-link" aria-label="Facebook"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></a>
+                            <a href="#" class="social-link" aria-label="Line"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596a.629.629 0 0 1-.199.031c-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595a.672.672 0 0 1 .194-.033c.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"></path></svg></a>
+                            <a href="#" class="social-link" aria-label="Instagram"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                        </div>
+                    </div>
+
+                    <div class="footer-links">
+                        <h4 class="footer-title" data-i18n="footer.about_title">關於金優匯</h4>
+                        <ul>
+                            <li><a href="about.html#intro" data-i18n="footer.about_intro">公司簡介</a></li>
+                            <li><a href="about.html#philosophy" data-i18n="footer.about_philosophy">經營理念</a></li>
+                            <li><a href="about.html#history" data-i18n="footer.about_history">發展沿革</a></li>
+                            <li><a href="about.html#locations" data-i18n="footer.about_locations">據點資訊</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-links">
+                        <h4 class="footer-title" data-i18n="footer.services_title">服務項目</h4>
+                        <ul>
+                            <li><a href="service-detail.html?id=1" data-i18n="service.remittance">國際匯款服務</a></li>
+                            <li><a href="service-detail.html?id=2" data-i18n="service.fintech">金融科技</a></li>
+                            <li><a href="service-detail.html?id=3" data-i18n="service.consulting">企業顧問</a></li>
+                            <li><a href="service-detail.html?id=4" data-i18n="service.investment">投資理財</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-links">
+                        <h4 class="footer-title" data-i18n="footer.support_title">客戶服務</h4>
+                        <ul>
+                            <li><a href="support.html#faq" data-i18n="footer.support_faq">常見問題</a></li>
+                            <li><a href="support.html#contact" data-i18n="footer.contact">聯絡我們</a></li>
+                            <li><a href="support.html#privacy" data-i18n="footer.privacy">隱私權政策</a></li>
+                            <li><a href="support.html#terms" data-i18n="footer.terms">服務條款</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-links">
+                        <h4 class="footer-title" data-i18n="footer.investor_title">投資人專區</h4>
+                        <ul>
+                            <li><a href="investors-financials.html" data-i18n="investor.financial">財務報告</a></li>
+                            <li><a href="investors-announcements.html" data-i18n="investor.announcements">公司公告</a></li>
+                            <li><a href="investors-governance.html" data-i18n="investor.governance">公司治理</a></li>
+                            <li><a href="investors-shareholders.html" data-i18n="investor.shareholders">股東會資訊</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-contact" id="footer-contact">
+                        <h4 class="footer-title" data-i18n="footer.contact_title">聯絡資訊</h4>
+                        <ul class="contact-list">
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                </svg>
+                                <span id="contact-phone">02-2796-5959</span>
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                </svg>
+                                <span id="contact-email">service@yourremit.com</span>
+                            </li>
+                            <li>
+                                <a href="#" id="contact-address-link" class="address-link" target="_blank">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                        <circle cx="12" cy="10" r="3"></circle>
+                                    </svg>
+                                    <span id="contact-address">台北市內湖區安美街181號</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="footer-bottom-content">
+                    <p class="copyright" data-i18n="footer.copyright">Copyright © 2025 金優匯股份有限公司 Your Remit | yourpay. All Rights Reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Buttons -->
+    <div class="floating-social">
+        <a href="#" class="floating-btn" aria-label="LinkedIn"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+        <a href="#" class="floating-btn" aria-label="Facebook"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+        <a href="#" class="floating-btn" aria-label="Instagram"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+        <a href="mailto:service@yourremit.com" class="floating-btn" aria-label="Email"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+        <button class="floating-btn floating-top" id="float-top" aria-label="回到頂部"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg><span>TOP</span></button>
+    </div>
+
+    <script src="api-client.js"></script>
+    <script src="i18n.js"></script>
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // FAQ accordion
+            const faqItems = document.querySelectorAll('.faq-item');
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                question.addEventListener('click', () => {
+                    const isActive = item.classList.contains('active');
+                    faqItems.forEach(i => i.classList.remove('active'));
+                    if (!isActive) item.classList.add('active');
+                });
+            });
+
+            // FAQ category filter
+            const categoryBtns = document.querySelectorAll('.faq-category-btn');
+            categoryBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    categoryBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    const category = btn.dataset.category;
+                    faqItems.forEach(item => {
+                        if (category === 'all' || item.dataset.category === category) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            // Support nav scroll spy
+            const sections = document.querySelectorAll('.support-section[id]');
+            const navLinks = document.querySelectorAll('.support-nav-list a');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetSection = document.getElementById(targetId);
+                    if (targetSection) {
+                        const headerOffset = 160;
+                        const offsetPosition = targetSection.getBoundingClientRect().top + window.pageYOffset - headerOffset;
+                        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                    }
+                });
+            });
+
+            function updateActiveNav() {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 200;
+                    if (window.pageYOffset >= sectionTop) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + current) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+            window.addEventListener('scroll', updateActiveNav);
+            updateActiveNav();
+
+            // Handle hash on page load
+            if (window.location.hash) {
+                setTimeout(() => {
+                    const targetSection = document.querySelector(window.location.hash);
+                    if (targetSection) {
+                        const headerOffset = 160;
+                        const offsetPosition = targetSection.getBoundingClientRect().top + window.pageYOffset - headerOffset;
+                        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                    }
+                }, 100);
+            }
+
+            // Scroll animations
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) entry.target.classList.add('is-visible');
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+
+            // Contact form submission
+            const contactForm = document.getElementById('support-contact-form');
+            if (contactForm) {
+                contactForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const formData = new FormData(contactForm);
+                    const data = Object.fromEntries(formData);
+                    try {
+                        await createContactMessage(data);
+                        alert('感謝您的留言，我們會盡快回覆！');
+                        contactForm.reset();
+                    } catch (err) {
+                        alert('送出失敗，請稍後再試。');
+                    }
+                });
+            }
+
+            // Load FAQ from database (if available)
+            loadFaqFromDB();
+        });
+
+        async function loadFaqFromDB() {
+            try {
+                const { data, error } = await supabaseSelect('support_faq', { order: { column: 'sort_order', ascending: true } });
+                if (data && data.length > 0) {
+                    const faqList = document.getElementById('faq-list');
+                    faqList.innerHTML = data.map(faq => `
+                        <div class="faq-item" data-category="${faq.category}">
+                            <button class="faq-question">
+                                <span>${faq.question}</span>
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </button>
+                            <div class="faq-answer">
+                                <div class="faq-answer-content">${faq.answer}</div>
+                            </div>
+                        </div>
+                    `).join('');
+                    // Re-attach event listeners
+                    document.querySelectorAll('.faq-item').forEach(item => {
+                        item.querySelector('.faq-question').addEventListener('click', () => {
+                            const isActive = item.classList.contains('active');
+                            document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+                            if (!isActive) item.classList.add('active');
+                        });
+                    });
+                }
+            } catch (e) {
+                console.log('Using default FAQ content');
+            }
+        }
+    </script>
+</body>
+</html>
