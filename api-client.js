@@ -348,6 +348,82 @@ async function deleteContactMessage(id) {
     return supabaseDelete('contact_messages', id);
 }
 
+// Support FAQ
+async function getSupportFaq(filter = {}) {
+    const options = { order: { column: 'sort_order', ascending: true } };
+    if (filter.category) {
+        options.filters = [{ column: 'category', value: filter.category }];
+    }
+    if (filter.published_only) {
+        options.filters = options.filters || [];
+        options.filters.push({ column: 'is_published', value: true });
+    }
+    return supabaseSelect('support_faq', options);
+}
+
+async function createSupportFaq(faq) {
+    return supabaseInsert('support_faq', faq);
+}
+
+async function updateSupportFaq(id, faq) {
+    return supabaseUpdate('support_faq', id, faq);
+}
+
+async function deleteSupportFaq(id) {
+    return supabaseDelete('support_faq', id);
+}
+
+// Support Privacy Policy
+async function getSupportPrivacy() {
+    return supabaseSelect('support_privacy', { order: { column: 'sort_order', ascending: true } });
+}
+
+async function createSupportPrivacy(privacy) {
+    return supabaseInsert('support_privacy', privacy);
+}
+
+async function updateSupportPrivacy(id, privacy) {
+    return supabaseUpdate('support_privacy', id, privacy);
+}
+
+async function deleteSupportPrivacy(id) {
+    return supabaseDelete('support_privacy', id);
+}
+
+// Support Terms of Service
+async function getSupportTerms() {
+    return supabaseSelect('support_terms', { order: { column: 'sort_order', ascending: true } });
+}
+
+async function createSupportTerms(terms) {
+    return supabaseInsert('support_terms', terms);
+}
+
+async function updateSupportTerms(id, terms) {
+    return supabaseUpdate('support_terms', id, terms);
+}
+
+async function deleteSupportTerms(id) {
+    return supabaseDelete('support_terms', id);
+}
+
+// Support Settings
+async function getSupportSettings() {
+    return supabaseSelect('support_settings');
+}
+
+async function updateSupportSetting(key, value) {
+    // Find existing setting by key and update
+    const { data } = await supabaseSelect('support_settings', {
+        filters: [{ column: 'key', value: key }],
+        limit: 1
+    });
+    if (data && data.length > 0) {
+        return supabaseUpdate('support_settings', data[0].id, { value });
+    }
+    return supabaseInsert('support_settings', { key, value });
+}
+
 // Visitor Logs
 async function getVisitorLogs() {
     return supabaseSelect('visitor_logs', { order: { column: 'created_at', ascending: false } });

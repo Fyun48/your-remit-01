@@ -101,6 +101,24 @@
                         <span>聯絡訊息</span>
                     </a>
                 </li>
+                <li class="nav-item has-submenu">
+                    <a href="#" class="nav-link" data-section="support">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                        <span>客戶服務</span>
+                        <svg class="submenu-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </a>
+                    <ul class="submenu">
+                        <li><a href="#" data-section="support-faq">常見問題</a></li>
+                        <li><a href="#" data-section="support-privacy">隱私權政策</a></li>
+                        <li><a href="#" data-section="support-terms">服務條款</a></li>
+                    </ul>
+                </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link" data-section="csr">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -902,6 +920,222 @@
                             刪除訊息
                         </button>
                         <button class="close-btn" id="closeMessageDetailBtn">關閉</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Support FAQ Management Section -->
+            <section class="content-section" id="support-faq">
+                <div class="section-header">
+                    <div class="section-header-left">
+                        <h1 class="section-title">常見問題管理</h1>
+                        <p class="section-desc">管理客戶服務頁面的 FAQ 內容</p>
+                    </div>
+                    <button class="add-btn" id="addFaqBtn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        新增問題
+                    </button>
+                </div>
+
+                <!-- FAQ 分類篩選 -->
+                <div class="filter-bar">
+                    <select id="faqCategoryFilter" class="filter-select">
+                        <option value="">全部分類</option>
+                        <option value="remittance">匯款相關</option>
+                        <option value="account">帳戶問題</option>
+                        <option value="security">安全問題</option>
+                        <option value="app">App 使用</option>
+                        <option value="general">一般問題</option>
+                    </select>
+                </div>
+
+                <!-- FAQ 列表 -->
+                <div class="faq-admin-list" id="faqAdminList">
+                    <!-- 動態生成 -->
+                </div>
+            </section>
+
+            <!-- FAQ Edit Modal -->
+            <div class="modal" id="faqEditModal">
+                <div class="modal-content modal-large">
+                    <div class="modal-header">
+                        <h2 id="faqModalTitle">新增常見問題</h2>
+                        <button class="modal-close" id="closeFaqModal">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="faqEditForm">
+                            <input type="hidden" id="faqEditId">
+                            <div class="form-group">
+                                <label for="faqCategory">分類 *</label>
+                                <select id="faqCategory" required>
+                                    <option value="remittance">匯款相關</option>
+                                    <option value="account">帳戶問題</option>
+                                    <option value="security">安全問題</option>
+                                    <option value="app">App 使用</option>
+                                    <option value="general">一般問題</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="faqQuestion">問題 *</label>
+                                <input type="text" id="faqQuestion" required placeholder="輸入問題內容">
+                            </div>
+                            <div class="form-group">
+                                <label for="faqAnswer">答案 *（支援 HTML）</label>
+                                <textarea id="faqAnswer" rows="8" required placeholder="輸入答案內容，可使用 HTML 標籤"></textarea>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="faqSortOrder">排序</label>
+                                    <input type="number" id="faqSortOrder" value="0" min="0">
+                                </div>
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="faqPublished" checked>
+                                        發布
+                                    </label>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="cancel-btn" id="cancelFaqBtn">取消</button>
+                        <button class="save-btn" id="saveFaqBtn">儲存</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Support Privacy Management Section -->
+            <section class="content-section" id="support-privacy">
+                <div class="section-header">
+                    <div class="section-header-left">
+                        <h1 class="section-title">隱私權政策管理</h1>
+                        <p class="section-desc">管理隱私權政策的章節內容</p>
+                    </div>
+                    <button class="add-btn" id="addPrivacyBtn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        新增章節
+                    </button>
+                </div>
+
+                <!-- Privacy 列表 -->
+                <div class="policy-admin-list" id="privacyAdminList">
+                    <!-- 動態生成 -->
+                </div>
+            </section>
+
+            <!-- Privacy Edit Modal -->
+            <div class="modal" id="privacyEditModal">
+                <div class="modal-content modal-large">
+                    <div class="modal-header">
+                        <h2 id="privacyModalTitle">新增隱私權政策章節</h2>
+                        <button class="modal-close" id="closePrivacyModal">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="privacyEditForm">
+                            <input type="hidden" id="privacyEditId">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="privacySectionNum">章節編號 *</label>
+                                    <input type="number" id="privacySectionNum" required min="1" value="1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="privacySortOrder">排序</label>
+                                    <input type="number" id="privacySortOrder" value="0" min="0">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="privacyTitle">章節標題 *</label>
+                                <input type="text" id="privacyTitle" required placeholder="例如：資料蒐集範圍">
+                            </div>
+                            <div class="form-group">
+                                <label for="privacyContent">內容 *（支援 HTML）</label>
+                                <textarea id="privacyContent" rows="10" required placeholder="輸入章節內容，可使用 HTML 標籤"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="cancel-btn" id="cancelPrivacyBtn">取消</button>
+                        <button class="save-btn" id="savePrivacyBtn">儲存</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Support Terms Management Section -->
+            <section class="content-section" id="support-terms">
+                <div class="section-header">
+                    <div class="section-header-left">
+                        <h1 class="section-title">服務條款管理</h1>
+                        <p class="section-desc">管理服務條款的章節內容</p>
+                    </div>
+                    <button class="add-btn" id="addTermsBtn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        新增章節
+                    </button>
+                </div>
+
+                <!-- Terms 列表 -->
+                <div class="policy-admin-list" id="termsAdminList">
+                    <!-- 動態生成 -->
+                </div>
+            </section>
+
+            <!-- Terms Edit Modal -->
+            <div class="modal" id="termsEditModal">
+                <div class="modal-content modal-large">
+                    <div class="modal-header">
+                        <h2 id="termsModalTitle">新增服務條款章節</h2>
+                        <button class="modal-close" id="closeTermsModal">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="termsEditForm">
+                            <input type="hidden" id="termsEditId">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="termsSectionNum">章節編號 *</label>
+                                    <input type="number" id="termsSectionNum" required min="1" value="1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="termsSortOrder">排序</label>
+                                    <input type="number" id="termsSortOrder" value="0" min="0">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="termsTitle">章節標題 *</label>
+                                <input type="text" id="termsTitle" required placeholder="例如：服務說明">
+                            </div>
+                            <div class="form-group">
+                                <label for="termsContent">內容 *（支援 HTML）</label>
+                                <textarea id="termsContent" rows="10" required placeholder="輸入章節內容，可使用 HTML 標籤"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="cancel-btn" id="cancelTermsBtn">取消</button>
+                        <button class="save-btn" id="saveTermsBtn">儲存</button>
                     </div>
                 </div>
             </div>

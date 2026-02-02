@@ -720,7 +720,7 @@
                         </div>
                         <div class="contact-info-content">
                             <h3>客服專線</h3>
-                            <p><a href="tel:02-2796-5959">02-2796-5959</a></p>
+                            <p><a href="tel:02-2796-5959" id="section-contact-phone">02-2796-5959</a></p>
                             <p>服務時間：週一至週五 09:00-18:00</p>
                         </div>
                     </div>
@@ -733,7 +733,7 @@
                         </div>
                         <div class="contact-info-content">
                             <h3>電子郵件</h3>
-                            <p><a href="mailto:service@yourremit.com">service@yourremit.com</a></p>
+                            <p><a href="mailto:service@yourremit.com" id="section-contact-email">service@yourremit.com</a></p>
                             <p>我們會在 24 小時內回覆您的來信</p>
                         </div>
                     </div>
@@ -746,8 +746,8 @@
                         </div>
                         <div class="contact-info-content">
                             <h3>總公司地址</h3>
-                            <p>台北市內湖區安美街181號</p>
-                            <p><a href="https://maps.google.com" target="_blank">查看地圖導航 →</a></p>
+                            <p id="section-contact-address">台北市內湖區安美街181號</p>
+                            <p><a href="https://maps.google.com" target="_blank" id="section-contact-map">查看地圖導航 →</a></p>
                         </div>
                     </div>
                     <div class="contact-info-card animate-on-scroll">
@@ -1213,25 +1213,11 @@
             }, { threshold: 0.1 });
             document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
 
-            // Contact form submission
-            const contactForm = document.getElementById('support-contact-form');
-            if (contactForm) {
-                contactForm.addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    const formData = new FormData(contactForm);
-                    const data = Object.fromEntries(formData);
-                    try {
-                        await createContactMessage(data);
-                        alert('感謝您的留言，我們會盡快回覆！');
-                        contactForm.reset();
-                    } catch (err) {
-                        alert('送出失敗，請稍後再試。');
-                    }
-                });
-            }
-
             // Load FAQ from database (if available)
             loadFaqFromDB();
+
+            // Load contact info from backend
+            loadContactInfo();
         });
 
         async function loadFaqFromDB() {
@@ -1261,6 +1247,55 @@
                 }
             } catch (e) {
                 console.log('Using default FAQ content');
+            }
+        }
+
+        async function loadContactInfo() {
+            try {
+                const { data, error } = await getContentSettings();
+                if (data && data.length > 0 && data[0].settings) {
+                    const settings = data[0].settings;
+
+                    // Update phone
+                    if (settings.phone) {
+                        const phoneEl = document.getElementById('section-contact-phone');
+                        const footerPhoneEl = document.getElementById('contact-phone');
+                        if (phoneEl) {
+                            phoneEl.textContent = settings.phone;
+                            phoneEl.href = 'tel:' + settings.phone.replace(/-/g, '');
+                        }
+                        if (footerPhoneEl) footerPhoneEl.textContent = settings.phone;
+                    }
+
+                    // Update email
+                    if (settings.email) {
+                        const emailEl = document.getElementById('section-contact-email');
+                        const footerEmailEl = document.getElementById('contact-email');
+                        if (emailEl) {
+                            emailEl.textContent = settings.email;
+                            emailEl.href = 'mailto:' + settings.email;
+                        }
+                        if (footerEmailEl) footerEmailEl.textContent = settings.email;
+                    }
+
+                    // Update address
+                    if (settings.address) {
+                        const addressEl = document.getElementById('section-contact-address');
+                        const footerAddressEl = document.getElementById('contact-address');
+                        if (addressEl) addressEl.textContent = settings.address;
+                        if (footerAddressEl) footerAddressEl.textContent = settings.address;
+                    }
+
+                    // Update map link
+                    if (settings.mapUrl) {
+                        const mapEl = document.getElementById('section-contact-map');
+                        const footerMapEl = document.getElementById('contact-address-link');
+                        if (mapEl) mapEl.href = settings.mapUrl;
+                        if (footerMapEl) footerMapEl.href = settings.mapUrl;
+                    }
+                }
+            } catch (e) {
+                console.log('Using default contact info');
             }
         }
     </script>

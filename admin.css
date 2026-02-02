@@ -3692,3 +3692,158 @@ input, select, textarea {
     }
 }
 
+/* ================================
+   Support Admin Sections
+================================ */
+
+/* Filter Bar */
+.filter-bar {
+    margin-bottom: var(--space-md);
+    padding: var(--space-sm);
+    background: var(--color-gray-100);
+    border-radius: var(--radius-md);
+}
+
+.filter-select {
+    padding: var(--space-xs) var(--space-sm);
+    border: 1px solid var(--color-gray-300);
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    background: white;
+    min-width: 150px;
+}
+
+/* Admin List */
+.faq-admin-list,
+.privacy-admin-list,
+.terms-admin-list {
+    display: grid;
+    gap: var(--space-md);
+}
+
+.admin-item {
+    background: white;
+    border: 1px solid var(--color-gray-200);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    transition: var(--transition-fast);
+}
+
+.admin-item:hover {
+    border-color: var(--color-accent);
+    box-shadow: var(--shadow-sm);
+}
+
+.admin-item.unpublished {
+    opacity: 0.6;
+    border-left: 3px solid var(--color-warning);
+}
+
+.admin-item .item-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-xs);
+}
+
+.admin-item .item-badge {
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    background: var(--color-gray-200);
+    color: var(--color-gray-700);
+}
+
+.admin-item .item-badge.remittance { background: #DBEAFE; color: #1E40AF; }
+.admin-item .item-badge.account { background: #FEF3C7; color: #92400E; }
+.admin-item .item-badge.security { background: #FEE2E2; color: #991B1B; }
+.admin-item .item-badge.app { background: #D1FAE5; color: #065F46; }
+.admin-item .item-badge.general { background: #E5E7EB; color: #374151; }
+
+.admin-item .item-status {
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+}
+
+.admin-item .item-status.published {
+    background: var(--color-success);
+    color: white;
+}
+
+.admin-item .item-status.draft {
+    background: var(--color-warning);
+    color: white;
+}
+
+.admin-item .item-number {
+    font-size: 0.75rem;
+    color: var(--color-gray-600);
+    font-weight: 500;
+}
+
+.admin-item .item-title {
+    font-size: 1rem;
+    color: var(--color-gray-900);
+    margin: var(--space-xs) 0;
+    font-weight: 500;
+}
+
+.admin-item .item-preview {
+    font-size: 0.875rem;
+    color: var(--color-gray-600);
+    line-height: 1.5;
+    margin-bottom: var(--space-sm);
+}
+
+.admin-item .item-actions {
+    display: flex;
+    gap: var(--space-xs);
+}
+
+.admin-item .edit-btn,
+.admin-item .delete-btn {
+    padding: 6px 12px;
+    font-size: 0.75rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.admin-item .edit-btn {
+    background: var(--color-primary);
+    color: white;
+    border: none;
+}
+
+.admin-item .edit-btn:hover {
+    background: var(--color-primary-light);
+}
+
+.admin-item .delete-btn {
+    background: transparent;
+    color: var(--color-error);
+    border: 1px solid var(--color-error);
+}
+
+.admin-item .delete-btn:hover {
+    background: var(--color-error);
+    color: white;
+}
+
+/* Loading and Empty States */
+.loading-state,
+.empty-state,
+.error-state {
+    padding: var(--space-2xl);
+    text-align: center;
+    color: var(--color-gray-600);
+    background: var(--color-gray-100);
+    border-radius: var(--radius-md);
+}
+
+.error-state {
+    color: var(--color-error);
+    background: #FEE2E2;
+}
+

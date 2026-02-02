@@ -266,6 +266,9 @@ function initNavigation() {
             if (section.startsWith('investor-')) {
                 // Handle investor sections with their initialization
                 handleInvestorSectionNavigation(section);
+            } else if (section.startsWith('support-')) {
+                // Handle support sections with their initialization
+                handleSupportSectionNavigation(section);
             } else {
                 // Show corresponding section
                 contentSections.forEach(s => s.classList.remove('active'));
@@ -4029,6 +4032,33 @@ function handleInvestorSectionNavigation(section) {
     }
 }
 
+/**
+ * Handle section navigation for support sections
+ */
+function handleSupportSectionNavigation(section) {
+    // Hide all sections first
+    document.querySelectorAll('.content-section').forEach(s => {
+        s.classList.remove('active');
+        s.style.display = 'none';
+    });
+
+    // Show target section
+    const targetSection = document.getElementById(section);
+    if (targetSection) {
+        targetSection.classList.add('active');
+        targetSection.style.display = 'block';
+
+        // Initialize section data on first load
+        if (section === 'support-faq') {
+            initSupportFaqSection();
+        } else if (section === 'support-privacy') {
+            initSupportPrivacySection();
+        } else if (section === 'support-terms') {
+            initSupportTermsSection();
+        }
+    }
+}
+
 // Make investor management functions globally available
 window.showAddDocumentModal = showAddDocumentModal;
 window.closeDocumentModal = closeDocumentModal;
@@ -4998,4 +5028,443 @@ window.initTranslationsSection = initTranslationsSection;
 window.editTranslation = editTranslation;
 window.deleteTranslation = deleteTranslation;
 window.closeTranslationModal = closeTranslationModal;
+
+// ============================================
+// Support Management (FAQ, Privacy, Terms)
+// ============================================
+
+// FAQ Management
+let faqList = [];
+
+async function initSupportFaqSection() {
+    await loadFaqList();
+    initFaqEventListeners();
+}
+
+async function loadFaqList() {
+    const container = document.getElementById('faqAdminList');
+    if (!container) return;
+
+    container.innerHTML = '<div class="loading-state">載入中...</div>';
+
+    try {
+        const filter = {};
+        const categorySelect = document.getElementById('faqCategoryFilter');
+        if (categorySelect && categorySelect.value) {
+            filter.category = categorySelect.value;
+        }
+
+        const { data, error } = await getSupportFaq(filter);
+        if (error) throw error;
+
+        faqList = data || [];
+
+        if (faqList.length === 0) {
+            container.innerHTML = '<div class="empty-state">尚無常見問題，點擊「新增問題」開始建立</div>';
+            return;
+        }
+
+        const categoryLabels = {
+            remittance: '匯款相關',
+            account: '帳戶問題',
+            security: '安全問題',
+            app: 'App 使用',
+            general: '一般問題'
+        };
+
+        container.innerHTML = faqList.map(faq => `
+            <div class="admin-item faq-item ${faq.is_published ? '' : 'unpublished'}">
+                <div class="item-header">
+                    <span class="item-badge ${faq.category}">${categoryLabels[faq.category] || faq.category}</span>
+                    <span class="item-status ${faq.is_published ? 'published' : 'draft'}">${faq.is_published ? '已發布' : '草稿'}</span>
+                </div>
+                <h4 class="item-title">${escapeHtml(faq.question)}</h4>
+                <div class="item-preview">${faq.answer.substring(0, 100)}...</div>
+                <div class="item-actions">
+                    <button class="edit-btn" onclick="editFaq(${faq.id})">編輯</button>
+                    <button class="delete-btn" onclick="deleteFaq(${faq.id})">刪除</button>
+                </div>
+            </div>
+        `).join('');
+    } catch (error) {
+        console.error('載入 FAQ 失敗:', error);
+        container.innerHTML = '<div class="error-state">載入失敗，請重試</div>';
+    }
+}
+
+function initFaqEventListeners() {
+    // Add button
+    const addBtn = document.getElementById('addFaqBtn');
+    if (addBtn) {
+        addBtn.addEventListener('click', () => openFaqModal());
+    }
+
+    // Category filter
+    const categoryFilter = document.getElementById('faqCategoryFilter');
+    if (categoryFilter) {
+        categoryFilter.addEventListener('change', loadFaqList);
+    }
+
+    // Modal close buttons
+    const closeBtn = document.getElementById('closeFaqModal');
+    const cancelBtn = document.getElementById('cancelFaqBtn');
+    if (closeBtn) closeBtn.addEventListener('click', closeFaqModal);
+    if (cancelBtn) cancelBtn.addEventListener('click', closeFaqModal);
+
+    // Save button
+    const saveBtn = document.getElementById('saveFaqBtn');
+    if (saveBtn) {
+        saveBtn.addEventListener('click', saveFaq);
+    }
+}
+
+function openFaqModal(faq = null) {
+    const modal = document.getElementById('faqEditModal');
+    const title = document.getElementById('faqModalTitle');
+    const form = document.getElementById('faqEditForm');
+
+    if (faq) {
+        title.textContent = '編輯常見問題';
+        document.getElementById('faqEditId').value = faq.id;
+        document.getElementById('faqCategory').value = faq.category;
+        document.getElementById('faqQuestion').value = faq.question;
+        document.getElementById('faqAnswer').value = faq.answer;
+        document.getElementById('faqSortOrder').value = faq.sort_order || 0;
+        document.getElementById('faqPublished').checked = faq.is_published;
+    } else {
+        title.textContent = '新增常見問題';
+        form.reset();
+        document.getElementById('faqEditId').value = '';
+        document.getElementById('faqPublished').checked = true;
+    }
+
+    modal.classList.add('active');
+}
+
+function closeFaqModal() {
+    const modal = document.getElementById('faqEditModal');
+    modal.classList.remove('active');
+}
+
+async function saveFaq() {
+    const id = document.getElementById('faqEditId').value;
+    const faqData = {
+        category: document.getElementById('faqCategory').value,
+        question: document.getElementById('faqQuestion').value,
+        answer: document.getElementById('faqAnswer').value,
+        sort_order: parseInt(document.getElementById('faqSortOrder').value) || 0,
+        is_published: document.getElementById('faqPublished').checked
+    };
+
+    try {
+        let result;
+        if (id) {
+            result = await updateSupportFaq(id, faqData);
+        } else {
+            result = await createSupportFaq(faqData);
+        }
+
+        if (result.error) throw result.error;
+
+        showToast(id ? 'FAQ 已更新' : 'FAQ 已新增', 'success');
+        closeFaqModal();
+        loadFaqList();
+    } catch (error) {
+        console.error('儲存 FAQ 失敗:', error);
+        showToast('儲存失敗: ' + error.message, 'error');
+    }
+}
+
+function editFaq(id) {
+    const faq = faqList.find(f => f.id === id);
+    if (faq) openFaqModal(faq);
+}
+
+async function deleteFaq(id) {
+    if (!confirm('確定要刪除這個問題嗎？')) return;
+
+    try {
+        const { error } = await deleteSupportFaq(id);
+        if (error) throw error;
+
+        showToast('FAQ 已刪除', 'success');
+        loadFaqList();
+    } catch (error) {
+        console.error('刪除 FAQ 失敗:', error);
+        showToast('刪除失敗: ' + error.message, 'error');
+    }
+}
+
+// Privacy Policy Management
+let privacyList = [];
+
+async function initSupportPrivacySection() {
+    await loadPrivacyList();
+    initPrivacyEventListeners();
+}
+
+async function loadPrivacyList() {
+    const container = document.getElementById('privacyAdminList');
+    if (!container) return;
+
+    container.innerHTML = '<div class="loading-state">載入中...</div>';
+
+    try {
+        const { data, error } = await getSupportPrivacy();
+        if (error) throw error;
+
+        privacyList = data || [];
+
+        if (privacyList.length === 0) {
+            container.innerHTML = '<div class="empty-state">尚無隱私權政策章節，點擊「新增章節」開始建立</div>';
+            return;
+        }
+
+        container.innerHTML = privacyList.map(item => `
+            <div class="admin-item policy-item">
+                <div class="item-header">
+                    <span class="item-number">第 ${item.section_num} 條</span>
+                </div>
+                <h4 class="item-title">${escapeHtml(item.title)}</h4>
+                <div class="item-preview">${item.content.substring(0, 100)}...</div>
+                <div class="item-actions">
+                    <button class="edit-btn" onclick="editPrivacy(${item.id})">編輯</button>
+                    <button class="delete-btn" onclick="deletePrivacy(${item.id})">刪除</button>
+                </div>
+            </div>
+        `).join('');
+    } catch (error) {
+        console.error('載入隱私權政策失敗:', error);
+        container.innerHTML = '<div class="error-state">載入失敗，請重試</div>';
+    }
+}
+
+function initPrivacyEventListeners() {
+    const addBtn = document.getElementById('addPrivacyBtn');
+    if (addBtn) addBtn.addEventListener('click', () => openPrivacyModal());
+
+    const closeBtn = document.getElementById('closePrivacyModal');
+    const cancelBtn = document.getElementById('cancelPrivacyBtn');
+    if (closeBtn) closeBtn.addEventListener('click', closePrivacyModal);
+    if (cancelBtn) cancelBtn.addEventListener('click', closePrivacyModal);
+
+    const saveBtn = document.getElementById('savePrivacyBtn');
+    if (saveBtn) saveBtn.addEventListener('click', savePrivacy);
+}
+
+function openPrivacyModal(item = null) {
+    const modal = document.getElementById('privacyEditModal');
+    const title = document.getElementById('privacyModalTitle');
+    const form = document.getElementById('privacyEditForm');
+
+    if (item) {
+        title.textContent = '編輯隱私權政策章節';
+        document.getElementById('privacyEditId').value = item.id;
+        document.getElementById('privacySectionNum').value = item.section_num;
+        document.getElementById('privacyTitle').value = item.title;
+        document.getElementById('privacyContent').value = item.content;
+        document.getElementById('privacySortOrder').value = item.sort_order || 0;
+    } else {
+        title.textContent = '新增隱私權政策章節';
+        form.reset();
+        document.getElementById('privacyEditId').value = '';
+        document.getElementById('privacySectionNum').value = privacyList.length + 1;
+    }
+
+    modal.classList.add('active');
+}
+
+function closePrivacyModal() {
+    document.getElementById('privacyEditModal').classList.remove('active');
+}
+
+async function savePrivacy() {
+    const id = document.getElementById('privacyEditId').value;
+    const data = {
+        section_num: parseInt(document.getElementById('privacySectionNum').value),
+        title: document.getElementById('privacyTitle').value,
+        content: document.getElementById('privacyContent').value,
+        sort_order: parseInt(document.getElementById('privacySortOrder').value) || 0
+    };
+
+    try {
+        let result;
+        if (id) {
+            result = await updateSupportPrivacy(id, data);
+        } else {
+            result = await createSupportPrivacy(data);
+        }
+
+        if (result.error) throw result.error;
+
+        showToast(id ? '章節已更新' : '章節已新增', 'success');
+        closePrivacyModal();
+        loadPrivacyList();
+    } catch (error) {
+        console.error('儲存隱私權政策失敗:', error);
+        showToast('儲存失敗: ' + error.message, 'error');
+    }
+}
+
+function editPrivacy(id) {
+    const item = privacyList.find(p => p.id === id);
+    if (item) openPrivacyModal(item);
+}
+
+async function deletePrivacy(id) {
+    if (!confirm('確定要刪除這個章節嗎？')) return;
+
+    try {
+        const { error } = await deleteSupportPrivacy(id);
+        if (error) throw error;
+
+        showToast('章節已刪除', 'success');
+        loadPrivacyList();
+    } catch (error) {
+        console.error('刪除隱私權政策失敗:', error);
+        showToast('刪除失敗: ' + error.message, 'error');
+    }
+}
+
+// Terms of Service Management
+let termsList = [];
+
+async function initSupportTermsSection() {
+    await loadTermsList();
+    initTermsEventListeners();
+}
+
+async function loadTermsList() {
+    const container = document.getElementById('termsAdminList');
+    if (!container) return;
+
+    container.innerHTML = '<div class="loading-state">載入中...</div>';
+
+    try {
+        const { data, error } = await getSupportTerms();
+        if (error) throw error;
+
+        termsList = data || [];
+
+        if (termsList.length === 0) {
+            container.innerHTML = '<div class="empty-state">尚無服務條款章節，點擊「新增章節」開始建立</div>';
+            return;
+        }
+
+        container.innerHTML = termsList.map(item => `
+            <div class="admin-item policy-item">
+                <div class="item-header">
+                    <span class="item-number">第 ${item.section_num} 條</span>
+                </div>
+                <h4 class="item-title">${escapeHtml(item.title)}</h4>
+                <div class="item-preview">${item.content.substring(0, 100)}...</div>
+                <div class="item-actions">
+                    <button class="edit-btn" onclick="editTerms(${item.id})">編輯</button>
+                    <button class="delete-btn" onclick="deleteTerms(${item.id})">刪除</button>
+                </div>
+            </div>
+        `).join('');
+    } catch (error) {
+        console.error('載入服務條款失敗:', error);
+        container.innerHTML = '<div class="error-state">載入失敗，請重試</div>';
+    }
+}
+
+function initTermsEventListeners() {
+    const addBtn = document.getElementById('addTermsBtn');
+    if (addBtn) addBtn.addEventListener('click', () => openTermsModal());
+
+    const closeBtn = document.getElementById('closeTermsModal');
+    const cancelBtn = document.getElementById('cancelTermsBtn');
+    if (closeBtn) closeBtn.addEventListener('click', closeTermsModal);
+    if (cancelBtn) cancelBtn.addEventListener('click', closeTermsModal);
+
+    const saveBtn = document.getElementById('saveTermsBtn');
+    if (saveBtn) saveBtn.addEventListener('click', saveTerms);
+}
+
+function openTermsModal(item = null) {
+    const modal = document.getElementById('termsEditModal');
+    const title = document.getElementById('termsModalTitle');
+    const form = document.getElementById('termsEditForm');
+
+    if (item) {
+        title.textContent = '編輯服務條款章節';
+        document.getElementById('termsEditId').value = item.id;
+        document.getElementById('termsSectionNum').value = item.section_num;
+        document.getElementById('termsTitle').value = item.title;
+        document.getElementById('termsContent').value = item.content;
+        document.getElementById('termsSortOrder').value = item.sort_order || 0;
+    } else {
+        title.textContent = '新增服務條款章節';
+        form.reset();
+        document.getElementById('termsEditId').value = '';
+        document.getElementById('termsSectionNum').value = termsList.length + 1;
+    }
+
+    modal.classList.add('active');
+}
+
+function closeTermsModal() {
+    document.getElementById('termsEditModal').classList.remove('active');
+}
+
+async function saveTerms() {
+    const id = document.getElementById('termsEditId').value;
+    const data = {
+        section_num: parseInt(document.getElementById('termsSectionNum').value),
+        title: document.getElementById('termsTitle').value,
+        content: document.getElementById('termsContent').value,
+        sort_order: parseInt(document.getElementById('termsSortOrder').value) || 0
+    };
+
+    try {
+        let result;
+        if (id) {
+            result = await updateSupportTerms(id, data);
+        } else {
+            result = await createSupportTerms(data);
+        }
+
+        if (result.error) throw result.error;
+
+        showToast(id ? '章節已更新' : '章節已新增', 'success');
+        closeTermsModal();
+        loadTermsList();
+    } catch (error) {
+        console.error('儲存服務條款失敗:', error);
+        showToast('儲存失敗: ' + error.message, 'error');
+    }
+}
+
+function editTerms(id) {
+    const item = termsList.find(t => t.id === id);
+    if (item) openTermsModal(item);
+}
+
+async function deleteTerms(id) {
+    if (!confirm('確定要刪除這個章節嗎？')) return;
+
+    try {
+        const { error } = await deleteSupportTerms(id);
+        if (error) throw error;
+
+        showToast('章節已刪除', 'success');
+        loadTermsList();
+    } catch (error) {
+        console.error('刪除服務條款失敗:', error);
+        showToast('刪除失敗: ' + error.message, 'error');
+    }
+}
+
+// Make support functions globally available
+window.initSupportFaqSection = initSupportFaqSection;
+window.initSupportPrivacySection = initSupportPrivacySection;
+window.initSupportTermsSection = initSupportTermsSection;
+window.editFaq = editFaq;
+window.deleteFaq = deleteFaq;
+window.editPrivacy = editPrivacy;
+window.deletePrivacy = deletePrivacy;
+window.editTerms = editTerms;
+window.deleteTerms = deleteTerms;
 

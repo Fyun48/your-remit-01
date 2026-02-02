@@ -1578,6 +1578,48 @@ input, textarea, select {
     box-shadow: var(--shadow-lg);
 }
 
+/* CTA Container (replaces form) */
+.contact-cta-container {
+    background: var(--color-white);
+    padding: var(--space-2xl);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.contact-cta-content {
+    text-align: center;
+    max-width: 400px;
+}
+
+.contact-cta-content h3 {
+    font-size: 1.5rem;
+    color: var(--color-gray-900);
+    margin-bottom: var(--space-md);
+}
+
+.contact-cta-content p {
+    color: var(--color-gray-600);
+    margin-bottom: var(--space-xl);
+    line-height: 1.6;
+}
+
+.contact-cta-content .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.contact-cta-content .btn svg {
+    transition: transform 0.3s ease;
+}
+
+.contact-cta-content .btn:hover svg {
+    transform: translateX(4px);
+}
+
 .contact-section .contact-form {
     display: flex;
     flex-direction: column;
