@@ -1154,14 +1154,35 @@
             loadServiceData();
         });
 
-        function loadServiceData() {
+        async function loadServiceData() {
             // Get service ID from URL
             const urlParams = new URLSearchParams(window.location.search);
             const serviceId = urlParams.get('id') || '1';
 
-            // Get service data from localStorage
-            const serviceDetailData = JSON.parse(localStorage.getItem('serviceDetailData')) || getDefaultServiceData();
-            const service = serviceDetailData[serviceId];
+            let service = null;
+
+            // 優先從 Supabase 讀取
+            try {
+                const { data, error } = await supabaseSelect('service_details', {
+                    eq: { service_id: serviceId }
+                });
+
+                if (!error && data && data.length > 0) {
+                    service = data[0];
+                    // sections 是 JSONB，可能已經是物件或需要解析
+                    if (typeof service.sections === 'string') {
+                        service.sections = JSON.parse(service.sections);
+                    }
+                }
+            } catch (e) {
+                console.log('從 Supabase 載入失敗，使用本地資料:', e);
+            }
+
+            // Fallback 到 localStorage
+            if (!service) {
+                const serviceDetailData = JSON.parse(localStorage.getItem('serviceDetailData')) || getDefaultServiceData();
+                service = serviceDetailData[serviceId];
+            }
 
             if (!service) {
                 console.error('Service not found');
