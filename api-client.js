@@ -45,10 +45,17 @@ async function supabaseSelect(table, options = {}) {
             url += `&limit=${options.limit}`;
         }
 
-        // 篩選條件
+        // 篩選條件 (eq 格式)
         if (options.eq) {
             for (const [key, value] of Object.entries(options.eq)) {
                 url += `&${key}=eq.${value}`;
+            }
+        }
+
+        // 篩選條件 (filters 陣列格式)
+        if (options.filters && Array.isArray(options.filters)) {
+            for (const filter of options.filters) {
+                url += `&${filter.column}=eq.${filter.value}`;
             }
         }
 
@@ -497,6 +504,9 @@ async function getInvestorDocuments(filter = {}) {
 
     if (filter.category) {
         options.filters.push({ column: 'category', value: filter.category });
+    }
+    if (filter.type) {
+        options.filters.push({ column: 'type', value: filter.type });
     }
     if (filter.year) {
         options.filters.push({ column: 'fiscal_year', value: parseInt(filter.year) });

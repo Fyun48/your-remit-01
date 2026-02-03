@@ -361,17 +361,16 @@
             if (!container) return;
 
             try {
-                const response = await fetch('/api/investor/documents?category=shareholder&published_only=true');
-                const data = await response.json();
+                const { data, error } = await getInvestorDocuments({ category: 'shareholder', published_only: true });
 
-                if (!data.success || !data.data || data.data.length === 0) {
+                if (error || !data || data.length === 0) {
                     showEmptyState(container, '暫無股東會資訊');
                     return;
                 }
 
                 // Group by fiscal_year
                 const grouped = {};
-                data.data.forEach(doc => {
+                data.forEach(doc => {
                     const year = doc.fiscal_year || new Date(doc.publish_date).getFullYear();
                     if (!grouped[year]) grouped[year] = [];
                     grouped[year].push(doc);

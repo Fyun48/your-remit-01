@@ -387,22 +387,21 @@
             if (!container) return;
 
             try {
-                const response = await fetch('/api/investor/documents?category=announcement&published_only=true');
-                const data = await response.json();
+                const { data, error } = await getInvestorDocuments({ category: 'announcement', published_only: true });
 
-                if (!data.success || !data.data || data.data.length === 0) {
+                if (error || !data || data.length === 0) {
                     showEmptyState(container, '目前沒有公告');
                     return;
                 }
 
                 // Store all announcements for filtering
-                allAnnouncements = data.data;
+                allAnnouncements = data;
 
                 // Populate year filter
-                populateYearFilter(data.data);
+                populateYearFilter(data);
 
                 // Render timeline
-                renderTimeline(data.data);
+                renderTimeline(data);
 
             } catch (error) {
                 console.error('Error loading announcements:', error);

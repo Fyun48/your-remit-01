@@ -429,17 +429,16 @@
             if (!container) return;
 
             try {
-                const response = await fetch('/api/investor/documents?category=financial&type=annual_report&published_only=true');
-                const data = await response.json();
+                const { data, error } = await getInvestorDocuments({ category: 'financial', type: 'annual_report', published_only: true });
 
-                if (!data.success || !data.data || data.data.length === 0) {
+                if (error || !data || data.length === 0) {
                     showEmptyState(container, '目前沒有年度報告');
                     return;
                 }
 
                 // Group by year
                 const grouped = {};
-                data.data.forEach(doc => {
+                data.forEach(doc => {
                     const year = doc.fiscal_year || new Date(doc.publish_date).getFullYear();
                     if (!grouped[year]) grouped[year] = [];
                     grouped[year].push(doc);
@@ -496,10 +495,9 @@
             if (!tbody) return;
 
             try {
-                const response = await fetch('/api/investor/documents?category=financial&type=quarterly_report&published_only=true');
-                const data = await response.json();
+                const { data, error } = await getInvestorDocuments({ category: 'financial', type: 'quarterly_report', published_only: true });
 
-                if (!data.success || !data.data || data.data.length === 0) {
+                if (error || !data || data.length === 0) {
                     tbody.innerHTML = `
                         <tr>
                             <td colspan="5">
@@ -517,13 +515,13 @@
                 }
 
                 // Store all reports for filtering
-                allQuarterlyReports = data.data;
+                allQuarterlyReports = data;
 
                 // Render table rows
                 renderQuarterlyReports(allQuarterlyReports);
 
                 // Populate year filter
-                populateYearFilter(data.data);
+                populateYearFilter(data);
             } catch (error) {
                 console.error('Error loading quarterly reports:', error);
                 tbody.innerHTML = `

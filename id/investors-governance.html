@@ -438,10 +438,9 @@
             if (!tbody) return;
 
             try {
-                const response = await fetch('/api/investor/governance?type=board_member&published_only=true');
-                const data = await response.json();
+                const { data, error } = await getGovernanceInfo({ type: 'board_member', published_only: true });
 
-                if (!data.success || !data.data || data.data.length === 0) {
+                if (error || !data || data.length === 0) {
                     tbody.innerHTML = `
                         <tr>
                             <td colspan="3">
@@ -460,7 +459,7 @@
                     return;
                 }
 
-                tbody.innerHTML = data.data.map(member => `
+                tbody.innerHTML = data.map(member => `
                     <tr>
                         <td data-label="姓名"><strong>${escapeHtml(member.name)}</strong></td>
                         <td data-label="職稱">${escapeHtml(member.title) || '-'}</td>
@@ -495,10 +494,9 @@
             if (!container) return;
 
             try {
-                const response = await fetch('/api/investor/governance?type=org_chart&published_only=true');
-                const data = await response.json();
+                const { data, error } = await getGovernanceInfo({ type: 'org_chart', published_only: true });
 
-                if (!data.success || !data.data || data.data.length === 0 || !data.data[0].file_url) {
+                if (error || !data || data.length === 0 || !data[0].file_url) {
                     container.innerHTML = `
                         <div class="empty-state">
                             <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -513,7 +511,7 @@
                     return;
                 }
 
-                const orgChart = data.data[0];
+                const orgChart = data[0];
                 container.innerHTML = `
                     <div class="org-chart-wrapper">
                         <img src="${escapeHtml(orgChart.file_url)}" alt="組織架構圖" class="org-chart-img" onclick="openLightbox(this.src)">
@@ -552,16 +550,15 @@
             if (!container) return;
 
             try {
-                const response = await fetch('/api/investor/governance?published_only=true');
-                const data = await response.json();
+                const { data, error } = await getGovernanceInfo({ published_only: true });
 
-                if (!data.success || !data.data) {
+                if (error || !data) {
                     showDocumentsEmptyState(container);
                     return;
                 }
 
                 // Filter for charters and policies only
-                const docs = data.data.filter(d => d.type === 'charter' || d.type === 'policy');
+                const docs = data.filter(d => d.type === 'charter' || d.type === 'policy');
 
                 if (docs.length === 0) {
                     showDocumentsEmptyState(container);
