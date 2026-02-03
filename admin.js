@@ -5020,8 +5020,8 @@ async function loadFaqList() {
                 <h4 class="item-title">${escapeHtml(faq.question)}</h4>
                 <div class="item-preview">${faq.answer.substring(0, 100)}...</div>
                 <div class="item-actions">
-                    <button class="edit-btn" onclick="editFaq(${faq.id})">編輯</button>
-                    <button class="delete-btn" onclick="deleteFaq(${faq.id})">刪除</button>
+                    <button class="edit-btn" onclick="editFaq('${faq.id}')">編輯</button>
+                    <button class="delete-btn" onclick="deleteFaq('${faq.id}')">刪除</button>
                 </div>
             </div>
         `).join('');
@@ -5167,8 +5167,8 @@ async function loadPrivacyList() {
                 <h4 class="item-title">${escapeHtml(item.title)}</h4>
                 <div class="item-preview">${item.content.substring(0, 100)}...</div>
                 <div class="item-actions">
-                    <button class="edit-btn" onclick="editPrivacy(${item.id})">編輯</button>
-                    <button class="delete-btn" onclick="deletePrivacy(${item.id})">刪除</button>
+                    <button class="edit-btn" onclick="editPrivacy('${item.id}')">編輯</button>
+                    <button class="delete-btn" onclick="deletePrivacy('${item.id}')">刪除</button>
                 </div>
             </div>
         `).join('');
@@ -5298,8 +5298,8 @@ async function loadTermsList() {
                 <h4 class="item-title">${escapeHtml(item.title)}</h4>
                 <div class="item-preview">${item.content.substring(0, 100)}...</div>
                 <div class="item-actions">
-                    <button class="edit-btn" onclick="editTerms(${item.id})">編輯</button>
-                    <button class="delete-btn" onclick="deleteTerms(${item.id})">刪除</button>
+                    <button class="edit-btn" onclick="editTerms('${item.id}')">編輯</button>
+                    <button class="delete-btn" onclick="deleteTerms('${item.id}')">刪除</button>
                 </div>
             </div>
         `).join('');
