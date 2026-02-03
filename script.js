@@ -1468,6 +1468,14 @@ function handleLinkClick(e) {
     const href = link.getAttribute('href');
     if (!href) return;
 
+    // 取得當前頁面路徑
+    const currentPath = window.location.pathname;
+
+    // 需要排除 SPA 的頁面（使用額外 CSS 或特殊結構）
+    const excludedPages = ['investor', 'service-detail', 'app-download'];
+    const isCurrentPageExcluded = excludedPages.some(page => currentPath.includes(page));
+    const isTargetPageExcluded = excludedPages.some(page => href.includes(page));
+
     // 跳過以下情況：
     // - 外部連結
     // - 錨點連結 (#)
@@ -1475,6 +1483,7 @@ function handleLinkClick(e) {
     // - 下載連結
     // - JavaScript 連結
     // - 管理後台連結
+    // - 當前頁面或目標頁面使用額外 CSS
     if (
         href.startsWith('http') ||
         href.startsWith('//') ||
@@ -1484,6 +1493,8 @@ function handleLinkClick(e) {
         href.startsWith('tel:') ||
         href.includes('admin') ||
         href.includes('login') ||
+        isCurrentPageExcluded ||
+        isTargetPageExcluded ||
         link.target === '_blank' ||
         link.hasAttribute('download') ||
         link.classList.contains('no-spa')
