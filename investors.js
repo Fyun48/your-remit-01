@@ -186,16 +186,15 @@ async function loadLatestAnnouncements() {
     if (!container) return;
 
     try {
-        const response = await fetch('/api/investor/documents?category=announcement&published_only=true');
-        const data = await response.json();
+        const result = await getInvestorDocuments({ category: 'announcement', published_only: true });
 
-        if (!data.success || !data.data || data.data.length === 0) {
+        if (!result.success || !result.data || result.data.length === 0) {
             showEmptyState(container, '目前沒有公告');
             return;
         }
 
         // Get only the 3 most recent announcements
-        const announcements = data.data.slice(0, 3);
+        const announcements = result.data.slice(0, 3);
 
         container.innerHTML = announcements.map(item => {
             const date = new Date(item.publish_date);
@@ -236,15 +235,14 @@ async function loadQuickDownloads() {
     if (!container) return;
 
     try {
-        const response = await fetch('/api/investor/documents?category=financial&published_only=true');
-        const data = await response.json();
+        const result = await getInvestorDocuments({ category: 'financial', published_only: true });
 
-        if (!data.success || !data.data || data.data.length === 0) {
+        if (!result.success || !result.data || result.data.length === 0) {
             showEmptyState(container, '目前沒有可下載的文件');
             return;
         }
 
-        const documents = data.data;
+        const documents = result.data;
 
         // Find latest annual report
         const annualReport = documents.find(d => d.type === 'annual_report');

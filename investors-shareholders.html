@@ -45,7 +45,7 @@
     <link rel="stylesheet" href="investors.css">
 </head>
 <body>
-    <!-- Header -->
+    <!-- 頂部導航 -->
     <header class="header">
         <div class="header-container">
             <a href="index.html" class="logo">
@@ -70,54 +70,50 @@
                         <a href="csr.html" class="nav-link" data-i18n="nav.csr">企業責任</a>
                     </li>
                     <li class="nav-item">
-                        <a href="index.html#career" class="nav-link" data-i18n="nav.career">人才招募</a>
+                        <a href="index.html#career" class="nav-link" data-i18n="nav.careers">人才招募</a>
                     </li>
                     <li class="nav-item">
                         <a href="index.html#about" class="nav-link" data-i18n="nav.about">關於我們</a>
                     </li>
                     <li class="nav-item">
-                        <a href="app-download.html" class="nav-link" data-i18n="nav.app">App 下載</a>
+                        <a href="app-download.html" class="nav-link" data-i18n="nav.download">App 下載</a>
                     </li>
                     <li class="nav-item has-dropdown">
-                        <a href="index.html#services" class="nav-link" data-i18n="nav.services">
-                            服務項目
+                        <a href="index.html#services" class="nav-link">
+                            <span data-i18n="nav.services">服務項目</span>
                             <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="6 9 12 15 18 9"></polyline>
                             </svg>
                         </a>
                         <ul class="dropdown">
-                            <li><a href="service-detail.html?id=1">國際匯款服務</a></li>
-                            <li><a href="service-detail.html?id=2">金融科技</a></li>
-                            <li><a href="service-detail.html?id=3">企業顧問</a></li>
-                            <li><a href="service-detail.html?id=4">投資理財</a></li>
+                            <li><a href="service-detail.html?id=1" data-i18n="service.remittance">國際匯款服務</a></li>
+                            <li><a href="service-detail.html?id=2" data-i18n="service.fintech">金融科技</a></li>
+                            <li><a href="service-detail.html?id=3" data-i18n="service.consulting">企業顧問</a></li>
+                            <li><a href="service-detail.html?id=4" data-i18n="service.investment">投資理財</a></li>
                         </ul>
                     </li>
                     <li class="nav-item has-dropdown">
-                        <a href="investors.html" class="nav-link active" data-i18n="nav.investors">
-                            投資人關係
+                        <a href="investors.html" class="nav-link active">
+                            <span data-i18n="nav.investors">投資人關係</span>
                             <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="6 9 12 15 18 9"></polyline>
                             </svg>
                         </a>
                         <ul class="dropdown">
                             <li><a href="investors-financials.html" data-i18n="investor.financial">財務報告</a></li>
-                            <li><a href="investors-announcements.html" data-i18n="investor.announcements">公司公告</a></li>
+                            <li><a href="investors-announcements.html" data-i18n="investor.announcement">公司公告</a></li>
                             <li><a href="investors-governance.html" data-i18n="investor.governance">公司治理</a></li>
-                            <li><a href="investors-shareholders.html" class="active">股東會資訊</a></li>
+                            <li><a href="investors-shareholders.html" class="active" data-i18n="investor.shareholder">股東會資訊</a></li>
                         </ul>
                     </li>
                 </ul>
             </nav>
 
-            <div class="header-actions">
-                <div class="lang-switch">
-                    <a href="#" class="lang-active">繁中</a>
-                    <span class="lang-divider">|</span>
-                    <a href="#">EN</a>
-                </div>
+            <div class="header-actions nav-right">
+                <!-- 語言切換器由 i18n.js 動態生成 -->
             </div>
 
-            <button class="mobile-menu-btn" type="button" aria-label="開啟選單">
+            <button class="mobile-menu-btn" aria-label="開啟選單">
                 <span></span>
                 <span></span>
                 <span></span>
