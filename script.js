@@ -830,9 +830,16 @@ function getDefaultBannerData() {
  */
 function initNewsTabs() {
     const tabs = document.querySelectorAll('.news-tab');
-    const newsCards = document.querySelectorAll('.news-card');
+    // 支援兩種新聞卡片格式：.news-card (首頁) 和 .news-item (新聞頁)
+    const newsCards = document.querySelectorAll('.news-card, .news-item');
 
-    if (!tabs.length) return;
+    if (!tabs.length || !newsCards.length) return;
+
+    const categoryMap = {
+        'announcement': '服務公告',
+        'activity': '活動資訊',
+        'media': '媒體報導'
+    };
 
     tabs.forEach(tab => {
         tab.addEventListener('click', () => {
@@ -844,25 +851,28 @@ function initNewsTabs() {
 
             // 篩選新聞卡片
             newsCards.forEach(card => {
-                const category = card.dataset.category;
+                // 從 data-category 屬性或 .news-item-category / .news-category 元素取得分類
+                let category = card.dataset.category;
+                if (!category) {
+                    const categoryEl = card.querySelector('.news-item-category, .news-category');
+                    if (categoryEl) {
+                        category = categoryEl.textContent.trim();
+                    }
+                }
+
                 let shouldShow = false;
 
                 if (tabType === 'all') {
                     shouldShow = true;
                 } else {
-                    const categoryMap = {
-                        'announcement': '服務公告',
-                        'activity': '活動資訊',
-                        'media': '媒體報導'
-                    };
                     shouldShow = category === categoryMap[tabType];
                 }
 
                 if (shouldShow) {
-                    card.style.display = 'flex';
+                    card.style.display = '';
                     card.style.opacity = '0';
                     card.style.transform = 'translateY(20px)';
-                    
+
                     setTimeout(() => {
                         card.style.opacity = '1';
                         card.style.transform = 'translateY(0)';
