@@ -943,16 +943,15 @@ async function loadAndUpdateContent() {
         }
         
         // 更新關於我們的文字內容
-        if (stats.text1) {
-            const aboutText1 = document.querySelector('.about-text:nth-of-type(1)');
-            if (aboutText1) aboutText1.textContent = stats.text1;
+        const aboutTexts = document.querySelectorAll('.about-text');
+        if (stats.text1 && aboutTexts[0]) {
+            aboutTexts[0].textContent = stats.text1;
         }
-        
-        if (stats.text2) {
-            const aboutText2 = document.querySelector('.about-text:nth-of-type(2)');
-            if (aboutText2) aboutText2.textContent = stats.text2;
+
+        if (stats.text2 && aboutTexts[1]) {
+            aboutTexts[1].textContent = stats.text2;
         }
-        
+
         if (stats.title) {
             const aboutTitle = document.querySelector('.about-title');
             if (aboutTitle) aboutTitle.textContent = stats.title;
