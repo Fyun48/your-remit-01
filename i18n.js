@@ -217,6 +217,18 @@ const I18N = {
             dropdown.classList.toggle('show');
         });
 
+        // 語言選項點擊 - 確保導航發生
+        const langOptions = switcher.querySelectorAll('.lang-option');
+        langOptions.forEach(option => {
+            option.addEventListener('click', (e) => {
+                const href = option.getAttribute('href');
+                if (href && href !== '#') {
+                    // 確保頁面導航
+                    window.location.href = href;
+                }
+            });
+        });
+
         // 點擊外部關閉
         document.addEventListener('click', () => {
             dropdown.classList.remove('show');
@@ -227,16 +239,53 @@ const I18N = {
      * 取得切換語言的 URL
      */
     getLanguageUrl(targetLang) {
-        const currentPath = window.location.pathname;
+        let currentPath = window.location.pathname;
         const currentLangPrefix = this.LANGUAGES[this.currentLang].urlPrefix;
         const targetLangPrefix = this.LANGUAGES[targetLang].urlPrefix;
+
+        // 處理本地 file:// 協議的情況
+        const isLocalFile = window.location.protocol === 'file:';
+        if (isLocalFile) {
+            // 取得檔案名稱
+            const fileName = currentPath.split('/').pop() || 'index.html';
+
+            // 判斷當前是否在語言子資料夾
+            const pathParts = currentPath.split('/');
+            const langFolders = ['en', 'vi', 'id', 'th'];
+            let currentFolder = '';
+
+            for (let i = pathParts.length - 2; i >= 0; i--) {
+                if (langFolders.includes(pathParts[i])) {
+                    currentFolder = pathParts[i];
+                    break;
+                }
+            }
+
+            // 建構目標 URL
+            if (targetLangPrefix) {
+                if (currentFolder) {
+                    // 從語言資料夾切換到另一個語言資料夾
+                    return currentPath.replace(`/${currentFolder}/`, `/${targetLangPrefix}/`);
+                } else {
+                    // 從根目錄切換到語言資料夾
+                    const lastSlash = currentPath.lastIndexOf('/');
+                    return currentPath.substring(0, lastSlash) + `/${targetLangPrefix}/${fileName}`;
+                }
+            } else {
+                // 切換到繁中（根目錄）
+                if (currentFolder) {
+                    return currentPath.replace(`/${currentFolder}/`, '/');
+                }
+                return currentPath;
+            }
+        }
 
         // 移除當前語言前綴
         let basePath = currentPath;
         if (currentLangPrefix && currentPath.startsWith(`/${currentLangPrefix}/`)) {
             basePath = currentPath.substring(currentLangPrefix.length + 1);
         } else if (currentLangPrefix && currentPath === `/${currentLangPrefix}`) {
-            basePath = '/';
+            basePath = '/index.html';
         }
 
         // 確保 basePath 以 / 開頭
@@ -244,12 +293,13 @@ const I18N = {
             basePath = '/' + basePath;
         }
 
+        // 處理根路徑
+        if (basePath === '/' || basePath === '') {
+            basePath = '/index.html';
+        }
+
         // 加上目標語言前綴
         if (targetLangPrefix) {
-            // 如果是根路徑
-            if (basePath === '/' || basePath === '/index.html') {
-                return `/${targetLangPrefix}/`;
-            }
             return `/${targetLangPrefix}${basePath}`;
         }
 

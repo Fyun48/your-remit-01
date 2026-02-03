@@ -18,10 +18,25 @@
   to = "/.netlify/functions/api/:splat"
   status = 200
 
-# 路由重寫規則（用於單頁應用程式）
+# 語言版本首頁重定向
 [[redirects]]
-  from = "/*"
-  to = "/index.html"
+  from = "/en"
+  to = "/en/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/vi"
+  to = "/vi/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/id"
+  to = "/id/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/th"
+  to = "/th/index.html"
   status = 200
 
 # 標頭設定（快取控制）
