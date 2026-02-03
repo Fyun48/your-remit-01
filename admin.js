@@ -4712,15 +4712,17 @@ async function initTranslationsSection() {
 // Load translations from database
 async function loadTranslations() {
     try {
-        const { data, error } = await supabase
-            .from('translations')
-            .select('*')
-            .order('category', { ascending: true })
-            .order('key', { ascending: true });
+        const { data, error } = await supabaseSelect('translations', {
+            order: { column: 'category', ascending: true }
+        });
 
         if (error) throw error;
 
-        translationsData = data || [];
+        // Sort by category then by key
+        translationsData = (data || []).sort((a, b) => {
+            if (a.category !== b.category) return a.category.localeCompare(b.category);
+            return a.key.localeCompare(b.key);
+        });
         translationsFilteredData = [...translationsData];
         renderTranslationsTable();
 
@@ -4931,19 +4933,12 @@ async function handleTranslationSubmit(e) {
     try {
         if (id) {
             // Update
-            const { error } = await supabase
-                .from('translations')
-                .update(data)
-                .eq('id', id);
-
+            const { error } = await supabaseUpdate('translations', id, data);
             if (error) throw error;
             showToast('翻譯已更新', 'success');
         } else {
             // Insert
-            const { error } = await supabase
-                .from('translations')
-                .insert([data]);
-
+            const { error } = await supabaseInsert('translations', data);
             if (error) throw error;
             showToast('翻譯已新增', 'success');
         }
@@ -4971,11 +4966,7 @@ async function deleteTranslation(id) {
     if (!confirm('確定要刪除此翻譯嗎？')) return;
 
     try {
-        const { error } = await supabase
-            .from('translations')
-            .delete()
-            .eq('id', id);
-
+        const { error } = await supabaseDelete('translations', id);
         if (error) throw error;
 
         showToast('翻譯已刪除', 'success');
