@@ -331,6 +331,150 @@
             75% { transform: translateX(5px); }
         }
 
+        /* CAPTCHA styles */
+        .captcha-group {
+            display: none;
+            margin-top: 1rem;
+        }
+
+        .captcha-group.show {
+            display: block;
+        }
+
+        .captcha-container {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .captcha-image {
+            background: var(--color-gray-100);
+            border: 2px solid var(--color-gray-200);
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 4px;
+            color: var(--color-primary);
+            user-select: none;
+            position: relative;
+            min-width: 150px;
+            text-align: center;
+        }
+
+        .captcha-image::before {
+            content: '';
+            position: absolute;
+            left: 10%;
+            right: 10%;
+            top: 50%;
+            border-top: 2px solid var(--color-gray-400);
+            transform: rotate(-5deg);
+        }
+
+        .captcha-image::after {
+            content: '';
+            position: absolute;
+            left: 15%;
+            right: 15%;
+            top: 40%;
+            border-top: 1px solid var(--color-gray-300);
+            transform: rotate(3deg);
+        }
+
+        .refresh-captcha {
+            padding: 8px;
+            background: var(--color-gray-100);
+            border: 1px solid var(--color-gray-200);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .refresh-captcha:hover {
+            background: var(--color-gray-200);
+        }
+
+        .captcha-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--color-gray-200);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            letter-spacing: 2px;
+        }
+
+        .captcha-input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+        }
+
+        /* Forgot password modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h2 {
+            font-size: 1.25rem;
+            color: var(--color-dark);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            color: var(--color-gray-600);
+        }
+
+        .modal-close:hover {
+            color: var(--color-dark);
+        }
+
+        .success-message {
+            display: none;
+            padding: 0.875rem 1rem;
+            background: #DCFCE7;
+            border: 1px solid #86EFAC;
+            border-radius: 8px;
+            color: #166534;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
         @media (max-width: 968px) {
             .login-left {
                 display: none;
@@ -449,12 +593,27 @@
                         </div>
                     </div>
 
+                    <!-- CAPTCHA (顯示於第3次登入失敗後) -->
+                    <div class="captcha-group" id="captchaGroup">
+                        <label>驗證碼</label>
+                        <div class="captcha-container">
+                            <canvas id="captchaCanvas" class="captcha-image" width="150" height="50"></canvas>
+                            <button type="button" class="refresh-captcha" onclick="generateCaptcha()" title="重新產生">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="23 4 23 10 17 10"></polyline>
+                                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <input type="text" id="captchaInput" class="captcha-input" placeholder="請輸入上方驗證碼" maxlength="8">
+                    </div>
+
                     <div class="form-options">
                         <label class="remember-me">
                             <input type="checkbox" id="remember">
                             <span>記住我</span>
                         </label>
-                        <a href="#" class="forgot-password">忘記密碼？</a>
+                        <a href="#" class="forgot-password" id="forgotPasswordLink">忘記密碼？</a>
                     </div>
 
                     <button type="submit" class="login-btn">
@@ -478,17 +637,433 @@
         </div>
     </div>
 
+    <!-- 忘記密碼 Modal -->
+    <div class="modal-overlay" id="forgotPasswordModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>忘記密碼</h2>
+                <button type="button" class="modal-close" onclick="closeForgotPasswordModal()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="error-message" id="forgotPasswordError">
+                查無此 Email
+            </div>
+            <div class="success-message" id="forgotPasswordSuccess">
+                新密碼已寄送至您的信箱，請查收
+            </div>
+            <form id="forgotPasswordForm">
+                <div class="form-group">
+                    <label for="forgotEmail">Email</label>
+                    <div class="input-wrapper">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                        <input type="email" id="forgotEmail" placeholder="請輸入您的 Email" required>
+                    </div>
+                </div>
+                <button type="submit" class="login-btn" id="forgotPasswordBtn">
+                    發送新密碼
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </button>
+            </form>
+        </div>
+    </div>
+
     <script src="api-client.js"></script>
     <script>
-        // 預設帳密（首次使用或重設時）
-        const DEFAULT_USERNAME = 'admin';
-        const DEFAULT_PASSWORD = 'admin123';
+        // ==================== 登入失敗計數與驗證碼 ====================
+        const LOGIN_FAIL_KEY = 'loginFailCount';
+        const CAPTCHA_THRESHOLD = 2; // 第3次起顯示驗證碼
+        let currentCaptcha = '';
 
-        // 從 Supabase 取得儲存的帳密
+        // 取得登入失敗次數
+        function getFailCount() {
+            return parseInt(sessionStorage.getItem(LOGIN_FAIL_KEY) || '0');
+        }
+
+        // 設定登入失敗次數
+        function setFailCount(count) {
+            sessionStorage.setItem(LOGIN_FAIL_KEY, count.toString());
+        }
+
+        // 重置失敗次數
+        function resetFailCount() {
+            sessionStorage.removeItem(LOGIN_FAIL_KEY);
+        }
+
+        // 產生隨機驗證碼
+        function generateCaptcha() {
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+            let captcha = '';
+            for (let i = 0; i < 8; i++) {
+                captcha += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            currentCaptcha = captcha;
+            drawCaptcha(captcha);
+        }
+
+        // 繪製驗證碼到 Canvas
+        function drawCaptcha(text) {
+            const canvas = document.getElementById('captchaCanvas');
+            const ctx = canvas.getContext('2d');
+
+            // 清空畫布
+            ctx.fillStyle = '#F4F7FA';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // 繪製干擾線
+            for (let i = 0; i < 5; i++) {
+                ctx.strokeStyle = `rgba(${Math.random()*100+100}, ${Math.random()*100+100}, ${Math.random()*100+150}, 0.5)`;
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
+                ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
+                ctx.stroke();
+            }
+
+            // 繪製干擾點
+            for (let i = 0; i < 50; i++) {
+                ctx.fillStyle = `rgba(${Math.random()*150+50}, ${Math.random()*150+50}, ${Math.random()*150+50}, 0.3)`;
+                ctx.beginPath();
+                ctx.arc(Math.random() * canvas.width, Math.random() * canvas.height, 1, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // 繪製文字
+            ctx.font = 'bold 24px Courier New';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+
+            for (let i = 0; i < text.length; i++) {
+                const x = 15 + i * 17;
+                const y = canvas.height / 2 + (Math.random() * 10 - 5);
+                const rotation = (Math.random() * 30 - 15) * Math.PI / 180;
+
+                ctx.save();
+                ctx.translate(x, y);
+                ctx.rotate(rotation);
+                ctx.fillStyle = `rgb(${Math.random()*50+20}, ${Math.random()*50+40}, ${Math.random()*50+70})`;
+                ctx.fillText(text[i], 0, 0);
+                ctx.restore();
+            }
+        }
+
+        // 檢查是否需要顯示驗證碼
+        function checkShowCaptcha() {
+            const failCount = getFailCount();
+            const captchaGroup = document.getElementById('captchaGroup');
+            if (failCount >= CAPTCHA_THRESHOLD) {
+                captchaGroup.classList.add('show');
+                if (!currentCaptcha) {
+                    generateCaptcha();
+                }
+            } else {
+                captchaGroup.classList.remove('show');
+            }
+        }
+
+        // 驗證驗證碼
+        function validateCaptcha() {
+            const failCount = getFailCount();
+            if (failCount < CAPTCHA_THRESHOLD) return true;
+
+            const input = document.getElementById('captchaInput').value.toUpperCase();
+            return input === currentCaptcha;
+        }
+
+        // ==================== 忘記密碼功能 ====================
+        function openForgotPasswordModal() {
+            document.getElementById('forgotPasswordModal').classList.add('show');
+            document.getElementById('forgotPasswordError').classList.remove('show');
+            document.getElementById('forgotPasswordSuccess').classList.remove('show');
+            document.getElementById('forgotEmail').value = '';
+        }
+
+        function closeForgotPasswordModal() {
+            document.getElementById('forgotPasswordModal').classList.remove('show');
+        }
+
+        // 產生隨機密碼
+        function generateRandomPassword(length = 12) {
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789!@#$%';
+            let password = '';
+            for (let i = 0; i < length; i++) {
+                password += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return password;
+        }
+
+        // 處理忘記密碼表單
+        document.getElementById('forgotPasswordForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const email = document.getElementById('forgotEmail').value.trim();
+            const errorEl = document.getElementById('forgotPasswordError');
+            const successEl = document.getElementById('forgotPasswordSuccess');
+            const btn = document.getElementById('forgotPasswordBtn');
+
+            errorEl.classList.remove('show');
+            successEl.classList.remove('show');
+            btn.textContent = '處理中...';
+            btn.disabled = true;
+
+            try {
+                // 使用 REST API 查詢 admin_users 資料表
+                const { data: users, error: queryError } = await supabaseSelect('admin_users', {
+                    eq: { email: email, status: 'active' }
+                });
+
+                if (queryError) throw queryError;
+
+                if (!users || users.length === 0) {
+                    errorEl.textContent = '查無此 Email';
+                    errorEl.classList.add('show');
+                    btn.innerHTML = '發送新密碼 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>';
+                    btn.disabled = false;
+                    return;
+                }
+
+                const user = users[0];
+                const newPassword = generateRandomPassword();
+
+                // 使用 Web Crypto API 產生密碼雜湊
+                const encoder = new TextEncoder();
+                const data = encoder.encode(newPassword + user.id);
+                const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+                // 更新資料庫中的密碼
+                const { error: updateError } = await supabaseUpdate('admin_users', user.id, {
+                    password_hash: hashHex
+                });
+
+                if (updateError) throw updateError;
+
+                // 呼叫 SendGrid Edge Function 發送郵件
+                const emailResponse = await fetch(SUPABASE_URL + '/functions/v1/send-email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+                    },
+                    body: JSON.stringify({
+                        to: email,
+                        subject: '金優匯後台 - 密碼重設通知',
+                        html: `
+                            <div style="font-family: 'Noto Sans TC', sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+                                <h2 style="color: #1B3A57;">金優匯後台管理系統</h2>
+                                <p>親愛的 ${user.name || '管理員'} 您好，</p>
+                                <p>您的密碼已重設，新密碼如下：</p>
+                                <div style="background: #F4F7FA; padding: 15px 20px; border-radius: 8px; margin: 20px 0;">
+                                    <strong style="font-size: 18px; letter-spacing: 2px;">${newPassword}</strong>
+                                </div>
+                                <p>請使用此密碼登入後台，並建議立即修改密碼。</p>
+                                <p style="color: #6B849E; font-size: 14px; margin-top: 30px;">
+                                    此為系統自動發送的郵件，請勿直接回覆。
+                                </p>
+                            </div>
+                        `
+                    })
+                });
+
+                if (!emailResponse.ok) {
+                    console.error('發送郵件失敗');
+                    successEl.textContent = '密碼已重設，但郵件發送失敗，請聯繫管理員';
+                } else {
+                    successEl.textContent = '新密碼已寄送至您的信箱，請查收';
+                }
+
+                successEl.classList.add('show');
+
+                // 記錄稽核日誌
+                try {
+                    await supabaseInsert('audit_logs', {
+                        user_email: email,
+                        action: 'update',
+                        module: '帳號管理',
+                        item_name: '密碼重設',
+                        details: { method: 'forgot_password' }
+                    });
+                } catch (e) {
+                    console.error('記錄稽核日誌失敗:', e);
+                }
+
+            } catch (error) {
+                console.error('忘記密碼處理失敗:', error);
+                errorEl.textContent = '系統錯誤，請稍後再試';
+                errorEl.classList.add('show');
+            }
+
+            btn.innerHTML = '發送新密碼 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>';
+            btn.disabled = false;
+        });
+
+        // 忘記密碼連結點擊
+        document.getElementById('forgotPasswordLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            openForgotPasswordModal();
+        });
+
+        // 點擊 modal 外部關閉
+        document.getElementById('forgotPasswordModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeForgotPasswordModal();
+            }
+        });
+
+        // ==================== 登入驗證 ====================
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const account = document.getElementById('username').value.trim(); // 可以是 email 或 username
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+            const loginBtn = document.querySelector('.login-btn');
+            const captchaInput = document.getElementById('captchaInput');
+
+            // 檢查驗證碼
+            if (!validateCaptcha()) {
+                errorMessage.textContent = '驗證碼錯誤，請重新輸入';
+                errorMessage.classList.add('show');
+                generateCaptcha();
+                captchaInput.value = '';
+                setTimeout(() => errorMessage.classList.remove('show'), 3000);
+                return;
+            }
+
+            // 顯示載入中
+            loginBtn.textContent = '驗證中...';
+            loginBtn.disabled = true;
+
+            try {
+                // 使用 REST API 從 admin_users 查詢帳號（支援 email 或 username）
+                let users = [];
+                let queryError = null;
+
+                // 先嘗試用 email 查詢
+                const emailResult = await supabaseSelect('admin_users', {
+                    eq: { email: account }
+                });
+
+                if (!emailResult.error && emailResult.data && emailResult.data.length > 0) {
+                    users = emailResult.data;
+                } else {
+                    // 再嘗試用 username 查詢
+                    const usernameResult = await supabaseSelect('admin_users', {
+                        eq: { username: account }
+                    });
+                    if (!usernameResult.error && usernameResult.data) {
+                        users = usernameResult.data;
+                    }
+                }
+
+                let loginSuccess = false;
+                let user = null;
+
+                if (users && users.length > 0) {
+                    user = users[0];
+
+                    // 檢查帳號狀態
+                    if (user.status !== 'active') {
+                        errorMessage.textContent = '此帳號已停用，請聯繫管理員';
+                        errorMessage.classList.add('show');
+                        loginBtn.innerHTML = '登入 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>';
+                        loginBtn.disabled = false;
+                        setTimeout(() => errorMessage.classList.remove('show'), 3000);
+                        return;
+                    }
+
+                    // 驗證密碼 (使用 SHA-256)
+                    const encoder = new TextEncoder();
+                    const data = encoder.encode(password + user.id);
+                    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+                    const hashArray = Array.from(new Uint8Array(hashBuffer));
+                    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+                    if (hashHex === user.password_hash) {
+                        loginSuccess = true;
+                    }
+                }
+
+                // 如果新系統驗證失敗，嘗試舊系統相容驗證
+                if (!loginSuccess) {
+                    const credentials = await getCredentialsFromDB();
+                    const validUsername = credentials ? credentials.username : 'admin';
+                    const validPassword = credentials ? credentials.password : 'admin123';
+
+                    if (account === validUsername && password === validPassword) {
+                        loginSuccess = true;
+                        user = { email: account, username: account, name: '管理員', role: 'admin' };
+                    }
+                }
+
+                if (loginSuccess) {
+                    // 重置失敗次數
+                    resetFailCount();
+
+                    // 儲存登入狀態
+                    sessionStorage.setItem('isLoggedIn', 'true');
+                    sessionStorage.setItem('userEmail', user.email);
+                    sessionStorage.setItem('userName', user.name || '管理員');
+                    sessionStorage.setItem('userRole', user.role || 'admin');
+
+                    // 更新最後登入時間
+                    if (user.id) {
+                        try {
+                            await supabaseUpdate('admin_users', user.id, {
+                                last_login: new Date().toISOString()
+                            });
+                        } catch (e) {
+                            console.log('更新登入時間失敗:', e);
+                        }
+                    }
+
+                    // 導向後台
+                    window.location.href = 'yourremit-admin.html';
+                } else {
+                    // 登入失敗
+                    const failCount = getFailCount() + 1;
+                    setFailCount(failCount);
+
+                    errorMessage.textContent = '帳號或密碼錯誤，請重新輸入';
+                    errorMessage.classList.add('show');
+
+                    // 檢查是否需要顯示驗證碼
+                    checkShowCaptcha();
+                    if (failCount >= CAPTCHA_THRESHOLD) {
+                        generateCaptcha();
+                        captchaInput.value = '';
+                    }
+
+                    loginBtn.innerHTML = '登入 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>';
+                    loginBtn.disabled = false;
+
+                    setTimeout(() => errorMessage.classList.remove('show'), 3000);
+                }
+
+            } catch (error) {
+                console.error('登入驗證失敗:', error);
+                errorMessage.textContent = '系統錯誤，請稍後再試';
+                errorMessage.classList.add('show');
+                loginBtn.innerHTML = '登入 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>';
+                loginBtn.disabled = false;
+                setTimeout(() => errorMessage.classList.remove('show'), 3000);
+            }
+        });
+
+        // 舊系統相容函數
         async function getCredentialsFromDB() {
             try {
                 const data = await getAdminCredentialsFromDB();
-                console.log('從 Supabase 取得的帳密:', data);
                 if (data) {
                     return { username: data.username, password: data.password };
                 }
@@ -498,62 +1073,14 @@
             return null;
         }
 
-        document.getElementById('loginForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const errorMessage = document.getElementById('errorMessage');
-            const loginBtn = document.querySelector('.login-btn');
-
-            // 顯示載入中
-            loginBtn.textContent = '驗證中...';
-            loginBtn.disabled = true;
-
-            // 從 Supabase 取得目前的帳密設定
-            const credentials = await getCredentialsFromDB();
-            const validUsername = credentials ? credentials.username : DEFAULT_USERNAME;
-            const validPassword = credentials ? credentials.password : DEFAULT_PASSWORD;
-
-            console.log('輸入帳號:', username);
-            console.log('有效帳號:', validUsername);
-            console.log('密碼比對:', password === validPassword);
-
-            // 驗證帳密
-            if (username === validUsername && password === validPassword) {
-                // 儲存登入狀態
-                sessionStorage.setItem('isLoggedIn', 'true');
-                sessionStorage.setItem('username', username);
-
-                // 導向後台
-                window.location.href = 'yourremit-admin.html';
-            } else {
-                // 顯示錯誤訊息
-                errorMessage.classList.add('show');
-                loginBtn.innerHTML = '登入 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>';
-                loginBtn.disabled = false;
-
-                // 3 秒後移除錯誤訊息
-                setTimeout(() => {
-                    errorMessage.classList.remove('show');
-                }, 3000);
-            }
-        });
-
         // 檢查是否已登入
         if (sessionStorage.getItem('isLoggedIn') === 'true') {
             window.location.href = 'yourremit-admin.html';
         }
 
-        // 頁面載入時檢查 Supabase 連線
-        (async function() {
-            console.log('=== 登入頁面載入 ===');
-            const creds = await getCredentialsFromDB();
-            if (creds) {
-                console.log('目前儲存的帳號:', creds.username);
-            } else {
-                console.log('沒有儲存的帳密，使用預設值 (admin/admin123)');
-            }
+        // 頁面載入時初始化
+        (function() {
+            checkShowCaptcha();
         })();
     </script>
 </body>

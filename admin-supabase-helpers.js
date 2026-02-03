@@ -762,10 +762,23 @@ async function saveServiceDetail(serviceId, serviceData) {
         console.error('儲存服務詳情到 Supabase 失敗:', error);
     }
 
-    // 同時儲存到 localStorage
-    let serviceDetailData = JSON.parse(localStorage.getItem('serviceDetailData')) || {};
-    serviceDetailData[serviceId] = serviceData;
-    localStorage.setItem('serviceDetailData', JSON.stringify(serviceDetailData));
+    // 同時儲存到 localStorage（移除大型圖片數據以避免配額超出）
+    try {
+        let serviceDetailData = JSON.parse(localStorage.getItem('serviceDetailData')) || {};
+        // 建立不含 base64 圖片的副本
+        const dataForStorage = {
+            ...serviceData,
+            sections: (serviceData.sections || []).map(section => ({
+                ...section,
+                // 如果圖片是 base64，只保留 URL 類型的圖片路徑
+                image: section.image && section.image.startsWith('data:') ? '' : section.image
+            }))
+        };
+        serviceDetailData[serviceId] = dataForStorage;
+        localStorage.setItem('serviceDetailData', JSON.stringify(serviceDetailData));
+    } catch (storageError) {
+        console.warn('localStorage 儲存失敗（可能配額已滿），資料已存至 Supabase:', storageError.message);
+    }
 }
 
 /**

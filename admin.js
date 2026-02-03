@@ -7,6 +7,80 @@ if (sessionStorage.getItem('isLoggedIn') !== 'true') {
     window.location.href = 'yourremit-login.html';
 }
 
+// ==================== 權限控制 ====================
+const USER_ROLE = sessionStorage.getItem('userRole') || 'admin';
+const USER_EMAIL = sessionStorage.getItem('userEmail') || 'admin';
+const USER_NAME = sessionStorage.getItem('userName') || '管理員';
+
+// 權限定義
+const PERMISSIONS = {
+    admin: ['full'], // 管理員有完整權限
+    editor: ['media', 'banner', 'content', 'stats', 'csr', 'customer', 'app', 'news', 'contact', 'investor', 'translations'],
+    viewer: [] // 檢視者僅能檢視，不能編輯
+};
+
+// 檢查是否有編輯權限
+function canEdit() {
+    return USER_ROLE === 'admin' || USER_ROLE === 'editor';
+}
+
+// 檢查是否有存取系統設定的權限
+function canAccessSettings() {
+    return USER_ROLE === 'admin';
+}
+
+// 根據權限隱藏/顯示 UI 元素
+function applyPermissions() {
+    // 隱藏系統設定選單（非管理員）
+    if (!canAccessSettings()) {
+        const settingsNavItem = document.querySelector('[data-section="settings"]')?.closest('.nav-item');
+        if (settingsNavItem) {
+            settingsNavItem.style.display = 'none';
+        }
+    }
+
+    // 檢視者：隱藏所有新增、編輯、刪除按鈕
+    if (USER_ROLE === 'viewer') {
+        // 隱藏所有 action 按鈕
+        document.querySelectorAll('.btn-primary, .btn-danger, .add-btn, .edit-btn, .delete-btn').forEach(btn => {
+            if (btn.textContent.includes('新增') || btn.textContent.includes('編輯') ||
+                btn.textContent.includes('刪除') || btn.textContent.includes('儲存') ||
+                btn.textContent.includes('上傳')) {
+                btn.style.display = 'none';
+            }
+        });
+
+        // 禁用所有表單輸入
+        document.querySelectorAll('input:not([type="search"]), textarea, select').forEach(el => {
+            if (!el.closest('.search-filter') && !el.closest('.filter-bar')) {
+                el.disabled = true;
+                el.style.opacity = '0.7';
+            }
+        });
+
+        // 顯示唯讀提示
+        const readOnlyBanner = document.createElement('div');
+        readOnlyBanner.className = 'readonly-banner';
+        readOnlyBanner.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg> 唯讀模式 - 您目前僅有檢視權限';
+        readOnlyBanner.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; background: #FEF3C7; color: #92400E; padding: 8px 16px; text-align: center; font-size: 14px; z-index: 9999; display: flex; align-items: center; justify-content: center; gap: 8px;';
+        document.body.prepend(readOnlyBanner);
+        document.body.style.paddingTop = '40px';
+    }
+
+    // 更新使用者顯示名稱
+    const userNameEl = document.querySelector('.user-name');
+    if (userNameEl) {
+        userNameEl.textContent = USER_NAME;
+    }
+
+    // 顯示角色標籤
+    const userRoleEl = document.querySelector('.user-role');
+    if (userRoleEl) {
+        const roleNames = { admin: '管理員', editor: '編輯者', viewer: '檢視者' };
+        userRoleEl.textContent = roleNames[USER_ROLE] || '使用者';
+    }
+}
+
 // Initialize data - 將從 Supabase 或 localStorage 載入
 let newsData = [];
 let imageData = [];
@@ -182,6 +256,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         initTranslationsSection();
         updateStats();
 
+        // 套用權限控制
+        applyPermissions();
+
         hideLoadingState();
     } catch (error) {
         console.error('載入資料失敗:', error);
@@ -212,6 +289,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         initCsrSection();
         initTranslationsSection();
         updateStats();
+
+        // 套用權限控制
+        applyPermissions();
     }
 });
 
@@ -300,6 +380,11 @@ function initNavigation() {
             // Show corresponding section
             contentSections.forEach(s => s.classList.remove('active'));
             document.getElementById(section).classList.add('active');
+
+            // Initialize section-specific functionality
+            if (section === 'settings' && typeof initSettingsTabs === 'function') {
+                initSettingsTabs();
+            }
 
             // Close mobile menu
             sidebar.classList.remove('active');
@@ -922,7 +1007,7 @@ function initBannerManagement() {
                 }
                 break;
             case 'select':
-                openImageSelector(index);
+                openImagePicker('banner', index);
                 break;
             case 'upload':
                 const fileInput = bannerItem.querySelector('.banner-file-input');
@@ -1362,7 +1447,7 @@ function initImageManagement() {
 }
 
 // 儲存所有分組（包括沒有圖片的分組）
-let allGroups = new Set(['default']);
+let allGroups = new Set(['預設']);
 
 // 更新分組過濾器選項
 function updateGroupFilter() {
@@ -1371,7 +1456,7 @@ function updateGroupFilter() {
     
     // 從圖片資料中取得所有分組
     imageData.forEach(img => {
-        allGroups.add(img.group || 'default');
+        allGroups.add(img.group || '預設');
     });
     
     // 更新選項（保留「全部」選項和所有已知分組）
@@ -1423,17 +1508,18 @@ function editImage(id) {
         name: document.getElementById('editImageName'),
         group: document.getElementById('editImageGroup'),
         description: document.getElementById('editImageDescription'),
-        showInBanner: document.getElementById('editImageShowInBanner'),
         preview: document.getElementById('editImagePreviewImg'),
+        videoPreview: document.getElementById('editVideoPreview'),
         size: document.getElementById('editImageSize'),
         resolution: document.getElementById('editImageResolution'),
         createdAt: document.getElementById('editImageCreatedAt'),
         mimeType: document.getElementById('editImageMimeType')
     };
     
-    // 檢查所有元素是否存在
-    for (const [key, element] of Object.entries(elements)) {
-        if (!element) {
+    // 檢查必要元素是否存在（videoPreview 為選用）
+    const requiredKeys = ['id', 'name', 'group', 'description', 'preview', 'size', 'resolution', 'createdAt', 'mimeType'];
+    for (const key of requiredKeys) {
+        if (!elements[key]) {
             console.error(`找不到元素: editImage${key.charAt(0).toUpperCase() + key.slice(1)}`);
             showToast(`找不到編輯表單元素: ${key}`, 'error');
             return;
@@ -1444,8 +1530,8 @@ function editImage(id) {
     updateGroupFilter();
     
     // 確保當前分組在選項中
-    if (!allGroups.has(image.group || 'default')) {
-        allGroups.add(image.group || 'default');
+    if (!allGroups.has(image.group || '預設')) {
+        allGroups.add(image.group || '預設');
         updateGroupFilter();
     }
     
@@ -1460,7 +1546,7 @@ function editImage(id) {
             editGroupSelect.appendChild(option);
         });
         // 設定當前值
-        editGroupSelect.value = image.group || 'default';
+        editGroupSelect.value = image.group || '預設';
         console.log('分組選單已更新，選項:', Array.from(allGroups));
     } else {
         console.error('editGroupSelect 不是 SELECT 元素:', editGroupSelect);
@@ -1470,10 +1556,24 @@ function editImage(id) {
     elements.id.value = image.id;
     elements.name.value = image.name || '';
     elements.description.value = image.description || '';
-    elements.showInBanner.checked = image.showInBanner || false;
-    
-    // 顯示圖片預覽
-    elements.preview.src = image.data;
+
+    // 判斷是否為影片
+    const isVideo = image.mediaType === 'video' || image.mimeType?.startsWith('video/');
+
+    // 顯示預覽（根據類型切換）
+    if (isVideo) {
+        elements.preview.style.display = 'none';
+        if (elements.videoPreview) {
+            elements.videoPreview.style.display = 'block';
+            elements.videoPreview.src = image.data;
+        }
+    } else {
+        elements.preview.style.display = 'block';
+        elements.preview.src = image.data;
+        if (elements.videoPreview) {
+            elements.videoPreview.style.display = 'none';
+        }
+    }
     
     // 顯示圖片資訊
     elements.size.textContent = image.size || formatFileSize(image.fileSize || 0);
@@ -1525,41 +1625,37 @@ async function saveImageEdit() {
     // 取得表單值
     const groupElement = document.getElementById('editImageGroup');
     const descriptionElement = document.getElementById('editImageDescription');
-    const showInBannerElement = document.getElementById('editImageShowInBanner');
-    
-    if (!groupElement || !descriptionElement || !showInBannerElement) {
+
+    if (!groupElement || !descriptionElement) {
         console.error('找不到表單元素');
         showToast('找不到表單元素', 'error');
         return;
     }
-    
-    // 更新圖片資訊
-    const newGroup = groupElement.value || 'default';
+
+    // 更新影音資訊
+    const newGroup = groupElement.value || '預設';
     const newDescription = descriptionElement.value || '';
-    const newShowInBanner = showInBannerElement.checked || false;
-    
-    console.log('新資料:', { newGroup, newDescription, newShowInBanner });
-    
+
+    console.log('新資料:', { newGroup, newDescription });
+
     image.group = newGroup;
     image.description = newDescription;
-    image.showInBanner = newShowInBanner;
-    
+
     // 添加到分組集合
     allGroups.add(newGroup);
-    
+
     try {
-        // 儲存到 Supabase（如果圖片在 Supabase 中）
+        // 儲存到 Supabase（如果在 Supabase 中）
         if (typeof id === 'string' && id.includes('-')) {
             // UUID 格式，表示在 Supabase 中
             console.log('更新到 Supabase...');
             await updateImageItem(id, {
                 group: newGroup,
-                description: newDescription,
-                show_in_banner: newShowInBanner
+                description: newDescription
             });
             console.log('Supabase 更新成功');
         } else {
-            console.log('圖片 ID 不是 UUID，跳過 Supabase 更新');
+            console.log('ID 不是 UUID，跳過 Supabase 更新');
         }
         
         // 更新本地資料
@@ -1586,85 +1682,9 @@ async function saveImageEdit() {
     }
 }
 
-// 開啟圖片選擇器（用於輪播圖）
+// 開啟圖片選擇器（用於輪播圖）- 已改用 openImagePicker
 function openImageSelector(bannerIndex) {
-    // 取得所有標記為可顯示在輪播圖的圖片
-    const availableImages = imageData.filter(img => img.showInBanner === true);
-    
-    if (availableImages.length === 0) {
-        showToast('沒有可用的圖片。請先在圖片管理中將圖片標記為「顯示在輪播圖選擇中」', 'error');
-        return;
-    }
-    
-    // 建立選擇器 Modal
-    const modal = document.createElement('div');
-    modal.className = 'modal active';
-    modal.id = 'imageSelectorModal';
-    modal.dataset.bannerIndex = bannerIndex; // 儲存 bannerIndex 到 modal 的 data 屬性
-    
-    modal.innerHTML = `
-        <div class="modal-content" style="max-width: 900px;">
-            <div class="modal-header">
-                <h2>選擇圖片</h2>
-                <button class="modal-close" id="closeImageSelectorBtn">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                </button>
-            </div>
-            <div style="padding: 20px;">
-                <div class="image-selector-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; max-height: 500px; overflow-y: auto;">
-                    ${availableImages.map(img => {
-                        const safeId = String(img.id).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-                        return `
-                        <div class="image-select-item" data-image-id="${safeId}" data-banner-index="${bannerIndex}" style="cursor: pointer; border: 2px solid #ddd; border-radius: 8px; overflow: hidden; transition: all 0.2s;" onmouseover="this.style.borderColor='#2196F3'" onmouseout="this.style.borderColor='#ddd'">
-                            <img src="${img.data}" alt="${img.name}" style="width: 100%; height: 120px; object-fit: cover;">
-                            <div style="padding: 8px; font-size: 12px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;" title="${img.name}">${img.name}</div>
-                        </div>
-                    `;
-                    }).join('')}
-                </div>
-            </div>
-        </div>
-    `;
-    
-    document.body.appendChild(modal);
-    
-    // 關閉按鈕事件
-    const closeBtn = modal.querySelector('#closeImageSelectorBtn');
-    if (closeBtn) {
-        closeBtn.addEventListener('click', () => {
-            closeImageSelector();
-        });
-    }
-    
-    // 圖片選擇事件（使用事件委託）
-    const imageGrid = modal.querySelector('.image-selector-grid');
-    if (imageGrid) {
-        imageGrid.addEventListener('click', (e) => {
-            const imageItem = e.target.closest('.image-select-item');
-            if (imageItem) {
-                const imageId = imageItem.dataset.imageId;
-                const itemBannerIndex = imageItem.dataset.bannerIndex || bannerIndex;
-                console.log('點擊圖片選擇項，imageId:', imageId, 'bannerIndex:', itemBannerIndex);
-                if (imageId) {
-                    selectImageForBanner(parseInt(itemBannerIndex), imageId);
-                } else {
-                    console.error('找不到 imageId');
-                }
-            }
-        });
-    }
-    
-    // 點擊背景關閉
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            closeImageSelector();
-        }
-    });
-    
-    console.log('圖片選擇器已開啟，可用圖片數量:', availableImages.length);
+    openImagePicker('banner', bannerIndex);
 }
 
 // 關閉圖片選擇器
@@ -1673,6 +1693,166 @@ function closeImageSelector() {
     if (modal) {
         modal.remove();
     }
+}
+
+// 通用圖片選擇器（支援分組展開）
+function openImagePicker(targetType, targetIndex) {
+    // targetType: 'banner' 或 'service'
+    // targetIndex: 輪播圖索引 或 服務區塊編號 (1, 2, 3)
+
+    if (imageData.length === 0) {
+        showToast('沒有可用的檔案。請先在影音管理中上傳檔案', 'error');
+        return;
+    }
+
+    // 依據分組整理圖片
+    const groupedImages = {};
+    imageData.forEach(img => {
+        const group = img.group || '預設';
+        if (!groupedImages[group]) {
+            groupedImages[group] = [];
+        }
+        groupedImages[group].push(img);
+    });
+
+    // 建立分組列表 HTML
+    let groupsHtml = '';
+    Object.keys(groupedImages).sort().forEach(groupName => {
+        const images = groupedImages[groupName];
+        groupsHtml += `
+            <div class="image-group-section" style="margin-bottom: 15px; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
+                <div class="image-group-header" onclick="toggleImageGroup(this)" style="background: #f5f5f5; padding: 12px 15px; cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-weight: 500;">${groupName} (${images.length})</span>
+                    <svg class="group-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.2s;">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+                <div class="image-group-content" style="display: none; padding: 15px;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px;">
+                        ${images.map(img => {
+                            const safeId = String(img.id).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+                            const imgSrc = img.data || img.url || img.file_url || '';
+                            return `
+                                <div class="picker-image-item" data-image-id="${safeId}" data-target-type="${targetType}" data-target-index="${targetIndex}"
+                                     style="cursor: pointer; border: 2px solid #ddd; border-radius: 6px; overflow: hidden; transition: all 0.2s;"
+                                     onmouseover="this.style.borderColor='#2196F3'; this.style.transform='scale(1.02)'"
+                                     onmouseout="this.style.borderColor='#ddd'; this.style.transform='scale(1)'">
+                                    <img src="${imgSrc}" alt="${img.name}" style="width: 100%; height: 80px; object-fit: cover;">
+                                    <div style="padding: 6px; font-size: 11px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; text-align: center;" title="${img.name}">${img.name}</div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+
+    // 建立 Modal
+    const modal = document.createElement('div');
+    modal.className = 'modal active';
+    modal.id = 'imagePickerModal';
+    modal.innerHTML = `
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <h2>選擇圖片</h2>
+                <button class="modal-close" id="closeImagePickerBtn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div style="padding: 20px; max-height: 500px; overflow-y: auto;">
+                <p style="margin-bottom: 15px; color: #666; font-size: 14px;">點擊分組名稱展開查看圖片，然後選擇要使用的圖片。</p>
+                ${groupsHtml}
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    // 關閉按鈕事件
+    document.getElementById('closeImagePickerBtn').addEventListener('click', closeImagePicker);
+
+    // 圖片選擇事件（使用事件委託）
+    modal.querySelector('.modal-content').addEventListener('click', (e) => {
+        const imageItem = e.target.closest('.picker-image-item');
+        if (imageItem) {
+            const imageId = imageItem.dataset.imageId;
+            const type = imageItem.dataset.targetType;
+            const index = imageItem.dataset.targetIndex;
+            if (type === 'banner') {
+                selectImageForBanner(parseInt(index), imageId);
+            } else if (type === 'service') {
+                selectImageForService(parseInt(index), imageId);
+            }
+            closeImagePicker();
+        }
+    });
+
+    // 點擊背景關閉
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeImagePicker();
+    });
+
+    // 預設展開第一個分組
+    const firstGroup = modal.querySelector('.image-group-header');
+    if (firstGroup) toggleImageGroup(firstGroup);
+}
+
+// 切換圖片分組展開/收合
+function toggleImageGroup(header) {
+    const content = header.nextElementSibling;
+    const arrow = header.querySelector('.group-arrow');
+    if (content.style.display === 'none') {
+        content.style.display = 'block';
+        arrow.style.transform = 'rotate(180deg)';
+    } else {
+        content.style.display = 'none';
+        arrow.style.transform = 'rotate(0deg)';
+    }
+}
+
+// 關閉圖片選擇器
+function closeImagePicker() {
+    const modal = document.getElementById('imagePickerModal');
+    if (modal) modal.remove();
+}
+
+// 選擇圖片用於服務區塊
+function selectImageForService(sectionIndex, imageId) {
+    const image = imageData.find(img => String(img.id) === String(imageId));
+    if (!image) {
+        showToast('找不到圖片', 'error');
+        return;
+    }
+
+    const imgUrl = image.data || image.url || image.file_url || '';
+
+    // 更新預覽
+    const preview = document.getElementById(`section${sectionIndex}Preview`);
+    if (preview) {
+        preview.innerHTML = `<img src="${imgUrl}" alt="預覽" style="max-width: 100%; max-height: 200px; object-fit: contain; border-radius: 4px;">`;
+    }
+
+    // 更新隱藏欄位
+    const hiddenInput = document.getElementById(`section${sectionIndex}Image`);
+    if (hiddenInput) {
+        hiddenInput.value = imgUrl;
+    }
+
+    showToast('圖片已選擇！');
+}
+
+// 開啟服務區塊圖片選擇器
+function openServiceImagePicker(sectionIndex) {
+    openImagePicker('service', sectionIndex);
+}
+
+// 開啟輪播圖圖片選擇器（帶分組）
+function openBannerImagePicker(bannerIndex) {
+    openImagePicker('banner', bannerIndex);
 }
 
 // 選擇圖片用於輪播圖
@@ -1785,50 +1965,135 @@ function addNewGroup() {
 }
 
 async function handleFiles(files) {
+    // 取得當前選擇的分組
+    const groupFilter = document.getElementById('imageGroupFilter');
+    let currentGroup = groupFilter ? groupFilter.value : '預設';
+    if (currentGroup === 'all') currentGroup = '預設';
+
     for (const file of Array.from(files)) {
-        if (!file.type.startsWith('image/')) continue;
-        
+        // 支援圖片和影片
+        const isImage = file.type.startsWith('image/');
+        const isVideo = file.type.startsWith('video/');
+        if (!isImage && !isVideo) {
+            showToast('僅支援圖片和影片檔案', 'error');
+            continue;
+        }
+
+        // 檢查檔案大小（從系統設定讀取，預設圖片6MB、影片20MB）
+        const maxImageSize = (window.systemSettings?.maxImageSize || 6) * 1024 * 1024;
+        const maxVideoSize = (window.systemSettings?.maxVideoSize || 20) * 1024 * 1024;
+        const maxSize = isVideo ? maxVideoSize : maxImageSize;
+        const maxSizeMB = isVideo ? (window.systemSettings?.maxVideoSize || 20) : (window.systemSettings?.maxImageSize || 6);
+
+        if (file.size > maxSize) {
+            if (isVideo) {
+                showToast(`影片檔案超過 ${maxSizeMB}MB 上限，請選擇較小的檔案`, 'error');
+                continue;
+            }
+            // 圖片超過大小，詢問是否壓縮
+            const confirmCompress = confirm(`此圖片已超過 ${maxSizeMB}MB 上限，是否嘗試壓縮？\n（畫質可能會有折損）`);
+            if (!confirmCompress) continue;
+
+            // 壓縮圖片
+            try {
+                const compressedFile = await compressImage(file, maxSize);
+                if (compressedFile.size > maxSize) {
+                    showToast('壓縮後仍超過上限，請選擇較小的圖片', 'error');
+                    continue;
+                }
+                // 使用壓縮後的檔案繼續上傳
+                await uploadMediaFile(compressedFile, currentGroup, 'image');
+            } catch (error) {
+                console.error('壓縮圖片失敗:', error);
+                showToast('圖片壓縮失敗', 'error');
+            }
+            continue;
+        }
+
         try {
-            // 上傳到 Supabase Storage
-            const result = await uploadImageToStorage(file, file.name);
-            
-            // 確保使用 Supabase 返回的 ID
-            const imageId = result.id || (result.url ? Date.now() + Math.random() : Date.now() + Math.random());
-            
-            const imageItem = {
-                id: imageId,
-                name: file.name,
-                size: formatFileSize(file.size),
-                fileSize: file.size,
-                data: result.url || (typeof result === 'string' ? result : result.url) || result, // Supabase URL 或 base64 fallback
-                filePath: result.path || null,
-                width: result.width || 0,
-                height: result.height || 0,
-                group: 'default',
-                description: '',
-                showInBanner: false,
-                createdAt: new Date().toISOString(),
-                mimeType: file.type
-            };
-            
-            imageData.push(imageItem);
-            
-            // 無論是否上傳到 Supabase，都更新 localStorage 作為備份
-            await saveImageData();
-            
-            updateGroupFilter();
-            renderImageGrid('all', imageViewMode);
-            updateStats();
-            showToast('圖片已上傳！');
+            await uploadMediaFile(file, currentGroup, isVideo ? 'video' : 'image');
         } catch (error) {
-            console.error('上傳圖片失敗:', error);
-            showToast('圖片上傳失敗，請稍後再試', 'error');
+            console.error('上傳檔案失敗:', error);
+            showToast('檔案上傳失敗，請稍後再試', 'error');
         }
     }
 }
 
-// 圖片顯示模式（grid 或 list）
-let imageViewMode = localStorage.getItem('imageViewMode') || 'grid';
+// 壓縮圖片
+async function compressImage(file, maxSize) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+
+                // 逐步降低品質直到符合大小
+                let quality = 0.8;
+                const tryCompress = () => {
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    canvas.toBlob((blob) => {
+                        if (blob.size <= maxSize || quality <= 0.1) {
+                            resolve(new File([blob], file.name, { type: 'image/jpeg' }));
+                        } else {
+                            quality -= 0.1;
+                            // 同時縮小尺寸
+                            width = Math.floor(width * 0.9);
+                            height = Math.floor(height * 0.9);
+                            tryCompress();
+                        }
+                    }, 'image/jpeg', quality);
+                };
+                tryCompress();
+            };
+            img.onerror = reject;
+            img.src = e.target.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
+}
+
+// 上傳媒體檔案
+async function uploadMediaFile(file, group, mediaType) {
+    const result = await uploadImageToStorage(file, file.name);
+
+    const mediaId = result.id || (result.url ? Date.now() + Math.random() : Date.now() + Math.random());
+
+    const mediaItem = {
+        id: mediaId,
+        name: file.name,
+        size: formatFileSize(file.size),
+        fileSize: file.size,
+        data: result.url || (typeof result === 'string' ? result : result.url) || result,
+        filePath: result.path || null,
+        width: result.width || 0,
+        height: result.height || 0,
+        group: group,
+        description: '',
+        mediaType: mediaType, // 'image' 或 'video'
+        createdAt: new Date().toISOString(),
+        mimeType: file.type
+    };
+
+    imageData.push(mediaItem);
+
+    await saveImageData();
+
+    updateGroupFilter();
+    renderImageGrid('all', imageViewMode);
+    updateStats();
+    showToast(mediaType === 'video' ? '影片已上傳！' : '圖片已上傳！');
+}
+
+// 影音顯示模式（grid 或 list），預設為列表模式
+let imageViewMode = localStorage.getItem('imageViewMode') || 'list';
 let selectedImageIds = new Set();
 
 function renderImageGrid(filterGroup = 'all', viewMode = imageViewMode) {
@@ -1857,7 +2122,7 @@ function renderImageGrid(filterGroup = 'all', viewMode = imageViewMode) {
     }
     
     if (imageData.length === 0) {
-        container.innerHTML = '<div class="no-data">尚無圖片，請上傳圖片</div>';
+        container.innerHTML = '<div class="no-data">尚無影音檔案，請上傳檔案</div>';
         container.className = 'image-grid';
         updateSelectedCount();
         return;
@@ -1866,16 +2131,16 @@ function renderImageGrid(filterGroup = 'all', viewMode = imageViewMode) {
     // 過濾分組
     let filteredImages = imageData;
     if (filterGroup !== 'all') {
-        filteredImages = imageData.filter(img => (img.group || 'default') === filterGroup);
+        filteredImages = imageData.filter(img => (img.group || '預設') === filterGroup);
     }
     
     if (filteredImages.length === 0) {
-        container.innerHTML = '<div class="no-data">此分組中沒有圖片</div>';
+        container.innerHTML = '<div class="no-data">此分組中沒有檔案</div>';
         container.className = 'image-grid';
         updateSelectedCount();
         return;
     }
-    
+
     // 根據顯示模式渲染
     if (viewMode === 'list') {
         // 列表模式（像檔案總管）
@@ -1889,6 +2154,7 @@ function renderImageGrid(filterGroup = 'all', viewMode = imageViewMode) {
                         </th>
                         <th style="padding: 12px; text-align: left; width: 80px;">預覽</th>
                         <th style="padding: 12px; text-align: left;">檔案名稱</th>
+                        <th style="padding: 12px; text-align: left; width: 70px;">類型</th>
                         <th style="padding: 12px; text-align: left;">分組</th>
                         <th style="padding: 12px; text-align: left;">描述</th>
                         <th style="padding: 12px; text-align: left; width: 100px;">檔案大小</th>
@@ -1901,27 +2167,37 @@ function renderImageGrid(filterGroup = 'all', viewMode = imageViewMode) {
                     ${filteredImages.map(img => {
                         const createdAt = img.createdAt ? new Date(img.createdAt).toLocaleString('zh-TW') : '未知';
                         const resolution = (img.width && img.height) ? `${img.width} × ${img.height}` : '未知';
-                        const group = img.group || 'default';
+                        const group = img.group || '預設';
                         const description = img.description || '';
-                        const showInBanner = img.showInBanner || false;
+                        const mediaType = img.mediaType || (img.mimeType?.startsWith('video/') ? 'video' : 'image');
+                        const isVideo = mediaType === 'video';
                         const isSelected = selectedImageIds.has(String(img.id));
-                        
+
                         return `
-                        <tr style="border-bottom: 1px solid #eee; ${isSelected ? 'background: #e3f2fd;' : ''}" data-id="${img.id}">
-                            <td style="padding: 12px;">
+                        <tr style="border-bottom: 1px solid #eee; ${isSelected ? 'background: #e3f2fd;' : ''} cursor: pointer;" data-id="${img.id}" ondblclick="editImage('${String(img.id).replace(/'/g, "\\'")}')">
+                            <td style="padding: 12px;" onclick="event.stopPropagation();">
                                 <input type="checkbox" class="image-checkbox" data-id="${img.id}" onchange="toggleImageSelection('${String(img.id).replace(/'/g, "\\'")}', this.checked)" ${isSelected ? 'checked' : ''}>
                             </td>
                             <td style="padding: 12px;">
-                                <img src="${img.data}" alt="${img.name}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px;">
-                                ${showInBanner ? '<span style="display: block; font-size: 10px; color: #2196F3; margin-top: 4px;">輪播圖</span>' : ''}
+                                ${isVideo ?
+                                    `<div style="width: 60px; height: 60px; background: #333; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                                    </div>` :
+                                    `<img src="${img.data}" alt="${img.name}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px;">`
+                                }
                             </td>
                             <td style="padding: 12px; font-weight: 500;">${img.name}</td>
+                            <td style="padding: 12px;">
+                                <span style="background: ${isVideo ? '#ff9800' : '#4caf50'}; color: white; padding: 2px 8px; border-radius: 4px; font-size: 11px;">
+                                    ${isVideo ? '影片' : '圖片'}
+                                </span>
+                            </td>
                             <td style="padding: 12px;"><span style="background: #e3f2fd; padding: 4px 8px; border-radius: 4px; font-size: 12px;">${group}</span></td>
                             <td style="padding: 12px; color: #666; font-size: 14px;">${description || '-'}</td>
                             <td style="padding: 12px; font-size: 14px;">${img.size}</td>
                             <td style="padding: 12px; font-size: 14px;">${resolution}</td>
                             <td style="padding: 12px; font-size: 14px; color: #666;">${createdAt}</td>
-                            <td style="padding: 12px;">
+                            <td style="padding: 12px;" onclick="event.stopPropagation();">
                                 <button onclick="editImage('${String(img.id).replace(/'/g, "\\'")}')" style="padding: 4px 8px; background: #2196F3; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; margin-right: 4px;">編輯</button>
                                 <button onclick="deleteImage('${String(img.id).replace(/'/g, "\\'")}')" style="padding: 4px 8px; background: #f44336; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">刪除</button>
                             </td>
@@ -1937,28 +2213,34 @@ function renderImageGrid(filterGroup = 'all', viewMode = imageViewMode) {
         container.innerHTML = filteredImages.map(img => {
             const createdAt = img.createdAt ? new Date(img.createdAt).toLocaleString('zh-TW') : '未知';
             const resolution = (img.width && img.height) ? `${img.width} × ${img.height}` : '未知';
-            const group = img.group || 'default';
+            const group = img.group || '預設';
             const description = img.description || '';
-            const showInBanner = img.showInBanner || false;
+            const mediaType = img.mediaType || (img.mimeType?.startsWith('video/') ? 'video' : 'image');
+            const isVideo = mediaType === 'video';
             const isSelected = selectedImageIds.has(String(img.id));
-            
+
             return `
-            <div class="image-item ${isSelected ? 'selected' : ''}" data-id="${img.id}">
+            <div class="image-item ${isSelected ? 'selected' : ''}" data-id="${img.id}" ondblclick="editImage('${String(img.id).replace(/'/g, "\\'")}')">
                 <div class="image-item-checkbox" style="position: absolute; top: 8px; left: 8px; z-index: 10;">
-                    <input type="checkbox" class="image-checkbox" data-id="${img.id}" onchange="toggleImageSelection('${String(img.id).replace(/'/g, "\\'")}', this.checked)" ${isSelected ? 'checked' : ''} style="width: 20px; height: 20px; cursor: pointer;">
+                    <input type="checkbox" class="image-checkbox" data-id="${img.id}" onchange="toggleImageSelection('${String(img.id).replace(/'/g, "\\'")}', this.checked)" ${isSelected ? 'checked' : ''} style="width: 20px; height: 20px; cursor: pointer;" onclick="event.stopPropagation();">
                 </div>
+                ${isVideo ? `<span style="position: absolute; top: 8px; right: 8px; background: #ff9800; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; z-index: 10;">影片</span>` : ''}
                 <div class="image-item-preview">
-                    <img src="${img.data}" alt="${img.name}">
-                    ${showInBanner ? '<span class="banner-badge">輪播圖</span>' : ''}
+                    ${isVideo ?
+                        `<div style="width: 100%; height: 150px; background: #333; display: flex; align-items: center; justify-content: center;">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        </div>` :
+                        `<img src="${img.data}" alt="${img.name}">`
+                    }
                 </div>
                 <div class="image-item-actions">
-                    <button class="image-action-btn" onclick="editImage('${String(img.id).replace(/'/g, "\\'")}')" title="編輯">
+                    <button class="image-action-btn" onclick="event.stopPropagation(); editImage('${String(img.id).replace(/'/g, "\\'")}')" title="編輯">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                             <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                         </svg>
                     </button>
-                    <button class="image-action-btn" onclick="deleteImage('${String(img.id).replace(/'/g, "\\'")}')" title="刪除">
+                    <button class="image-action-btn" onclick="event.stopPropagation(); deleteImage('${String(img.id).replace(/'/g, "\\'")}')" title="刪除">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <polyline points="3 6 5 6 21 6"></polyline>
                             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
@@ -2003,7 +2285,7 @@ function renderImageGrid(filterGroup = 'all', viewMode = imageViewMode) {
 }
 
 async function deleteImage(id) {
-    if (!confirm('確定要刪除這張圖片嗎？')) return;
+    if (!confirm('確定要刪除這個檔案嗎？')) return;
     
     const image = imageData.find(img => img.id === id);
     if (!image) return;
@@ -2017,7 +2299,7 @@ async function deleteImage(id) {
     const currentFilter = document.getElementById('imageGroupFilter')?.value || 'all';
     renderImageGrid(currentFilter, imageViewMode);
     updateStats();
-    showToast('圖片已刪除！');
+    showToast('檔案已刪除！');
 }
 
 async function saveImageData() {
@@ -2754,9 +3036,9 @@ function initServiceDetailEditor() {
     });
 
     // Form submit
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        saveServiceDetail();
+        await saveServiceDetailForm();
         closeModal();
         showToast('服務詳細內容已儲存！');
     });
@@ -2811,23 +3093,41 @@ function openServiceDetailEditor(serviceId) {
     modal.classList.add('active');
 }
 
-function handleServiceImageUpload(sectionIndex, file) {
+async function handleServiceImageUpload(sectionIndex, file) {
     if (!file || !file.type.startsWith('image/')) {
         showToast('請選擇有效的圖片檔案');
         return;
     }
 
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        const imageData = e.target.result;
-        document.getElementById(`section${sectionIndex}Image`).value = imageData;
-        
-        const preview = document.getElementById(`section${sectionIndex}Preview`);
-        preview.innerHTML = `<img src="${imageData}" alt="Preview">`;
-        
+    const preview = document.getElementById(`section${sectionIndex}Preview`);
+    preview.innerHTML = '<span class="uploading">上傳中...</span>';
+
+    try {
+        // 產生唯一檔名
+        const ext = file.name.split('.').pop();
+        const fileName = `service-${currentServiceId}-section-${sectionIndex}-${Date.now()}.${ext}`;
+        const filePath = `services/${fileName}`;
+
+        // 上傳到 Supabase Storage
+        const { data, error } = await supabaseUploadFile('images', filePath, file, {
+            contentType: file.type,
+            upsert: true
+        });
+
+        if (error) throw error;
+
+        // 取得公開 URL
+        const publicUrl = supabaseGetPublicUrl('images', filePath);
+
+        document.getElementById(`section${sectionIndex}Image`).value = publicUrl;
+        preview.innerHTML = `<img src="${publicUrl}" alt="Preview">`;
+
         showToast('圖片已上傳');
-    };
-    reader.readAsDataURL(file);
+    } catch (error) {
+        console.error('上傳圖片失敗:', error);
+        preview.innerHTML = '<span class="no-image">上傳失敗</span>';
+        showToast('圖片上傳失敗: ' + error.message, 'error');
+    }
 }
 
 function removeServiceImage(sectionIndex) {
@@ -2840,7 +3140,7 @@ function removeServiceImage(sectionIndex) {
     if (uploadInput) uploadInput.value = '';
 }
 
-async function saveServiceDetail() {
+async function saveServiceDetailForm() {
     if (!currentServiceId) return;
 
     const service = {
@@ -2859,18 +3159,11 @@ async function saveServiceDetail() {
     }
 
     serviceDetailData[currentServiceId] = service;
-    
+
     // 儲存到 Supabase
     await saveServiceDetail(currentServiceId, service);
-    
-    try {
-        localStorage.setItem('serviceDetailData', JSON.stringify(serviceDetailData));
-    } catch (e) {
-        if (e.name === 'QuotaExceededError') {
-            showToast('儲存空間已滿，請減少圖片大小');
-            return;
-        }
-    }
+
+    // localStorage 儲存已在 saveServiceDetail 中處理，這裡不重複存儲
 
     // Also update the main service title/description in contentData
     const serviceKey = `service${currentServiceId}`;
@@ -5016,13 +5309,13 @@ async function loadFaqList() {
                 <div class="item-header">
                     <span class="item-badge ${faq.category}">${categoryLabels[faq.category] || faq.category}</span>
                     <span class="item-status ${faq.is_published ? 'published' : 'draft'}">${faq.is_published ? '已發布' : '草稿'}</span>
+                    <div class="item-actions">
+                        <button class="edit-btn" onclick="editFaq('${faq.id}')">編輯</button>
+                        <button class="delete-btn" onclick="deleteFaq('${faq.id}')">刪除</button>
+                    </div>
                 </div>
                 <h4 class="item-title">${escapeHtml(faq.question)}</h4>
                 <div class="item-preview">${faq.answer.substring(0, 100)}...</div>
-                <div class="item-actions">
-                    <button class="edit-btn" onclick="editFaq('${faq.id}')">編輯</button>
-                    <button class="delete-btn" onclick="deleteFaq('${faq.id}')">刪除</button>
-                </div>
             </div>
         `).join('');
     } catch (error) {
@@ -5162,14 +5455,14 @@ async function loadPrivacyList() {
         container.innerHTML = privacyList.map(item => `
             <div class="admin-item policy-item">
                 <div class="item-header">
-                    <span class="item-number">第 ${item.section_num} 條</span>
+                    <span class="item-number">第 ${item.sort_order} 條</span>
+                    <div class="item-actions">
+                        <button class="edit-btn" onclick="editPrivacy('${item.id}')">編輯</button>
+                        <button class="delete-btn" onclick="deletePrivacy('${item.id}')">刪除</button>
+                    </div>
                 </div>
                 <h4 class="item-title">${escapeHtml(item.title)}</h4>
                 <div class="item-preview">${item.content.substring(0, 100)}...</div>
-                <div class="item-actions">
-                    <button class="edit-btn" onclick="editPrivacy('${item.id}')">編輯</button>
-                    <button class="delete-btn" onclick="deletePrivacy('${item.id}')">刪除</button>
-                </div>
             </div>
         `).join('');
     } catch (error) {
@@ -5199,7 +5492,6 @@ function openPrivacyModal(item = null) {
     if (item) {
         title.textContent = '編輯隱私權政策章節';
         document.getElementById('privacyEditId').value = item.id;
-        document.getElementById('privacySectionNum').value = item.section_num;
         document.getElementById('privacyTitle').value = item.title;
         document.getElementById('privacyContent').value = item.content;
         document.getElementById('privacySortOrder').value = item.sort_order || 0;
@@ -5207,7 +5499,7 @@ function openPrivacyModal(item = null) {
         title.textContent = '新增隱私權政策章節';
         form.reset();
         document.getElementById('privacyEditId').value = '';
-        document.getElementById('privacySectionNum').value = privacyList.length + 1;
+        document.getElementById('privacySortOrder').value = privacyList.length + 1;
     }
 
     modal.classList.add('active');
@@ -5220,7 +5512,6 @@ function closePrivacyModal() {
 async function savePrivacy() {
     const id = document.getElementById('privacyEditId').value;
     const data = {
-        section_num: parseInt(document.getElementById('privacySectionNum').value),
         title: document.getElementById('privacyTitle').value,
         content: document.getElementById('privacyContent').value,
         sort_order: parseInt(document.getElementById('privacySortOrder').value) || 0
@@ -5293,14 +5584,14 @@ async function loadTermsList() {
         container.innerHTML = termsList.map(item => `
             <div class="admin-item policy-item">
                 <div class="item-header">
-                    <span class="item-number">第 ${item.section_num} 條</span>
+                    <span class="item-number">第 ${item.sort_order} 條</span>
+                    <div class="item-actions">
+                        <button class="edit-btn" onclick="editTerms('${item.id}')">編輯</button>
+                        <button class="delete-btn" onclick="deleteTerms('${item.id}')">刪除</button>
+                    </div>
                 </div>
                 <h4 class="item-title">${escapeHtml(item.title)}</h4>
                 <div class="item-preview">${item.content.substring(0, 100)}...</div>
-                <div class="item-actions">
-                    <button class="edit-btn" onclick="editTerms('${item.id}')">編輯</button>
-                    <button class="delete-btn" onclick="deleteTerms('${item.id}')">刪除</button>
-                </div>
             </div>
         `).join('');
     } catch (error) {
@@ -5330,7 +5621,6 @@ function openTermsModal(item = null) {
     if (item) {
         title.textContent = '編輯服務條款章節';
         document.getElementById('termsEditId').value = item.id;
-        document.getElementById('termsSectionNum').value = item.section_num;
         document.getElementById('termsTitle').value = item.title;
         document.getElementById('termsContent').value = item.content;
         document.getElementById('termsSortOrder').value = item.sort_order || 0;
@@ -5338,7 +5628,7 @@ function openTermsModal(item = null) {
         title.textContent = '新增服務條款章節';
         form.reset();
         document.getElementById('termsEditId').value = '';
-        document.getElementById('termsSectionNum').value = termsList.length + 1;
+        document.getElementById('termsSortOrder').value = termsList.length + 1;
     }
 
     modal.classList.add('active');
@@ -5351,7 +5641,6 @@ function closeTermsModal() {
 async function saveTerms() {
     const id = document.getElementById('termsEditId').value;
     const data = {
-        section_num: parseInt(document.getElementById('termsSectionNum').value),
         title: document.getElementById('termsTitle').value,
         content: document.getElementById('termsContent').value,
         sort_order: parseInt(document.getElementById('termsSortOrder').value) || 0
@@ -5406,4 +5695,517 @@ window.editPrivacy = editPrivacy;
 window.deletePrivacy = deletePrivacy;
 window.editTerms = editTerms;
 window.deleteTerms = deleteTerms;
+
+// ==================== System Settings ====================
+
+// System settings data
+window.systemSettings = {
+    maxImageSize: 6,
+    maxVideoSize: 20
+};
+
+let adminAccounts = [];
+let auditLogs = [];
+
+// Initialize settings tabs
+function initSettingsTabs() {
+    const tabs = document.querySelectorAll('.settings-tab');
+    const contents = document.querySelectorAll('.settings-tab-content');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            // Remove active from all
+            tabs.forEach(t => t.classList.remove('active'));
+            contents.forEach(c => c.classList.remove('active'));
+
+            // Add active to clicked
+            tab.classList.add('active');
+            const tabId = tab.dataset.tab;
+            document.getElementById(`tab-${tabId}`)?.classList.add('active');
+
+            // Load content for the tab
+            if (tabId === 'accounts') loadAccountsList();
+            if (tabId === 'audit-logs') loadAuditLogs();
+        });
+    });
+
+    // Load file limits from localStorage or Supabase
+    loadFileLimits();
+
+    // File limits form
+    const fileLimitsForm = document.getElementById('fileLimitsForm');
+    if (fileLimitsForm) {
+        fileLimitsForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await saveFileLimits();
+        });
+    }
+
+    // Account form
+    const accountForm = document.getElementById('accountForm');
+    if (accountForm) {
+        accountForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const submitBtn = accountForm.querySelector('.submit-btn');
+            if (submitBtn.disabled) return; // 防止重複提交
+            submitBtn.disabled = true;
+            submitBtn.textContent = '儲存中...';
+            try {
+                await saveAccount();
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = '儲存';
+            }
+        });
+    }
+
+    // Audit filters
+    const actionFilter = document.getElementById('auditActionFilter');
+    const moduleFilter = document.getElementById('auditModuleFilter');
+    if (actionFilter) actionFilter.addEventListener('change', loadAuditLogs);
+    if (moduleFilter) moduleFilter.addEventListener('change', loadAuditLogs);
+
+    // Initial load
+    loadAccountsList();
+}
+
+// Load file limits
+async function loadFileLimits() {
+    // Try to load from Supabase first
+    try {
+        const { data, error } = await supabaseSelect('system_settings', {});
+
+        if (!error && data && data.length > 0) {
+            data.forEach(setting => {
+                if (setting.key === 'maxImageSize' || setting.key === 'maxVideoSize') {
+                    window.systemSettings[setting.key] = parseInt(setting.value) || window.systemSettings[setting.key];
+                }
+            });
+        }
+    } catch (e) {
+        console.log('Loading file limits from localStorage');
+        const saved = localStorage.getItem('systemSettings');
+        if (saved) {
+            window.systemSettings = JSON.parse(saved);
+        }
+    }
+
+    const maxImageInput = document.getElementById('maxImageSize');
+    const maxVideoInput = document.getElementById('maxVideoSize');
+    if (maxImageInput) maxImageInput.value = window.systemSettings.maxImageSize || 6;
+    if (maxVideoInput) maxVideoInput.value = window.systemSettings.maxVideoSize || 20;
+}
+
+// Save file limits
+async function saveFileLimits() {
+    const maxImageSize = parseInt(document.getElementById('maxImageSize').value) || 6;
+    const maxVideoSize = parseInt(document.getElementById('maxVideoSize').value) || 20;
+
+    window.systemSettings.maxImageSize = maxImageSize;
+    window.systemSettings.maxVideoSize = maxVideoSize;
+
+    // Save to localStorage as backup
+    localStorage.setItem('systemSettings', JSON.stringify(window.systemSettings));
+
+    // Save to Supabase using REST API
+    try {
+        // Check if settings exist and update/insert accordingly
+        const { data: existing } = await supabaseSelect('system_settings', {});
+        const existingKeys = (existing || []).reduce((acc, s) => { acc[s.key] = s.id; return acc; }, {});
+
+        // Save maxImageSize
+        if (existingKeys['maxImageSize']) {
+            await supabaseUpdate('system_settings', existingKeys['maxImageSize'], { value: maxImageSize.toString() });
+        } else {
+            await supabaseInsert('system_settings', { key: 'maxImageSize', value: maxImageSize.toString() });
+        }
+
+        // Save maxVideoSize
+        if (existingKeys['maxVideoSize']) {
+            await supabaseUpdate('system_settings', existingKeys['maxVideoSize'], { value: maxVideoSize.toString() });
+        } else {
+            await supabaseInsert('system_settings', { key: 'maxVideoSize', value: maxVideoSize.toString() });
+        }
+
+        // Log audit
+        await logAudit('update', '系統設定', 'file-limits', '檔案上限設定', {
+            maxImageSize: maxImageSize + 'MB',
+            maxVideoSize: maxVideoSize + 'MB'
+        });
+
+        showToast('檔案上限設定已儲存');
+    } catch (error) {
+        console.error('儲存檔案上限失敗:', error);
+        showToast('儲存失敗，已儲存至本地', 'error');
+    }
+}
+
+// Load accounts list
+async function loadAccountsList() {
+    const tbody = document.getElementById('accountsTableBody');
+    if (!tbody) return;
+
+    // Try to load from Supabase
+    try {
+        const { data, error } = await supabaseSelect('admin_users', { order: { column: 'created_at', ascending: false } });
+        if (!error && data) {
+            adminAccounts = data;
+        }
+    } catch (e) {
+        console.log('Loading accounts from localStorage');
+        adminAccounts = JSON.parse(localStorage.getItem('adminAccounts')) || [];
+    }
+
+    // If no accounts, show default admin
+    if (adminAccounts.length === 0) {
+        adminAccounts = [{
+            id: 'default-admin',
+            email: 'admin@yourremit.com',
+            name: '系統管理員',
+            role: 'admin',
+            status: 'active',
+            created_at: new Date().toISOString(),
+            last_login: null
+        }];
+    }
+
+    renderAccountsTable();
+}
+
+function renderAccountsTable() {
+    const tbody = document.getElementById('accountsTableBody');
+    if (!tbody) return;
+
+    tbody.innerHTML = adminAccounts.map(account => {
+        const roleClass = account.role === 'admin' ? 'role-admin' : (account.role === 'editor' ? 'role-editor' : 'role-viewer');
+        const roleText = account.role === 'admin' ? '管理員' : (account.role === 'editor' ? '編輯者' : '檢視者');
+        const statusClass = account.status === 'active' ? 'status-active' : 'status-disabled';
+        const statusText = account.status === 'active' ? '啟用' : '停用';
+        const lastLogin = account.last_login ? new Date(account.last_login).toLocaleString('zh-TW') : '-';
+
+        return `
+            <tr>
+                <td>${account.username || '-'}</td>
+                <td>${account.email}</td>
+                <td>${account.name}</td>
+                <td><span class="${roleClass}">${roleText}</span></td>
+                <td><span class="${statusClass}">${statusText}</span></td>
+                <td>${lastLogin}</td>
+                <td>
+                    <div class="table-actions">
+                        <button class="btn-edit" onclick="editAccount('${account.id}')">編輯</button>
+                        ${account.id !== 'default-admin' ? `<button class="btn-delete" onclick="deleteAccount('${account.id}')">刪除</button>` : ''}
+                    </div>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+// Open add account modal
+function openAddAccountModal() {
+    document.getElementById('accountModalTitle').textContent = '新增帳號';
+    document.getElementById('accountId').value = '';
+    document.getElementById('accountUsername').value = '';
+    document.getElementById('accountEmail').value = '';
+    document.getElementById('accountName').value = '';
+    document.getElementById('accountPassword').value = '';
+    document.getElementById('accountPassword').required = true;
+    document.getElementById('accountRole').value = 'editor';
+    document.getElementById('accountStatus').value = 'active';
+    document.getElementById('accountModal').classList.add('active');
+}
+
+// Edit account
+function editAccount(id) {
+    const account = adminAccounts.find(a => a.id === id);
+    if (!account) return;
+
+    document.getElementById('accountModalTitle').textContent = '編輯帳號';
+    document.getElementById('accountId').value = account.id;
+    document.getElementById('accountUsername').value = account.username || '';
+    document.getElementById('accountEmail').value = account.email;
+    document.getElementById('accountName').value = account.name;
+    document.getElementById('accountPassword').value = '';
+    document.getElementById('accountPassword').required = false;
+    document.getElementById('accountRole').value = account.role;
+    document.getElementById('accountStatus').value = account.status;
+    document.getElementById('accountModal').classList.add('active');
+}
+
+// Close account modal
+function closeAccountModal() {
+    document.getElementById('accountModal').classList.remove('active');
+}
+
+// Hash password using SHA-256
+async function hashPassword(password, salt) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password + salt);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// Save account
+async function saveAccount() {
+    const id = document.getElementById('accountId').value;
+    const username = document.getElementById('accountUsername').value.trim();
+    const email = document.getElementById('accountEmail').value.trim();
+    const name = document.getElementById('accountName').value.trim();
+    const password = document.getElementById('accountPassword').value;
+    const role = document.getElementById('accountRole').value;
+    const status = document.getElementById('accountStatus').value;
+
+    try {
+        if (id && id !== 'default-admin') {
+            // Update existing account
+            const updateData = { username, email, name, role, status };
+
+            if (password) {
+                updateData.password_hash = await hashPassword(password, id);
+            }
+
+            const { error } = await supabaseUpdate('admin_users', id, updateData);
+
+            if (error) throw error;
+
+            // Update local array
+            const index = adminAccounts.findIndex(a => a.id === id);
+            if (index !== -1) {
+                adminAccounts[index] = { ...adminAccounts[index], ...updateData };
+            }
+
+            // Log audit
+            await logAudit('update', '帳號管理', id, name, { updated_fields: Object.keys(updateData) });
+            showToast('帳號已更新');
+        } else {
+            // Add new account
+            const newId = crypto.randomUUID ? crypto.randomUUID() : Date.now().toString();
+            const passwordHash = await hashPassword(password, newId);
+
+            const newAccount = {
+                id: newId,
+                username,
+                email,
+                name,
+                password_hash: passwordHash,
+                role,
+                status,
+                created_at: new Date().toISOString(),
+                last_login: null
+            };
+
+            const { error } = await supabaseInsert('admin_users', newAccount);
+
+            if (error) throw error;
+
+            adminAccounts.push(newAccount);
+
+            // Log audit
+            await logAudit('create', '帳號管理', newId, name, { email, role });
+            showToast('帳號已新增');
+        }
+
+        closeAccountModal();
+        renderAccountsTable();
+
+    } catch (error) {
+        console.error('儲存帳號失敗:', error);
+
+        // 友善的錯誤訊息
+        let errorMsg = '儲存帳號失敗';
+        if (error.message.includes('admin_users_email_key')) {
+            errorMsg = '此 Email 已被使用';
+        } else if (error.message.includes('admin_users_username_key') || error.message.includes('idx_admin_users_username')) {
+            errorMsg = '此帳號名稱已被使用';
+        } else {
+            errorMsg = '儲存失敗: ' + error.message;
+        }
+
+        showToast(errorMsg, 'error');
+    }
+}
+
+// Delete account
+async function deleteAccount(id) {
+    if (!confirm('確定要刪除這個帳號嗎？')) return;
+
+    const account = adminAccounts.find(a => a.id === id);
+    if (!account) return;
+
+    try {
+        const { error } = await supabaseDelete('admin_users', id);
+
+        if (error) throw error;
+
+        adminAccounts = adminAccounts.filter(a => a.id !== id);
+
+        // Log audit
+        await logAudit('delete', '帳號管理', id, account.name, { email: account.email });
+        showToast('帳號已刪除');
+
+    } catch (error) {
+        console.error('刪除帳號失敗:', error);
+        showToast('刪除帳號失敗: ' + error.message, 'error');
+    }
+
+    renderAccountsTable();
+}
+
+// Load audit logs
+async function loadAuditLogs() {
+    const tbody = document.getElementById('auditLogsTableBody');
+    if (!tbody) return;
+
+    const actionFilter = document.getElementById('auditActionFilter')?.value || '';
+    const moduleFilter = document.getElementById('auditModuleFilter')?.value || '';
+
+    // Try to load from Supabase
+    try {
+        let query = { order: { column: 'created_at', ascending: false } };
+        if (actionFilter) query.eq = { ...query.eq, action: actionFilter };
+        if (moduleFilter) query.eq = { ...query.eq, module: moduleFilter };
+
+        const { data, error } = await supabaseSelect('audit_logs', query);
+        if (!error && data) {
+            auditLogs = data;
+        }
+    } catch (e) {
+        console.log('Loading audit logs from localStorage');
+        auditLogs = JSON.parse(localStorage.getItem('auditLogs')) || [];
+    }
+
+    // Apply filters locally if needed
+    let filtered = auditLogs;
+    if (actionFilter) filtered = filtered.filter(l => l.action === actionFilter);
+    if (moduleFilter) filtered = filtered.filter(l => l.module === moduleFilter);
+
+    renderAuditLogsTable(filtered);
+}
+
+function renderAuditLogsTable(logs) {
+    const tbody = document.getElementById('auditLogsTableBody');
+    if (!tbody) return;
+
+    if (logs.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #666;">尚無操作記錄</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = logs.slice(0, 100).map(log => {
+        const time = new Date(log.created_at).toLocaleString('zh-TW');
+        const actionClass = log.action === 'create' ? 'action-create' : (log.action === 'update' ? 'action-update' : 'action-delete');
+        const actionText = log.action === 'create' ? '新增' : (log.action === 'update' ? '修改' : '刪除');
+        const moduleNames = {
+            'images': '影音管理',
+            'banner': '輪播圖',
+            'content': '內容管理',
+            'news': '最新消息',
+            'accounts': '帳號管理'
+        };
+
+        return `
+            <tr>
+                <td>${time}</td>
+                <td>${log.user_email || '-'}</td>
+                <td><span class="${actionClass}">${actionText}</span></td>
+                <td>${moduleNames[log.module] || log.module}</td>
+                <td>${log.item_name || log.item_id || '-'}</td>
+                <td>
+                    ${log.details ? `<button class="btn-view" onclick="viewAuditDetail('${log.id}')">查看</button>` : '-'}
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+// Log audit action
+async function logAudit(action, module, itemId, itemName, details = null) {
+    const currentUserEmail = sessionStorage.getItem('userEmail') || 'admin@yourremit.com';
+
+    const log = {
+        id: crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(),
+        user_email: currentUserEmail,
+        action,
+        module,
+        item_id: itemId,
+        item_name: itemName,
+        details,
+        created_at: new Date().toISOString()
+    };
+
+    // Add to local array
+    auditLogs.unshift(log);
+    localStorage.setItem('auditLogs', JSON.stringify(auditLogs.slice(0, 1000))); // Keep last 1000
+
+    // Save to Supabase using REST API
+    try {
+        await supabaseInsert('audit_logs', {
+            user_email: currentUserEmail,
+            action,
+            module,
+            item_id: itemId,
+            item_name: itemName,
+            details
+        });
+    } catch (error) {
+        console.error('記錄稽核日誌失敗:', error);
+    }
+}
+
+// View audit detail
+function viewAuditDetail(id) {
+    const log = auditLogs.find(l => l.id === id);
+    if (!log || !log.details) return;
+
+    alert(JSON.stringify(log.details, null, 2));
+}
+
+// Export audit logs to CSV
+function exportAuditLogs() {
+    const actionFilter = document.getElementById('auditActionFilter')?.value || '';
+    const moduleFilter = document.getElementById('auditModuleFilter')?.value || '';
+
+    let filtered = auditLogs;
+    if (actionFilter) filtered = filtered.filter(l => l.action === actionFilter);
+    if (moduleFilter) filtered = filtered.filter(l => l.module === moduleFilter);
+
+    const headers = ['時間', '操作者', '動作', '模組', '項目'];
+    const rows = filtered.map(log => [
+        new Date(log.created_at).toLocaleString('zh-TW'),
+        log.user_email || '',
+        log.action === 'create' ? '新增' : (log.action === 'update' ? '修改' : '刪除'),
+        log.module,
+        log.item_name || log.item_id || ''
+    ]);
+
+    const csv = [headers.join(','), ...rows.map(r => r.map(c => `"${c}"`).join(','))].join('\n');
+    const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `audit_logs_${new Date().toISOString().slice(0, 10)}.csv`;
+    link.click();
+
+    showToast('CSV 已匯出');
+}
+
+// Initialize settings when section is shown
+document.addEventListener('DOMContentLoaded', () => {
+    // Check if we're on the settings section
+    const settingsSection = document.getElementById('settings');
+    if (settingsSection) {
+        initSettingsTabs();
+    }
+});
+
+// Make settings functions globally available
+window.initSettingsTabs = initSettingsTabs;
+window.openAddAccountModal = openAddAccountModal;
+window.editAccount = editAccount;
+window.closeAccountModal = closeAccountModal;
+window.deleteAccount = deleteAccount;
+window.exportAuditLogs = exportAuditLogs;
+window.viewAuditDetail = viewAuditDetail;
+window.logAudit = logAudit;
 

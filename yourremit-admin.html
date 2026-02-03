@@ -28,6 +28,7 @@
 
         <nav class="sidebar-nav">
             <ul class="nav-list">
+                <!-- 1. 儀表板 -->
                 <li class="nav-item">
                     <a href="#" class="nav-link active" data-section="dashboard">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -39,26 +40,18 @@
                         <span>儀表板</span>
                     </a>
                 </li>
+                <!-- 2. 影音管理 -->
                 <li class="nav-item">
-                    <a href="#" class="nav-link" data-section="content">
+                    <a href="#" class="nav-link" data-section="images">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                            <polyline points="21 15 16 10 5 21"></polyline>
                         </svg>
-                        <span>內容管理</span>
+                        <span>影音管理</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link" data-section="news">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                            <polyline points="14 2 14 8 20 8"></polyline>
-                            <line x1="16" y1="13" x2="8" y2="13"></line>
-                            <line x1="16" y1="17" x2="8" y2="17"></line>
-                        </svg>
-                        <span>最新消息</span>
-                    </a>
-                </li>
+                <!-- 3. 輪播圖管理 -->
                 <li class="nav-item">
                     <a href="#" class="nav-link" data-section="banner">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -71,16 +64,17 @@
                         <span>輪播圖管理</span>
                     </a>
                 </li>
+                <!-- 4. 內容管理 -->
                 <li class="nav-item">
-                    <a href="#" class="nav-link" data-section="images">
+                    <a href="#" class="nav-link" data-section="content">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                            <polyline points="21 15 16 10 5 21"></polyline>
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                         </svg>
-                        <span>圖片管理</span>
+                        <span>內容管理</span>
                     </a>
                 </li>
+                <!-- 5. 訪客統計 -->
                 <li class="nav-item">
                     <a href="#" class="nav-link" data-section="visitors">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -92,15 +86,16 @@
                         <span>訪客統計</span>
                     </a>
                 </li>
+                <!-- 6. 企業責任 -->
                 <li class="nav-item">
-                    <a href="#" class="nav-link" data-section="messages">
+                    <a href="#" class="nav-link" data-section="csr">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                            <polyline points="22,6 12,13 2,6"></polyline>
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                         </svg>
-                        <span>聯絡訊息</span>
+                        <span>企業責任</span>
                     </a>
                 </li>
+                <!-- 7. 客戶服務 -->
                 <li class="nav-item has-submenu">
                     <a href="#" class="nav-link" data-section="support">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -119,26 +114,46 @@
                         <li><a href="#" data-section="support-terms">服務條款</a></li>
                     </ul>
                 </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link" data-section="csr">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                        </svg>
-                        <span>企業責任</span>
-                    </a>
-                </li>
+                <!-- 8. APP 設定 -->
                 <li class="nav-item">
                     <a href="#" class="nav-link" data-section="app-settings">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
                             <line x1="12" y1="18" x2="12.01" y2="18"></line>
                         </svg>
-                        <span>App 設定</span>
+                        <span>APP 設定</span>
                     </a>
                 </li>
+                <!-- 9. 最新消息 -->
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-section="news">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                        </svg>
+                        <span>最新消息</span>
+                    </a>
+                </li>
+                <!-- 10. 聯絡訊息 -->
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-section="messages">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                        <span>聯絡訊息</span>
+                    </a>
+                </li>
+                <!-- 11. 投資人專區 -->
                 <li class="nav-item has-submenu">
                     <a href="#" class="nav-link" data-section="investor">
-                        <span class="nav-icon">📊</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="20" x2="12" y2="10"></line>
+                            <line x1="18" y1="20" x2="18" y2="4"></line>
+                            <line x1="6" y1="20" x2="6" y2="16"></line>
+                        </svg>
                         <span>投資人專區</span>
                         <svg class="submenu-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <polyline points="6 9 12 15 18 9"></polyline>
@@ -150,18 +165,18 @@
                         <li><a href="#" data-section="investor-shareholders">股東會資料</a></li>
                     </ul>
                 </li>
+                <!-- 12. 多語系管理 -->
                 <li class="nav-item">
                     <a href="#" class="nav-link" data-section="translations">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="2"></circle>
-                            <path d="M5 8l6-4 6 4"></path>
-                            <path d="M4 14c1.67-1 3.33-1.5 5-1.5s3.33.5 5 1.5 3.33 1.5 5 1.5 3.33-.5 5-1.5"></path>
-                            <path d="M2 12h2"></path>
-                            <path d="M20 12h2"></path>
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="2" y1="12" x2="22" y2="12"></line>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
                         </svg>
                         <span>多語系管理</span>
                     </a>
                 </li>
+                <!-- 13. 系統設定 -->
                 <li class="nav-item">
                     <a href="#" class="nav-link" data-section="settings">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -711,8 +726,8 @@
             <section class="content-section" id="images">
                 <div class="section-header">
                     <div class="section-header-left">
-                        <h1 class="section-title">圖片管理</h1>
-                        <p class="section-desc">上傳與管理網站使用的圖片</p>
+                        <h1 class="section-title">影音管理</h1>
+                        <p class="section-desc">上傳與管理網站使用的圖片和影片</p>
                     </div>
                 </div>
 
@@ -767,9 +782,9 @@
                             <line x1="12" y1="3" x2="12" y2="15"></line>
                         </svg>
                     </div>
-                    <p class="upload-text">拖曳圖片到此處上傳</p>
-                    <p class="upload-hint">或點擊選擇檔案</p>
-                    <input type="file" id="fileInput" accept="image/*" multiple hidden>
+                    <p class="upload-text">拖曳圖片或影片到此處上傳</p>
+                    <p class="upload-hint">或點擊選擇檔案（支援圖片和影片）</p>
+                    <input type="file" id="fileInput" accept="image/*,video/*" multiple hidden>
                 </div>
 
                 <div class="image-grid" id="imageGrid">
@@ -1049,15 +1064,9 @@
                     <div class="modal-body">
                         <form id="privacyEditForm">
                             <input type="hidden" id="privacyEditId">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="privacySectionNum">章節編號 *</label>
-                                    <input type="number" id="privacySectionNum" required min="1" value="1">
-                                </div>
-                                <div class="form-group">
-                                    <label for="privacySortOrder">排序</label>
-                                    <input type="number" id="privacySortOrder" value="0" min="0">
-                                </div>
+                            <div class="form-group">
+                                <label for="privacySortOrder">章節編號（排序）*</label>
+                                <input type="number" id="privacySortOrder" required min="1" value="1">
                             </div>
                             <div class="form-group">
                                 <label for="privacyTitle">章節標題 *</label>
@@ -1113,15 +1122,9 @@
                     <div class="modal-body">
                         <form id="termsEditForm">
                             <input type="hidden" id="termsEditId">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="termsSectionNum">章節編號 *</label>
-                                    <input type="number" id="termsSectionNum" required min="1" value="1">
-                                </div>
-                                <div class="form-group">
-                                    <label for="termsSortOrder">排序</label>
-                                    <input type="number" id="termsSortOrder" value="0" min="0">
-                                </div>
+                            <div class="form-group">
+                                <label for="termsSortOrder">章節編號（排序）*</label>
+                                <input type="number" id="termsSortOrder" required min="1" value="1">
                             </div>
                             <div class="form-group">
                                 <label for="termsTitle">章節標題 *</label>
@@ -1526,12 +1529,121 @@
             <section class="content-section" id="settings">
                 <div class="section-header">
                     <h1 class="section-title">系統設定</h1>
-                    <p class="section-desc">管理網站基本設定與帳號資訊</p>
+                    <p class="section-desc">管理帳號、系統參數與操作記錄</p>
                 </div>
 
-                <div class="settings-grid">
-                    <div class="settings-card">
-                        <h3>網站資訊</h3>
+                <!-- Settings Tabs -->
+                <div class="settings-tabs">
+                    <button class="settings-tab active" data-tab="accounts">帳號管理</button>
+                    <button class="settings-tab" data-tab="file-limits">檔案上限</button>
+                    <button class="settings-tab" data-tab="audit-logs">操作記錄</button>
+                    <button class="settings-tab" data-tab="site-info">網站資訊</button>
+                </div>
+
+                <!-- Tab: 帳號管理 -->
+                <div class="settings-tab-content active" id="tab-accounts">
+                    <div class="tab-header">
+                        <h3>帳號列表</h3>
+                        <button class="btn btn-primary" onclick="openAddAccountModal()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            新增帳號
+                        </button>
+                    </div>
+                    <div class="accounts-table-container">
+                        <table class="data-table" id="accountsTable">
+                            <thead>
+                                <tr>
+                                    <th>帳號</th>
+                                    <th>Email</th>
+                                    <th>名稱</th>
+                                    <th>權限</th>
+                                    <th>狀態</th>
+                                    <th>最後登入</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="accountsTableBody">
+                                <!-- Dynamic content -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Tab: 檔案上限 -->
+                <div class="settings-tab-content" id="tab-file-limits">
+                    <div class="settings-card" style="max-width: 500px;">
+                        <h3>檔案大小上限</h3>
+                        <form class="settings-form" id="fileLimitsForm">
+                            <div class="form-group">
+                                <label>圖片大小上限 (MB)</label>
+                                <input type="number" id="maxImageSize" name="maxImageSize" value="6" min="1" max="50">
+                                <small>上傳圖片超過此大小將提示壓縮</small>
+                            </div>
+                            <div class="form-group">
+                                <label>影片大小上限 (MB)</label>
+                                <input type="number" id="maxVideoSize" name="maxVideoSize" value="20" min="1" max="100">
+                                <small>上傳影片超過此大小將無法上傳</small>
+                            </div>
+                            <button type="submit" class="save-btn">儲存設定</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Tab: 操作記錄 -->
+                <div class="settings-tab-content" id="tab-audit-logs">
+                    <div class="tab-header">
+                        <h3>操作記錄</h3>
+                        <div class="audit-filters">
+                            <select id="auditActionFilter">
+                                <option value="">全部動作</option>
+                                <option value="create">新增</option>
+                                <option value="update">修改</option>
+                                <option value="delete">刪除</option>
+                            </select>
+                            <select id="auditModuleFilter">
+                                <option value="">全部模組</option>
+                                <option value="images">影音管理</option>
+                                <option value="banner">輪播圖</option>
+                                <option value="content">內容管理</option>
+                                <option value="news">最新消息</option>
+                                <option value="accounts">帳號管理</option>
+                            </select>
+                            <button class="btn btn-secondary" onclick="exportAuditLogs()">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="7 10 12 15 17 10"></polyline>
+                                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                                </svg>
+                                匯出 CSV
+                            </button>
+                        </div>
+                    </div>
+                    <div class="audit-table-container">
+                        <table class="data-table" id="auditLogsTable">
+                            <thead>
+                                <tr>
+                                    <th>時間</th>
+                                    <th>操作者</th>
+                                    <th>動作</th>
+                                    <th>模組</th>
+                                    <th>項目</th>
+                                    <th>詳細</th>
+                                </tr>
+                            </thead>
+                            <tbody id="auditLogsTableBody">
+                                <!-- Dynamic content -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Tab: 網站資訊 -->
+                <div class="settings-tab-content" id="tab-site-info">
+                    <div class="settings-card" style="max-width: 500px;">
+                        <h3>網站基本資訊</h3>
                         <form class="settings-form" id="siteSettingsForm">
                             <div class="form-group">
                                 <label>網站名稱</label>
@@ -1544,28 +1656,64 @@
                             <button type="submit" class="save-btn">儲存設定</button>
                         </form>
                     </div>
-
-                    <div class="settings-card">
-                        <h3>帳號設定</h3>
-                        <form class="settings-form" id="accountSettingsForm">
-                            <div class="form-group">
-                                <label>新帳號名稱</label>
-                                <input type="text" name="newUsername" id="newUsername" placeholder="輸入新帳號（留空則不更改）">
-                                <small style="color: var(--color-gray-500); font-size: 0.8rem;">目前帳號：<span id="currentUsername">admin</span></small>
-                            </div>
-                            <div class="form-group">
-                                <label>新密碼</label>
-                                <input type="password" name="newPassword" placeholder="輸入新密碼（留空則不更改）">
-                            </div>
-                            <div class="form-group">
-                                <label>確認新密碼</label>
-                                <input type="password" name="confirmPassword" placeholder="再次輸入新密碼">
-                            </div>
-                            <button type="submit" class="save-btn">更新帳號設定</button>
-                        </form>
-                    </div>
                 </div>
             </section>
+
+            <!-- Account Modal -->
+            <div class="modal" id="accountModal">
+                <div class="modal-content" style="max-width: 500px;">
+                    <div class="modal-header">
+                        <h2 id="accountModalTitle">新增帳號</h2>
+                        <button class="modal-close" onclick="closeAccountModal()">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                    </div>
+                    <form class="modal-form" id="accountForm">
+                        <input type="hidden" id="accountId">
+                        <div class="form-group">
+                            <label>帳號（登入用）</label>
+                            <input type="text" id="accountUsername" required placeholder="例如：afavor">
+                            <small>可用於登入的帳號名稱</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="accountEmail" required placeholder="example@company.com">
+                            <small>也可用於登入，以及接收密碼重設信</small>
+                        </div>
+                        <div class="form-group">
+                            <label>顯示名稱</label>
+                            <input type="text" id="accountName" required placeholder="顯示名稱">
+                        </div>
+                        <div class="form-group">
+                            <label>密碼</label>
+                            <input type="password" id="accountPassword" placeholder="新增時必填，編輯時留空則不修改">
+                        </div>
+                        <div class="form-group">
+                            <label>權限</label>
+                            <select id="accountRole" required>
+                                <option value="admin">管理員</option>
+                                <option value="editor">編輯者</option>
+                                <option value="viewer">檢視者</option>
+                            </select>
+                            <small>管理員：全部權限｜編輯者：無法進入系統設定｜檢視者：僅能瀏覽</small>
+                        </div>
+                        <div class="form-group">
+                            <label>狀態</label>
+                            <select id="accountStatus" required>
+                                <option value="active">啟用</option>
+                                <option value="disabled">停用</option>
+                            </select>
+                        </div>
+                        <div class="modal-actions">
+                            <button type="button" class="cancel-btn" onclick="closeAccountModal()">取消</button>
+                            <button type="submit" class="submit-btn">儲存</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
 
             <!-- Translations Management Section -->
             <section class="content-section" id="translations">
@@ -1970,6 +2118,14 @@
                                     </svg>
                                     上傳圖片
                                 </button>
+                                <button type="button" class="upload-btn" onclick="openServiceImagePicker(1)" style="background: #4CAF50;">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                        <polyline points="21 15 16 10 5 21"></polyline>
+                                    </svg>
+                                    選擇圖片
+                                </button>
                                 <button type="button" class="remove-btn" onclick="removeServiceImage(1)">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <polyline points="3 6 5 6 21 6"></polyline>
@@ -2009,6 +2165,14 @@
                                         <line x1="12" y1="3" x2="12" y2="15"></line>
                                     </svg>
                                     上傳圖片
+                                </button>
+                                <button type="button" class="upload-btn" onclick="openServiceImagePicker(2)" style="background: #4CAF50;">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                        <polyline points="21 15 16 10 5 21"></polyline>
+                                    </svg>
+                                    選擇圖片
                                 </button>
                                 <button type="button" class="remove-btn" onclick="removeServiceImage(2)">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -2050,6 +2214,14 @@
                                     </svg>
                                     上傳圖片
                                 </button>
+                                <button type="button" class="upload-btn" onclick="openServiceImagePicker(3)" style="background: #4CAF50;">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                        <polyline points="21 15 16 10 5 21"></polyline>
+                                    </svg>
+                                    選擇圖片
+                                </button>
                                 <button type="button" class="remove-btn" onclick="removeServiceImage(3)">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <polyline points="3 6 5 6 21 6"></polyline>
@@ -2075,7 +2247,7 @@
     <div class="modal" id="imageEditModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>編輯圖片資訊</h2>
+                <h2>編輯檔案資訊</h2>
                 <button class="modal-close" id="closeImageEditModal">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -2086,9 +2258,10 @@
             <form class="modal-form" id="imageEditForm">
                 <input type="hidden" id="editImageId">
                 <div class="form-group">
-                    <label>圖片預覽</label>
+                    <label>預覽</label>
                     <div id="editImagePreview" style="max-width: 100%; margin-bottom: 15px;">
                         <img id="editImagePreviewImg" src="" alt="預覽" style="max-width: 100%; height: auto; border-radius: 4px;">
+                        <video id="editVideoPreview" src="" style="max-width: 100%; height: auto; border-radius: 4px; display: none;" controls></video>
                     </div>
                 </div>
                 <div class="form-group">
@@ -2098,7 +2271,7 @@
                 <div class="form-group">
                     <label>分組</label>
                     <select id="editImageGroup" style="width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
-                        <option value="default">default</option>
+                        <option value="預設">預設</option>
                     </select>
                     <small style="color: #666; font-size: 12px;">用於分類管理圖片</small>
                     <button type="button" onclick="addNewGroupFromEdit()" style="margin-top: 5px; padding: 4px 8px; background: #f5f5f5; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; font-size: 12px;">+ 新增分組</button>
@@ -2106,13 +2279,6 @@
                 <div class="form-group">
                     <label>描述</label>
                     <textarea id="editImageDescription" rows="3" placeholder="輸入圖片描述..."></textarea>
-                </div>
-                <div class="form-group">
-                    <label>
-                        <input type="checkbox" id="editImageShowInBanner">
-                        顯示在輪播圖選擇中
-                    </label>
-                    <small style="color: #666; font-size: 12px; display: block; margin-top: 5px;">勾選後，此圖片會出現在輪播圖管理的圖片選擇列表中</small>
                 </div>
                 <div class="form-group" style="background: #f9f9f9; padding: 15px; border-radius: 4px;">
                     <label style="font-weight: 600; margin-bottom: 10px; display: block;">圖片資訊</label>

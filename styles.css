@@ -3912,3 +3912,43 @@ input, textarea, select {
     border-radius: 1px;
 }
 
+/* ================================
+   Font Size Adjustments - Frontend
+   增加文字大小 2px（標題除外）
+================================ */
+
+body {
+    font-size: 1.125rem;
+}
+
+p,
+li,
+span:not(.hero-title-line):not(.section-tag):not(.stat-number):not(.logo-yourremit),
+label,
+td,
+th,
+.nav-link,
+.dropdown a,
+.footer-desc,
+.footer-links a,
+.contact-list,
+.about-text,
+.about-description,
+.hero-subtitle,
+.contact-description,
+.benefit-card p,
+.faq-question span,
+.faq-answer-content,
+.policy-section p,
+.policy-section li {
+    font-size: 1.125rem;
+}
+
+input,
+select,
+textarea,
+button,
+.btn {
+    font-size: 1.0625rem;
+}
+
