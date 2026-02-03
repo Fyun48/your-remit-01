@@ -2955,7 +2955,8 @@ input, textarea, select {
     margin-bottom: var(--space-2xl);
 }
 
-.filter-btn {
+.filter-btn,
+.news-tab {
     padding: var(--space-sm) var(--space-lg);
     border: 2px solid var(--color-gray-300);
     border-radius: var(--radius-full);
@@ -2966,12 +2967,14 @@ input, textarea, select {
     transition: all var(--transition-base);
 }
 
-.filter-btn:hover {
+.filter-btn:hover,
+.news-tab:hover {
     border-color: var(--color-primary);
     color: var(--color-primary);
 }
 
-.filter-btn.active {
+.filter-btn.active,
+.news-tab.active {
     background: var(--color-primary);
     border-color: var(--color-primary);
     color: var(--color-white);
