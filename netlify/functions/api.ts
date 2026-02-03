@@ -1,10 +1,12 @@
 import { Handler } from '@netlify/functions';
 import postgres from 'postgres';
 
-// Database connection
+// Database connection with better settings for serverless
 const sql = postgres(process.env.DATABASE_URL!, {
-  ssl: 'require',
+  ssl: { rejectUnauthorized: false },
   max: 1,
+  idle_timeout: 20,
+  connect_timeout: 10,
 });
 
 // CORS headers

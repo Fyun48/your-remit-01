@@ -489,3 +489,84 @@ async function saveAdminCredentialsToDB(username, password) {
         return { data: null, error: e.message || e };
     }
 }
+
+// ==================== Investor Documents ====================
+async function getInvestorDocuments(filter = {}) {
+    const options = { order: { column: 'fiscal_year', ascending: false } };
+    options.filters = [];
+
+    if (filter.category) {
+        options.filters.push({ column: 'category', value: filter.category });
+    }
+    if (filter.year) {
+        options.filters.push({ column: 'fiscal_year', value: parseInt(filter.year) });
+    }
+    if (filter.published_only) {
+        options.filters.push({ column: 'is_published', value: true });
+    }
+
+    if (options.filters.length === 0) {
+        delete options.filters;
+    }
+
+    return supabaseSelect('investor_documents', options);
+}
+
+async function getInvestorDocument(id) {
+    const { data, error } = await supabaseSelect('investor_documents', {
+        filters: [{ column: 'id', value: id }],
+        limit: 1
+    });
+    return { data: data && data.length > 0 ? data[0] : null, error };
+}
+
+async function createInvestorDocument(doc) {
+    return supabaseInsert('investor_documents', doc);
+}
+
+async function updateInvestorDocument(id, doc) {
+    return supabaseUpdate('investor_documents', id, doc);
+}
+
+async function deleteInvestorDocument(id) {
+    return supabaseDelete('investor_documents', id);
+}
+
+// ==================== Governance Info ====================
+async function getGovernanceInfo(filter = {}) {
+    const options = { order: { column: 'order', ascending: true } };
+    options.filters = [];
+
+    if (filter.type) {
+        options.filters.push({ column: 'type', value: filter.type });
+    }
+    if (filter.published_only) {
+        options.filters.push({ column: 'is_published', value: true });
+    }
+
+    if (options.filters.length === 0) {
+        delete options.filters;
+    }
+
+    return supabaseSelect('governance_info', options);
+}
+
+async function getGovernanceInfoById(id) {
+    const { data, error } = await supabaseSelect('governance_info', {
+        filters: [{ column: 'id', value: id }],
+        limit: 1
+    });
+    return { data: data && data.length > 0 ? data[0] : null, error };
+}
+
+async function createGovernanceInfo(info) {
+    return supabaseInsert('governance_info', info);
+}
+
+async function updateGovernanceInfo(id, info) {
+    return supabaseUpdate('governance_info', id, info);
+}
+
+async function deleteGovernanceInfo(id) {
+    return supabaseDelete('governance_info', id);
+}

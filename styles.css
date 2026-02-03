@@ -383,14 +383,16 @@ input, textarea, select {
     align-items: center;
     gap: var(--space-xs);
     padding: var(--space-sm) var(--space-md);
-    color: var(--color-gray-700);
-    font-size: 0.9rem;
-    font-weight: 500;
+    color: var(--color-gray-800);
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
     transition: color var(--transition-fast);
 }
 
 .nav-link:hover {
     color: var(--color-primary);
+    text-shadow: 0 0 0.5px currentColor;
 }
 
 .dropdown-arrow {
@@ -3841,5 +3843,64 @@ input, textarea, select {
         right: 0;
         min-width: 140px;
     }
+}
+
+/* ================================
+   SPA 路由器載入指示器
+================================ */
+#spa-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    z-index: 99999;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+#spa-loader.active {
+    opacity: 1;
+}
+
+.spa-loader-bar {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, var(--color-accent), var(--color-primary));
+    animation: spa-loading 1.5s ease-in-out infinite;
+}
+
+@keyframes spa-loading {
+    0% {
+        width: 0;
+        margin-left: 0;
+    }
+    50% {
+        width: 70%;
+        margin-left: 0;
+    }
+    100% {
+        width: 100%;
+        margin-left: 0;
+    }
+}
+
+/* 導航連結 active 狀態 */
+.nav-link.active {
+    color: var(--color-primary);
+    font-weight: 700;
+}
+
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 2px;
+    background: var(--color-accent);
+    border-radius: 1px;
 }
 

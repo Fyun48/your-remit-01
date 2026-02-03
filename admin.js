@@ -3146,14 +3146,13 @@ async function loadInvestorDocuments() {
     tbody.innerHTML = '<tr><td colspan="7" class="loading">載入中...</td></tr>';
 
     try {
-        const response = await fetch('/api/investor/documents');
-        const data = await response.json();
+        const { data, error } = await getInvestorDocuments();
 
-        if (!data.success) {
-            throw new Error(data.error || '載入失敗');
+        if (error) {
+            throw new Error(error.message || '載入失敗');
         }
 
-        allInvestorDocs = data.data || [];
+        allInvestorDocs = data || [];
 
         // Populate year filter
         const years = [...new Set(allInvestorDocs.map(d => d.fiscal_year).filter(Boolean))].sort((a, b) => b - a);
@@ -3313,27 +3312,23 @@ async function saveDocument(e) {
 
     const password = document.getElementById('doc-password')?.value;
     if (password) {
-        docData.password = password;
+        docData.password_hash = password; // Note: In production, hash this on the server
     }
 
     try {
-        const method = id ? 'PUT' : 'POST';
-        const url = id ? `/api/investor/documents/${id}` : '/api/investor/documents';
+        let result;
+        if (id) {
+            result = await updateInvestorDocument(id, docData);
+        } else {
+            result = await createInvestorDocument(docData);
+        }
 
-        const response = await fetch(url, {
-            method,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(docData)
-        });
-
-        const result = await response.json();
-
-        if (result.success) {
+        if (!result.error) {
             closeDocumentModal();
             await loadInvestorDocuments();
             showToast(id ? '文件已更新' : '文件已新增');
         } else {
-            showToast('儲存失敗: ' + (result.error || '未知錯誤'), 'error');
+            showToast('儲存失敗: ' + (result.error.message || '未知錯誤'), 'error');
         }
     } catch (error) {
         console.error('Error saving document:', error);
@@ -3348,17 +3343,13 @@ async function deleteDocument(id) {
     if (!confirm('確定要刪除此文件嗎？')) return;
 
     try {
-        const response = await fetch(`/api/investor/documents/${id}`, {
-            method: 'DELETE'
-        });
+        const { error } = await deleteInvestorDocument(id);
 
-        const result = await response.json();
-
-        if (result.success) {
+        if (!error) {
             await loadInvestorDocuments();
             showToast('文件已刪除');
         } else {
-            showToast('刪除失敗: ' + (result.error || '未知錯誤'), 'error');
+            showToast('刪除失敗: ' + (error.message || '未知錯誤'), 'error');
         }
     } catch (error) {
         console.error('Error deleting document:', error);
@@ -3382,14 +3373,13 @@ async function loadBoardMembers() {
     tbody.innerHTML = '<tr><td colspan="6" class="loading">載入中...</td></tr>';
 
     try {
-        const response = await fetch('/api/investor/governance?type=board_member');
-        const data = await response.json();
+        const { data, error } = await getGovernanceInfo({ type: 'board_member' });
 
-        if (!data.success) {
-            throw new Error(data.error || '載入失敗');
+        if (error) {
+            throw new Error(error.message || '載入失敗');
         }
 
-        allBoardMembers = data.data || [];
+        allBoardMembers = data || [];
         renderBoardMembersTable(allBoardMembers);
     } catch (error) {
         console.error('Error loading board members:', error);
@@ -3447,16 +3437,8 @@ async function moveBoardMember(id, direction) {
     try {
         // Update both items
         await Promise.all([
-            fetch(`/api/investor/governance/${allBoardMembers[index].id}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ order: targetOrder })
-            }),
-            fetch(`/api/investor/governance/${allBoardMembers[newIndex].id}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ order: currentOrder })
-            })
+            updateGovernanceInfo(allBoardMembers[index].id, { order: targetOrder }),
+            updateGovernanceInfo(allBoardMembers[newIndex].id, { order: currentOrder })
         ]);
 
         await loadBoardMembers();
@@ -3544,23 +3526,19 @@ async function saveBoardMember(e) {
     };
 
     try {
-        const method = id ? 'PUT' : 'POST';
-        const url = id ? `/api/investor/governance/${id}` : '/api/investor/governance';
+        let result;
+        if (id) {
+            result = await updateGovernanceInfo(id, memberData);
+        } else {
+            result = await createGovernanceInfo(memberData);
+        }
 
-        const response = await fetch(url, {
-            method,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(memberData)
-        });
-
-        const result = await response.json();
-
-        if (result.success) {
+        if (!result.error) {
             closeBoardMemberModal();
             await loadBoardMembers();
             showToast(id ? '成員資料已更新' : '成員已新增');
         } else {
-            showToast('儲存失敗: ' + (result.error || '未知錯誤'), 'error');
+            showToast('儲存失敗: ' + (result.error.message || '未知錯誤'), 'error');
         }
     } catch (error) {
         console.error('Error saving board member:', error);
@@ -3575,17 +3553,13 @@ async function deleteBoardMember(id) {
     if (!confirm('確定要刪除此成員嗎？')) return;
 
     try {
-        const response = await fetch(`/api/investor/governance/${id}`, {
-            method: 'DELETE'
-        });
+        const { error } = await deleteGovernanceInfo(id);
 
-        const result = await response.json();
-
-        if (result.success) {
+        if (!error) {
             await loadBoardMembers();
             showToast('成員已刪除');
         } else {
-            showToast('刪除失敗: ' + (result.error || '未知錯誤'), 'error');
+            showToast('刪除失敗: ' + (error.message || '未知錯誤'), 'error');
         }
     } catch (error) {
         console.error('Error deleting board member:', error);
@@ -3598,11 +3572,10 @@ async function deleteBoardMember(id) {
  */
 async function loadOrgChart() {
     try {
-        const response = await fetch('/api/investor/governance?type=org_chart');
-        const data = await response.json();
+        const { data, error } = await getGovernanceInfo({ type: 'org_chart' });
 
-        if (data.success && data.data && data.data.length > 0) {
-            orgChartUrl = data.data[0].file_url || '';
+        if (!error && data && data.length > 0) {
+            orgChartUrl = data[0].file_url || '';
             const urlInput = document.getElementById('org-chart-url');
             const preview = document.getElementById('org-chart-preview');
 
@@ -3632,31 +3605,23 @@ async function saveOrgChart() {
 
     try {
         // Check if org_chart entry exists
-        const checkResponse = await fetch('/api/investor/governance?type=org_chart');
-        const checkData = await checkResponse.json();
+        const { data: checkData, error: checkError } = await getGovernanceInfo({ type: 'org_chart' });
 
-        let method = 'POST';
-        let url = '/api/investor/governance';
+        const orgChartData = {
+            type: 'org_chart',
+            name: '組織架構圖',
+            file_url: newUrl,
+            is_published: true
+        };
 
-        if (checkData.success && checkData.data && checkData.data.length > 0) {
-            method = 'PUT';
-            url = `/api/investor/governance/${checkData.data[0].id}`;
+        let result;
+        if (!checkError && checkData && checkData.length > 0) {
+            result = await updateGovernanceInfo(checkData[0].id, orgChartData);
+        } else {
+            result = await createGovernanceInfo(orgChartData);
         }
 
-        const response = await fetch(url, {
-            method,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                type: 'org_chart',
-                name: '組織架構圖',
-                file_url: newUrl,
-                is_published: true
-            })
-        });
-
-        const result = await response.json();
-
-        if (result.success) {
+        if (!result.error) {
             orgChartUrl = newUrl;
 
             // Update preview
@@ -3673,7 +3638,7 @@ async function saveOrgChart() {
 
             showToast('組織架構圖已儲存');
         } else {
-            showToast('儲存失敗: ' + (result.error || '未知錯誤'), 'error');
+            showToast('儲存失敗: ' + (result.error.message || '未知錯誤'), 'error');
         }
     } catch (error) {
         console.error('Error saving org chart:', error);
@@ -3691,14 +3656,13 @@ async function loadCharters() {
     tbody.innerHTML = '<tr><td colspan="6" class="loading">載入中...</td></tr>';
 
     try {
-        const response = await fetch('/api/investor/governance?type=charter');
-        const data = await response.json();
+        const { data, error } = await getGovernanceInfo({ type: 'charter' });
 
-        if (!data.success) {
-            throw new Error(data.error || '載入失敗');
+        if (error) {
+            throw new Error(error.message || '載入失敗');
         }
 
-        allCharters = data.data || [];
+        allCharters = data || [];
         renderChartersTable(allCharters);
     } catch (error) {
         console.error('Error loading charters:', error);
@@ -3761,16 +3725,8 @@ async function moveCharter(id, direction) {
 
     try {
         await Promise.all([
-            fetch(`/api/investor/governance/${allCharters[index].id}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ order: targetOrder })
-            }),
-            fetch(`/api/investor/governance/${allCharters[newIndex].id}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ order: currentOrder })
-            })
+            updateGovernanceInfo(allCharters[index].id, { order: targetOrder }),
+            updateGovernanceInfo(allCharters[newIndex].id, { order: currentOrder })
         ]);
 
         await loadCharters();
@@ -3858,23 +3814,19 @@ async function saveCharter(e) {
     };
 
     try {
-        const method = id ? 'PUT' : 'POST';
-        const url = id ? `/api/investor/governance/${id}` : '/api/investor/governance';
+        let result;
+        if (id) {
+            result = await updateGovernanceInfo(id, charterData);
+        } else {
+            result = await createGovernanceInfo(charterData);
+        }
 
-        const response = await fetch(url, {
-            method,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(charterData)
-        });
-
-        const result = await response.json();
-
-        if (result.success) {
+        if (!result.error) {
             closeCharterModal();
             await loadCharters();
             showToast(id ? '文件已更新' : '文件已新增');
         } else {
-            showToast('儲存失敗: ' + (result.error || '未知錯誤'), 'error');
+            showToast('儲存失敗: ' + (result.error.message || '未知錯誤'), 'error');
         }
     } catch (error) {
         console.error('Error saving charter:', error);
@@ -3889,17 +3841,13 @@ async function deleteCharter(id) {
     if (!confirm('確定要刪除此文件嗎？')) return;
 
     try {
-        const response = await fetch(`/api/investor/governance/${id}`, {
-            method: 'DELETE'
-        });
+        const { error } = await deleteGovernanceInfo(id);
 
-        const result = await response.json();
-
-        if (result.success) {
+        if (!error) {
             await loadCharters();
             showToast('文件已刪除');
         } else {
-            showToast('刪除失敗: ' + (result.error || '未知錯誤'), 'error');
+            showToast('刪除失敗: ' + (error.message || '未知錯誤'), 'error');
         }
     } catch (error) {
         console.error('Error deleting charter:', error);

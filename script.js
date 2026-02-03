@@ -4,7 +4,17 @@
  */
 
 document.addEventListener('DOMContentLoaded', async () => {
+    // 初始化 SPA 路由器
+    initSPARouter();
+
     // 初始化所有功能
+    await initPageFeatures();
+});
+
+/**
+ * 初始化頁面功能（每次頁面切換後都要呼叫）
+ */
+async function initPageFeatures() {
     initHeader();
     initMobileMenu();
     initBannerSlider();
@@ -28,7 +38,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // 載入內容後再初始化計數動畫
     initCounterAnimation();
-});
+}
 
 /**
  * 載入 App QR Code 設定
@@ -1428,5 +1438,265 @@ function throttle(func, limit = 100) {
             setTimeout(() => inThrottle = false, limit);
         }
     };
+}
+
+// ==================== SPA 路由器 ====================
+
+/**
+ * SPA 路由器 - 實現無刷新頁面切換
+ */
+let isNavigating = false;
+
+function initSPARouter() {
+    // 攔截所有內部連結點擊
+    document.addEventListener('click', handleLinkClick);
+
+    // 處理瀏覽器上一頁/下一頁
+    window.addEventListener('popstate', handlePopState);
+
+    // 標記當前頁面已載入
+    window.spaInitialized = true;
+}
+
+/**
+ * 處理連結點擊
+ */
+function handleLinkClick(e) {
+    const link = e.target.closest('a');
+    if (!link) return;
+
+    const href = link.getAttribute('href');
+    if (!href) return;
+
+    // 跳過以下情況：
+    // - 外部連結
+    // - 錨點連結 (#)
+    // - 新視窗連結
+    // - 下載連結
+    // - JavaScript 連結
+    // - 管理後台連結
+    if (
+        href.startsWith('http') ||
+        href.startsWith('//') ||
+        href.startsWith('#') ||
+        href.startsWith('javascript:') ||
+        href.startsWith('mailto:') ||
+        href.startsWith('tel:') ||
+        href.includes('admin') ||
+        href.includes('login') ||
+        link.target === '_blank' ||
+        link.hasAttribute('download') ||
+        link.classList.contains('no-spa')
+    ) {
+        return;
+    }
+
+    // 如果是同頁面的錨點，讓瀏覽器處理
+    if (href.includes('#') && href.split('#')[0] === '' ) {
+        return;
+    }
+
+    e.preventDefault();
+    navigateToPage(href);
+}
+
+/**
+ * 導航到新頁面
+ */
+async function navigateToPage(url) {
+    if (isNavigating) return;
+    isNavigating = true;
+
+    // 顯示載入指示器
+    showPageLoader();
+
+    try {
+        // 標準化 URL
+        let targetUrl = url;
+        if (!targetUrl.endsWith('.html') && !targetUrl.includes('.html?') && !targetUrl.includes('.html#')) {
+            if (targetUrl === '/' || targetUrl === '') {
+                targetUrl = 'index.html';
+            } else if (!targetUrl.includes('.')) {
+                targetUrl = targetUrl + '.html';
+            }
+        }
+
+        // 處理相對路徑
+        const currentPath = window.location.pathname;
+        const currentDir = currentPath.substring(0, currentPath.lastIndexOf('/') + 1);
+
+        let fullUrl;
+        if (targetUrl.startsWith('/')) {
+            fullUrl = targetUrl;
+        } else {
+            fullUrl = currentDir + targetUrl;
+        }
+
+        // 取得新頁面內容
+        const response = await fetch(fullUrl);
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        const html = await response.text();
+
+        // 解析新頁面
+        const parser = new DOMParser();
+        const newDoc = parser.parseFromString(html, 'text/html');
+
+        // 取得新頁面的主要內容（排除 header）
+        const newMain = newDoc.querySelector('main') || newDoc.querySelector('.page-hero')?.parentElement || newDoc.body;
+        const currentMain = document.querySelector('main') || document.body;
+
+        // 取得新頁面標題
+        const newTitle = newDoc.querySelector('title')?.textContent || document.title;
+
+        // 取得新頁面的 body class
+        const newBodyClass = newDoc.body.className;
+
+        // 抽取 header 之後、footer 之前的內容
+        const newContent = extractMainContent(newDoc);
+        const oldContent = extractMainContent(document);
+
+        if (newContent && oldContent) {
+            // 淡出效果
+            oldContent.style.opacity = '0';
+            oldContent.style.transition = 'opacity 0.2s ease';
+
+            await new Promise(resolve => setTimeout(resolve, 200));
+
+            // 替換內容
+            oldContent.innerHTML = newContent.innerHTML;
+
+            // 更新 body class
+            document.body.className = newBodyClass;
+
+            // 淡入效果
+            oldContent.style.opacity = '1';
+        }
+
+        // 更新頁面標題
+        document.title = newTitle;
+
+        // 更新 URL（不觸發 popstate）
+        const urlWithoutHash = fullUrl.split('#')[0];
+        const hash = fullUrl.includes('#') ? '#' + fullUrl.split('#')[1] : '';
+        history.pushState({ url: fullUrl }, newTitle, fullUrl);
+
+        // 捲動到頁面頂部或指定錨點
+        if (hash) {
+            const target = document.querySelector(hash);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
+            }
+        } else {
+            window.scrollTo({ top: 0, behavior: 'instant' });
+        }
+
+        // 重新初始化頁面功能
+        await initPageFeatures();
+
+        // 更新導航列的 active 狀態
+        updateNavActiveState(fullUrl);
+
+    } catch (error) {
+        console.error('SPA navigation error:', error);
+        // 如果 SPA 導航失敗，使用傳統方式導航
+        window.location.href = url;
+    } finally {
+        hidePageLoader();
+        isNavigating = false;
+    }
+}
+
+/**
+ * 抽取主要內容（header 和 footer 之間的內容）
+ */
+function extractMainContent(doc) {
+    // 嘗試找到 main 元素
+    let main = doc.querySelector('main#page-content');
+    if (main) return main;
+
+    // 如果沒有 main 元素，創建一個虛擬容器
+    const header = doc.querySelector('header.header');
+    const footer = doc.querySelector('footer.footer');
+
+    if (!header) return null;
+
+    // 取得 header 之後的所有兄弟元素，直到 footer
+    const content = doc.createElement('div');
+    let sibling = header.nextElementSibling;
+
+    while (sibling && sibling !== footer) {
+        if (!sibling.classList.contains('cookie-consent') &&
+            !sibling.classList.contains('float-social') &&
+            !sibling.classList.contains('back-to-top') &&
+            sibling.tagName !== 'SCRIPT') {
+            content.appendChild(sibling.cloneNode(true));
+        }
+        sibling = sibling.nextElementSibling;
+    }
+
+    return content;
+}
+
+/**
+ * 處理瀏覽器上一頁/下一頁
+ */
+async function handlePopState(e) {
+    if (e.state && e.state.url) {
+        await navigateToPage(e.state.url);
+    } else {
+        // 如果沒有 state，重新載入當前 URL
+        await navigateToPage(window.location.pathname);
+    }
+}
+
+/**
+ * 更新導航列的 active 狀態
+ */
+function updateNavActiveState(currentUrl) {
+    const navLinks = document.querySelectorAll('.nav-link');
+    const currentPage = currentUrl.split('/').pop().split('?')[0].split('#')[0];
+
+    navLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        if (!href) return;
+
+        const linkPage = href.split('/').pop().split('?')[0].split('#')[0];
+
+        if (linkPage === currentPage ||
+            (currentPage === 'index.html' && (linkPage === '' || linkPage === '/'))) {
+            link.classList.add('active');
+        } else {
+            link.classList.remove('active');
+        }
+    });
+}
+
+/**
+ * 顯示頁面載入指示器
+ */
+function showPageLoader() {
+    let loader = document.getElementById('spa-loader');
+    if (!loader) {
+        loader = document.createElement('div');
+        loader.id = 'spa-loader';
+        loader.innerHTML = `
+            <div class="spa-loader-bar"></div>
+        `;
+        document.body.appendChild(loader);
+    }
+    loader.classList.add('active');
+}
+
+/**
+ * 隱藏頁面載入指示器
+ */
+function hidePageLoader() {
+    const loader = document.getElementById('spa-loader');
+    if (loader) {
+        loader.classList.remove('active');
+    }
 }
 

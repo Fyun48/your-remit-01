@@ -8,6 +8,9 @@
 [functions]
   # Netlify Functions 目錄
   directory = "netlify/functions"
+  # 使用 esbuild 並將 postgres 標記為外部模組
+  node_bundler = "esbuild"
+  external_node_modules = ["postgres"]
 
 # API 路由重寫（簡化 API 呼叫路徑）
 [[redirects]]
