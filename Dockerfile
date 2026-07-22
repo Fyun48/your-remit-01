@@ -12,7 +12,8 @@ FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-# 提示：請確保 next.config.js 有設定 output: 'standalone'
+# 確保即使沒有 public 目錄也不會報錯
+RUN mkdir -p public
 RUN npm run build
 
 # 4. 生產環境執行 (Runner)
@@ -23,12 +24,11 @@ ENV NODE_ENV=production
 ENV PORT=8080
 ENV HOSTNAME="0.0.0.0"
 
-# 複製打包好的 standalone 內容
+# 複製打包內容
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 
 EXPOSE 8080
 
-# 正確指向 server.js
 CMD ["node", "server.js"]
