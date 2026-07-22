@@ -1,34 +1,13 @@
-# 1. Base image
-FROM node:20-alpine AS base
+# 使用輕量級 Nginx 映像檔
+FROM nginx:alpine
 
-# 2. 安裝套件
-FROM base AS deps
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci
+# 複製專案中的所有靜態檔案到 Nginx 預設網頁目錄
+COPY . /usr/share/nginx/html
 
-# 3. 編譯 Next.js (Build)
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
-# 確保即使沒有 public 目錄也不會報錯
-RUN mkdir -p public
-RUN npm run build
+# 修改 Nginx 預設預設監聽的 Port（Cloud Run 預設要求 8080）
+RUN sed -i 's/listen  *80;/listen 8080;/g' /etc/nginx/conf.d/default.conf
 
-# 4. 生產環境執行 (Runner)
-FROM base AS runner
-WORKDIR /app
-
-ENV NODE_ENV=production
-ENV PORT=8080
-ENV HOSTNAME="0.0.0.0"
-
-# 複製打包內容
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
-
+# 對外開放 8080 埠號
 EXPOSE 8080
 
-CMD ["node", "server.js"]
+CMD ["nginx", "-g", "daemon off;"]
